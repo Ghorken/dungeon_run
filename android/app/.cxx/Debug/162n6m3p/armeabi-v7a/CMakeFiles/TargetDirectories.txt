@@ -1,0 +1,2 @@
+C:/Users/mfior/Desktop/Progetti/dungeon_run/android/app/.cxx/Debug/162n6m3p/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/mfior/Desktop/Progetti/dungeon_run/android/app/.cxx/Debug/162n6m3p/armeabi-v7a/CMakeFiles/rebuild_cache.dir
