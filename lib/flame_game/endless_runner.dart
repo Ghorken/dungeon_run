@@ -81,17 +81,17 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
     camera.viewport.add(hitComponent);
     camera.viewport.add(killComponent);
 
-    // Here we add a listener to the notifiers that are updated when the player
+    // Here we add a listener to the notifiers that are updated when the character
     // gets a new potion, is hitted or kill an enemy, in the callback we update the text of the
     // relative components.
     world.potionNotifier.addListener(() {
       potionComponent.text = 'Pozioni: ${world.potionNotifier.value}';
     });
-    world.hitNotifier.addListener(() {
-      hitComponent.text = 'Colpito: ${world.hitNotifier.value}';
+    world.hittedNotifier.addListener(() {
+      hitComponent.text = 'Colpito: ${world.hittedNotifier.value}';
     });
-    world.killNotifier.addListener(() {
-      killComponent.text = 'Uccisioni: ${world.killNotifier.value}';
+    world.blowNotifier.addListener(() {
+      killComponent.text = 'Uccisioni: ${world.blowNotifier.value}';
     });
   }
 }

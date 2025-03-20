@@ -20,7 +20,7 @@ class Background extends ParallaxComponent {
 
     // The base velocity sets the speed of the layer the farthest to the back.
     // Since the speed in our game is defined as the speed of the layer in the
-    // front, where the player is, we have to calculate what speed the layer in
+    // front, where the character is, we have to calculate what speed the layer in
     // the back should have and then the parallax will take care of setting the
     // speeds for the rest of the layers.
     final baseVelocity = Vector2(0, speed / pow(2, layers.length));

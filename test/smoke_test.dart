@@ -55,7 +55,7 @@ void main() {
       expect(game.children.length, 3);
       expect(game.world.children.length, 2);
       expect(game.camera.viewport.children.length, 2);
-      expect(game.world.player.isLoading, isTrue);
+      expect(game.world.character.isLoading, isTrue);
     },
   );
 }

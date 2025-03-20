@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 
 import '../endless_world.dart';
 
-/// The [Potion] components are the components that the [Player] could collect.
+/// The [Potion] components are the components that the [Character] could collect.
 class Potion extends SpriteAnimationComponent with HasGameReference, HasWorldReference<EndlessWorld> {
   Potion() : super(size: spriteSize, anchor: Anchor.center);
 
