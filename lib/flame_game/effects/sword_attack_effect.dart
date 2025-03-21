@@ -1,25 +1,25 @@
 import 'dart:math';
 
-import 'package:dungeon_run/flame_game/components/character.dart';
+import 'package:dungeon_run/flame_game/components/warrior.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/geometry.dart';
 import 'package:flutter/material.dart';
 
-/// The [AttackEffect] is an effect that is composed of multiple different effects
-/// that are added to the [Character] when it attacks.
+/// The [SwordAttackEffect] is an effect that is composed of multiple different effects
+/// that are added to the [Warrior] when it attacks.
 /// It spins the sword.
-class AttackEffect extends Component with ParentIsA<Character> {
+class SwordAttackEffect extends Component with ParentIsA<Warrior> {
   final effectTime = 0.5;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final swordSprite = await Sprite.load('sword.png');
+    final sprite = await Sprite.load('sword.png');
 
     final sword = SpriteComponent(
-      sprite: swordSprite,
+      sprite: sprite,
       size: Vector2(166, 180),
       anchor: Anchor.bottomCenter,
       angle: -pi / 2,
@@ -36,11 +36,8 @@ class AttackEffect extends Component with ParentIsA<Character> {
           duration: effectTime,
           curve: Curves.easeInOut,
         ),
+        onComplete: () => sword.removeFromParent(),
       ),
     );
-
-    Future.delayed(Duration(milliseconds: (effectTime * 1000).toInt()), () {
-      sword.removeFromParent();
-    });
   }
 }

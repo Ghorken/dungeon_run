@@ -1,10 +1,13 @@
 import 'dart:math';
 
+import 'package:dungeon_run/flame_game/components/archer.dart';
+import 'package:dungeon_run/flame_game/components/assassin.dart';
+import 'package:dungeon_run/flame_game/components/warrior.dart';
+import 'package:dungeon_run/flame_game/components/wizard.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 
 import '../level_selection/levels.dart';
 import 'components/enemy.dart';
@@ -37,13 +40,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// and how fast the enemies and obstacles should move.
   late double speed = _calculateSpeed(level.number);
 
-  /// In the [potionNotifier] we keep track of how many potions had been collected, and if
-  /// other parts of the code is interested in when the score is updated they
-  /// can listen to it and act on the updated value.
-  final potionNotifier = ValueNotifier(0);
-  final hittedNotifier = ValueNotifier(0);
-  final blowNotifier = ValueNotifier(0);
-  late final Character character;
+  late final Character frontCharacter;
+  late final Character leftCharacter;
+  late final Character rightCharacter;
   late final DateTime timeStarted;
   Vector2 get size => (parent as FlameGame).size;
 
@@ -51,7 +50,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   final Random _random;
 
   /// Where the ground is located in the world and things should stop falling.
-  late final double playerLevel = (size.y / 2) - (size.y / 10);
+  late final Vector2 frontCharacterPosition = Vector2(0, (size.y / 2) - (size.y / 10));
+  late final Vector2 leftCharacterPosition = Vector2(-(size.x / 2) + (size.x / 5), (size.y / 2) - (size.y / 20));
+  late final Vector2 rightCharacterPosition = Vector2((size.x / 2) - (size.x / 5), (size.y / 2) - (size.y / 20));
 
   /// List to keep track of potions int the world.
   final List<Potion> potions = [];
@@ -62,13 +63,23 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   @override
   Future<void> onLoad() async {
     // The character is the component that we control when we tap the screen
-    character = Character(
-      position: Vector2(0, playerLevel),
-      addPotion: addPotionCount,
-      addHitted: addHitted,
-      addBlow: addBlow,
+    // frontCharacter = Warrior(
+    //   position: frontCharacterPosition,
+    // );
+    frontCharacter = Assassin(
+      position: frontCharacterPosition,
     );
-    add(character);
+    add(frontCharacter);
+
+    leftCharacter = Archer(
+      position: leftCharacterPosition,
+    );
+    add(leftCharacter);
+
+    rightCharacter = Wizard(
+      position: rightCharacterPosition,
+    );
+    add(rightCharacter);
 
     // Spawning enemies in the world
     add(
@@ -118,40 +129,29 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     game.overlays.remove(GameScreen.backButtonKey);
   }
 
-  /// Increments the number of potions collected.
-  void addPotionCount({int amount = 1}) {
-    potionNotifier.value += amount;
-  }
-
-  /// Increments the number of hits received.
-  void addHitted({int amount = 1}) {
-    hittedNotifier.value += amount;
-  }
-
-  /// Increments the number of blows done.
-  void addBlow({int amount = 1}) {
-    blowNotifier.value += amount;
-  }
-
   /// [onTapDown] is called when the character taps the screen
   @override
   void onTapDown(TapDownEvent event) {
-    // If the character taps on a potion, we remove it from the world and increment
-    // the potion count.
-    bool potionTapped = false;
-    for (final potion in potions) {
-      if (potion.toRect().contains(event.localPosition.toOffset())) {
-        potionTapped = true;
-        potion.removeFromParent();
-        potions.remove(potion);
-        addPotionCount();
-        break;
-      }
+    // If the player taps on a character, we make it attack.
+    if (frontCharacter.toRect().contains(event.localPosition.toOffset())) {
+      frontCharacter.attack();
+      return;
+    } else if (leftCharacter.toRect().contains(event.localPosition.toOffset())) {
+      leftCharacter.attack();
+      return;
+    } else if (rightCharacter.toRect().contains(event.localPosition.toOffset())) {
+      rightCharacter.attack();
+      return;
     }
 
-    // If the character didn't tap on a potion, we attack the enemy.
-    if (!potionTapped) {
-      character.attack();
+    // If the player taps on a potion, we remove it from the world and increment
+    // the potion count.
+    for (final potion in potions) {
+      if (potion.toRect().contains(event.localPosition.toOffset())) {
+        potion.removeFromParent();
+        potions.remove(potion);
+        break;
+      }
     }
   }
 

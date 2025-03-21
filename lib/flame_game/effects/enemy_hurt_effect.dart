@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dungeon_run/flame_game/components/enemy.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';

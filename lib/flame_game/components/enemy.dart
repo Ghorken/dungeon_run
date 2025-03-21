@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
-import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -92,7 +91,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
     // last update ran. We need to multiply the speed by `dt` to make sure that
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
-    if (position.y < world.character.position.y) {
+    if (position.y < world.frontCharacter.position.y) {
       position.y += (world.speed * _speed) * dt;
     }
 
@@ -108,6 +107,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
     }
   }
 
+  /// When the enemy is hit by the character we reduce the hit points and
+  /// if the hit points are less than or equal to 0 we remove the enemy.
   void hitted() {
     _hitPoints--;
     if (_hitPoints <= 0) {
@@ -117,12 +118,15 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
     }
   }
 
+  /// When the enemy is hit by the character we remove the enemy.
   void die() {
     _speed = 0;
+    // We remove the enemy from the list so that it is no longer hittable even if still present on the screen.
     world.enemies.remove(this);
     DeathEffect deathEffect = DeathEffect();
     add(deathEffect);
 
+    // We remove the enemy from the screen after the effect has been played.
     Future.delayed(Duration(milliseconds: (deathEffect.effectTime * 1000).toInt()), () => removeFromParent());
   }
 }
