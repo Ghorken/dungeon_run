@@ -1,9 +1,9 @@
 import 'package:dungeon_run/style/palette.dart';
+import 'package:dungeon_run/style/wobbly_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../style/wobbly_button.dart';
 import 'settings.dart';
 
 class SettingsScreen extends StatelessWidget {

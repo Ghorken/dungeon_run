@@ -1,12 +1,14 @@
 import 'dart:math';
 
+import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
+import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
+import 'package:dungeon_run/flame_game/endless_runner.dart';
+import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-
-import '../endless_world.dart';
 
 enum EnemyType {
   goblin,
@@ -16,7 +18,10 @@ enum EnemyType {
 
 /// The [Enemy] component can represent three different types of enemies
 /// that the character can run into.
-class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
+class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner> {
+  // Timer to control the application of HurtEffect
+  double _hurtEffectTimer = 0.0;
+
   Enemy.goblin({super.position})
       : _srcSize = Vector2(250, 386),
         _srcImage = 'enemies/goblin.png',
@@ -80,6 +85,11 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
 
   @override
   void update(double dt) {
+    super.update(dt);
+
+    // Update the timer
+    _hurtEffectTimer += dt;
+
     // We need to move the component to the left together with the speed that we
     // have set for the world.
     // `dt` here stands for delta time and it is the time, in seconds, since the
@@ -88,6 +98,13 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
     // of your device.
     if (position.y < world.frontCharacterPosition.y) {
       position.y += (400 * _speed) * dt;
+    } else {
+      // Apply HurtEffect only if 1 second has passed since the last application
+      if (_hurtEffectTimer >= 1.0) {
+        _hurtEffectTimer = 0.0; // Reset the timer
+        world.frontCharacter!.add(HurtEffect());
+        game.audioController.playSfx(SfxType.damage);
+      }
     }
 
     // When the component is no longer visible on the screen anymore, we

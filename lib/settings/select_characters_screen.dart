@@ -1,8 +1,7 @@
 import 'package:dungeon_run/style/palette.dart';
+import 'package:dungeon_run/style/wobbly_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../style/wobbly_button.dart';
 
 class SelectCharactersScreen extends StatefulWidget {
   const SelectCharactersScreen({super.key});

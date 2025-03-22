@@ -3,11 +3,11 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dungeon_run/app_lifecycle/app_lifecycle.dart';
+import 'package:dungeon_run/settings/settings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 
-import '../app_lifecycle/app_lifecycle.dart';
-import '../settings/settings.dart';
 import 'songs.dart';
 import 'sounds.dart';
 

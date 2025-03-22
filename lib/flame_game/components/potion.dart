@@ -1,7 +1,6 @@
+import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-
-import '../endless_world.dart';
 
 /// The [Potion] components are the components that the [Character] could collect.
 class Potion extends SpriteAnimationComponent with HasGameReference, HasWorldReference<EndlessWorld> {

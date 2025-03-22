@@ -1,11 +1,10 @@
+import 'package:dungeon_run/audio/sounds.dart';
+import 'package:dungeon_run/flame_game/components/trap.dart';
+import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
+import 'package:dungeon_run/flame_game/endless_runner.dart';
+import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-
-import '../../../audio/sounds.dart';
-import '../../effects/hurt_effect.dart';
-import '../../endless_runner.dart';
-import '../../endless_world.dart';
-import '../enemy.dart';
 
 /// The [Character] is the component that the physical character of the game is
 /// controlling.
@@ -50,7 +49,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   ) {
     super.onCollisionStart(intersectionPoints, other);
     // When the character collides with an obstacle it should increment the hitted counter.
-    if (other is Enemy && world.enemies.contains(other)) {
+    if (other is Trap && world.traps.contains(other)) {
       game.audioController.playSfx(SfxType.damage);
       add(HurtEffect());
     }

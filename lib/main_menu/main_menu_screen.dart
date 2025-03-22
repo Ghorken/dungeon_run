@@ -1,13 +1,12 @@
+import 'package:dungeon_run/audio/audio_controller.dart';
+import 'package:dungeon_run/audio/sounds.dart';
+import 'package:dungeon_run/settings/settings.dart';
 import 'package:dungeon_run/style/palette.dart';
+import 'package:dungeon_run/style/responsive_screen.dart';
+import 'package:dungeon_run/style/wobbly_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../audio/audio_controller.dart';
-import '../audio/sounds.dart';
-import '../settings/settings.dart';
-import '../style/responsive_screen.dart';
-import '../style/wobbly_button.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});

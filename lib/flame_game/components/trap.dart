@@ -1,12 +1,11 @@
 import 'dart:math';
 
-import 'package:dungeon_run/flame_game/effects/death_effect%20copy.dart';
+import 'package:dungeon_run/flame_game/effects/disable_effect.dart';
+import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
-
-import '../endless_world.dart';
 
 enum TrapType {
   spikedRoller,
@@ -77,6 +76,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
     // fills up the size of the component.
     add(RectangleHitbox());
 
+    // If the trap is a rotating blade we add a rotation effect to it.
     if (_trapType == TrapType.rotatingBlades) {
       add(
         RotateEffect.by(

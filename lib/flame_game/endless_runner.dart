@@ -1,8 +1,8 @@
+import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-import '../audio/audio_controller.dart';
 import 'components/background.dart';
 import 'endless_world.dart';
 
