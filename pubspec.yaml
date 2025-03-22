@@ -39,6 +39,8 @@ flutter:
     - assets/images/characters/
     - assets/images/enemies/
     - assets/images/scenery/
+    - assets/images/attacks/
+    - assets/images/traps/
     - assets/music/
     - assets/sfx/
 

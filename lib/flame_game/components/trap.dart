@@ -1,68 +1,68 @@
 import 'dart:math';
 
-import 'package:dungeon_run/flame_game/effects/death_effect.dart';
-import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
+import 'package:dungeon_run/flame_game/effects/death_effect%20copy.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 
 import '../endless_world.dart';
 
-enum EnemyType {
-  goblin,
-  troll,
-  elementale,
+enum TrapType {
+  spikedRoller,
+  spikedPit,
+  rotatingBlades,
 }
 
-/// The [Enemy] component can represent three different types of enemies
+/// The [Trap] component can represent three different types of obstacles
 /// that the character can run into.
-class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
-  Enemy.goblin({super.position})
-      : _srcSize = Vector2(250, 386),
-        _srcImage = 'enemies/goblin.png',
-        _hitPoints = 1,
+class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
+  Trap.spikedRoller({super.position})
+      : _srcSize = Vector2(150, 154),
+        _srcImage = 'traps/spiked_roller.png',
         _speed = 1,
+        _trapType = TrapType.spikedRoller,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
         );
 
-  Enemy.troll({super.position})
-      : _srcSize = Vector2(250, 309),
-        _srcImage = 'enemies/troll.png',
-        _hitPoints = 2,
+  Trap.spikedPit({super.position})
+      : _srcSize = Vector2(150, 140),
+        _srcImage = 'traps/spiked_pit.png',
         _speed = 1,
+        _trapType = TrapType.spikedPit,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
         );
 
-  Enemy.elementale({super.position})
-      : _srcSize = Vector2(215, 386),
-        _srcImage = 'enemies/elementale.png',
-        _hitPoints = 3,
-        _speed = 2,
+  Trap.rotatingBlades({super.position})
+      : _srcSize = Vector2(150, 143),
+        _srcImage = 'traps/rotating_blades.png',
+        _speed = 1,
+        _trapType = TrapType.rotatingBlades,
         super(
           size: Vector2.all(150),
-          anchor: Anchor.bottomCenter,
+          anchor: Anchor.center,
         );
 
   /// Generates a random obstacle of type [EnemyType].
-  factory Enemy.random({
+  factory Trap.random({
     Vector2? position,
     Random? random,
   }) {
-    final enemyType = EnemyType.values.random(random);
-    return switch (enemyType) {
-      EnemyType.goblin => Enemy.goblin(position: position),
-      EnemyType.troll => Enemy.troll(position: position),
-      EnemyType.elementale => Enemy.elementale(position: position),
+    final TrapType trapType = TrapType.values.random(random);
+    return switch (trapType) {
+      TrapType.spikedRoller => Trap.spikedRoller(position: position),
+      TrapType.spikedPit => Trap.spikedPit(position: position),
+      TrapType.rotatingBlades => Trap.rotatingBlades(position: position),
     };
   }
 
+  final TrapType _trapType;
   final Vector2 _srcSize;
   final String _srcImage;
-  int _hitPoints;
   int _speed;
 
   @override
@@ -76,6 +76,18 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
     // When adding a RectangleHitbox without any arguments it automatically
     // fills up the size of the component.
     add(RectangleHitbox());
+
+    if (_trapType == TrapType.rotatingBlades) {
+      add(
+        RotateEffect.by(
+          -(2 * pi),
+          EffectController(
+            duration: 0.5,
+            infinite: true,
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -86,9 +98,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
     // last update ran. We need to multiply the speed by `dt` to make sure that
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
-    if (position.y < world.frontCharacterPosition.y) {
-      position.y += (400 * _speed) * dt;
-    }
+    position.y += (400 * _speed) * dt;
 
     // When the component is no longer visible on the screen anymore, we
     // remove it.
@@ -97,31 +107,20 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld> {
     // position minus its size in Y-axis is outside of minus half the world size
     // we know that it is no longer visible and it can be removed.
     if (position.y - size.y > world.size.y / 2) {
-      world.enemies.remove(this);
+      world.traps.remove(this);
       removeFromParent();
     }
   }
 
-  /// When the enemy is hit by the character we reduce the hit points and
-  /// if the hit points are less than or equal to 0 we remove the enemy.
-  void hitted() {
-    _hitPoints--;
-    if (_hitPoints <= 0) {
-      die();
-    } else {
-      add(EnemyHurtEffect());
-    }
-  }
-
   /// When the enemy is hit by the character we remove the enemy.
-  void die() {
+  void disable() {
     _speed = 0;
     // We remove the enemy from the list so that it is no longer hittable even if still present on the screen.
-    world.enemies.remove(this);
-    DeathEffect deathEffect = DeathEffect();
-    add(deathEffect);
+    world.traps.remove(this);
+    DisableEffect disableEffect = DisableEffect();
+    add(disableEffect);
 
     // We remove the enemy from the screen after the effect has been played.
-    Future.delayed(Duration(milliseconds: (deathEffect.effectTime * 1000).toInt()), () => removeFromParent());
+    Future.delayed(Duration(milliseconds: (disableEffect.effectTime * 1000).toInt()), () => removeFromParent());
   }
 }

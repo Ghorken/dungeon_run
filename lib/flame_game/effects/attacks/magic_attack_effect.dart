@@ -1,10 +1,6 @@
-import 'dart:math';
-
-import 'package:dungeon_run/flame_game/components/wizard.dart';
+import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/geometry.dart';
-import 'package:flutter/material.dart';
 
 /// The [MagicAttackEffect] is an effect that is composed of multiple different effects
 /// that are added to the [Wizard] when it attacks.
@@ -21,7 +17,7 @@ class MagicAttackEffect extends Component with ParentIsA<Wizard> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final sprite = await Sprite.load('frost.png');
+    final sprite = await Sprite.load('attacks/frost.png');
 
     final magic = SpriteComponent(
       sprite: sprite,

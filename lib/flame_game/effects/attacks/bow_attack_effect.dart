@@ -1,4 +1,4 @@
-import 'package:dungeon_run/flame_game/components/archer.dart';
+import 'package:dungeon_run/flame_game/components/characters/archer.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
@@ -17,7 +17,7 @@ class BowAttackEffect extends Component with ParentIsA<Archer> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final sprite = await Sprite.load('arrow.png');
+    final sprite = await Sprite.load('attacks/arrow.png');
 
     final arrow = SpriteComponent(
       sprite: sprite,

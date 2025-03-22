@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:dungeon_run/flame_game/components/character.dart';
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';

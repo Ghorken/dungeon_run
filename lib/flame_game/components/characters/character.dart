@@ -1,11 +1,11 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-import '../../audio/sounds.dart';
-import '../effects/hurt_effect.dart';
-import '../endless_runner.dart';
-import '../endless_world.dart';
-import '../components/enemy.dart';
+import '../../../audio/sounds.dart';
+import '../../effects/hurt_effect.dart';
+import '../../endless_runner.dart';
+import '../../endless_world.dart';
+import '../enemy.dart';
 
 /// The [Character] is the component that the physical character of the game is
 /// controlling.
@@ -61,4 +61,12 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
 
 enum CharacterState {
   running,
+}
+
+enum CharacterType {
+  warrior,
+  archer,
+  wizard,
+  assassin,
+  berserk,
 }

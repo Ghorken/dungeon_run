@@ -1,8 +1,8 @@
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
 import '../audio/audio_controller.dart';
-import '../level_selection/levels.dart';
 import 'components/background.dart';
 import 'endless_world.dart';
 
@@ -21,18 +21,17 @@ import 'endless_world.dart';
 /// could also be set inside of `onLoad` for example.
 class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
   EndlessRunner({
-    required this.level,
     required this.audioController,
+    required this.selectedCharacters,
   }) : super(
-          world: EndlessWorld(level: level),
+          world: EndlessWorld(selectedCharacters: selectedCharacters),
           camera: CameraComponent.withFixedResolution(width: 720, height: 1600),
         );
 
-  /// What the properties of the level that is played has.
-  final GameLevel level;
-
   /// A helper for playing sound effects and background audio.
   final AudioController audioController;
+
+  final List<CharacterType?> selectedCharacters;
 
   /// In the [onLoad] method you load different type of assets and set things
   /// that only needs to be set once when the level starts up.
@@ -40,6 +39,6 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
   Future<void> onLoad() async {
     // The backdrop is a static layer behind the world that the camera is
     // looking at, so here we add our parallax background.
-    camera.backdrop.add(Background(speed: world.speed));
+    camera.backdrop.add(Background());
   }
 }

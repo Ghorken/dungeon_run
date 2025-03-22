@@ -1,17 +1,18 @@
 import 'dart:math';
 
-import 'package:dungeon_run/flame_game/components/archer.dart';
-import 'package:dungeon_run/flame_game/components/assassin.dart';
-import 'package:dungeon_run/flame_game/components/warrior.dart';
-import 'package:dungeon_run/flame_game/components/wizard.dart';
+import 'package:dungeon_run/flame_game/components/characters/archer.dart';
+import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
+import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
+import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
+import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
+import 'package:dungeon_run/flame_game/components/trap.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-import '../level_selection/levels.dart';
 import 'components/enemy.dart';
-import 'components/character.dart';
+import 'components/characters/character.dart';
 import 'components/potion.dart';
 import 'game_screen.dart';
 
@@ -29,30 +30,21 @@ import 'game_screen.dart';
 ///  to.
 class EndlessWorld extends World with TapCallbacks, HasGameReference {
   EndlessWorld({
-    required this.level,
+    required this.selectedCharacters,
     Random? random,
   }) : _random = random ?? Random();
 
-  /// The properties of the current level.
-  final GameLevel level;
+  late Vector2 frontCharacterPosition = Vector2(0, (size.y / 2) - (size.y / 10));
+  late Vector2 leftCharacterPosition = Vector2(-(size.x / 2) + (size.x / 5), (size.y / 2) - (size.y / 20));
+  late Vector2 rightCharacterPosition = Vector2((size.x / 2) - (size.x / 5), (size.y / 2) - (size.y / 20));
 
-  /// The speed is used for determining how fast the background should pass by
-  /// and how fast the enemies and obstacles should move.
-  late double speed = _calculateSpeed(level.number);
-
-  late final Character frontCharacter;
-  late final Character leftCharacter;
-  late final Character rightCharacter;
   late final DateTime timeStarted;
   Vector2 get size => (parent as FlameGame).size;
 
   /// The random number generator that is used to spawn periodic components.
   final Random _random;
 
-  /// Where the ground is located in the world and things should stop falling.
-  late final Vector2 frontCharacterPosition = Vector2(0, (size.y / 2) - (size.y / 10));
-  late final Vector2 leftCharacterPosition = Vector2(-(size.x / 2) + (size.x / 5), (size.y / 2) - (size.y / 20));
-  late final Vector2 rightCharacterPosition = Vector2((size.x / 2) - (size.x / 5), (size.y / 2) - (size.y / 20));
+  final List<CharacterType?> selectedCharacters;
 
   /// List to keep track of potions int the world.
   final List<Potion> potions = [];
@@ -60,26 +52,46 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// List to keep track of enemies in the world.
   final List<Enemy> enemies = [];
 
+  /// List to keep track of traps in the world.
+  final List<Trap> traps = [];
+
+  /// The [Character] that is in the front slot.
+  Character? frontCharacter;
+
+  /// The [Character] that is in the left slot.
+  Character? leftCharacter;
+
+  /// The [Character] that is in the right slot.
+  Character? rightCharacter;
+
   @override
   Future<void> onLoad() async {
-    // The character is the component that we control when we tap the screen
-    // frontCharacter = Warrior(
-    //   position: frontCharacterPosition,
-    // );
-    frontCharacter = Assassin(
-      position: frontCharacterPosition,
-    );
-    add(frontCharacter);
+    // Initialize `leftCharacter` based on the first element of `selectedCharacters`
+    if (selectedCharacters[0] != null) {
+      leftCharacter = _createCharacter(
+        selectedCharacters[0]!,
+        leftCharacterPosition,
+      );
+      add(leftCharacter!);
+    }
 
-    leftCharacter = Archer(
-      position: leftCharacterPosition,
-    );
-    add(leftCharacter);
+    // Initialize `frontCharacter` based on the second element of `selectedCharacters`
+    if (selectedCharacters[1] != null) {
+      frontCharacter = _createCharacter(
+        selectedCharacters[1]!,
+        frontCharacterPosition,
+      );
+      add(frontCharacter!);
+    }
 
-    rightCharacter = Wizard(
-      position: rightCharacterPosition,
-    );
-    add(rightCharacter);
+    // Initialize `rightCharacter` based on the third element of `selectedCharacters`
+    if (selectedCharacters[2] != null) {
+      rightCharacter = _createCharacter(
+        selectedCharacters[2]!,
+        rightCharacterPosition,
+      );
+      add(rightCharacter!);
+    }
 
     // Spawning enemies in the world
     add(
@@ -89,10 +101,28 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           enemies.add(enemy);
           return enemy;
         },
-        period: 1,
+        period: 1.5,
         area: Rectangle.fromPoints(
           Vector2(-(size.x / 2), -(size.y / 2)),
-          Vector2((size.x / 2), -(size.y / 2) + (size.y / 5)),
+          Vector2((size.x / 2), -(size.y / 2)),
+        ),
+        random: _random,
+      ),
+    );
+
+    // Spawning traps in the world
+    add(
+      SpawnComponent.periodRange(
+        factory: (_) {
+          Trap trap = Trap.random(random: _random);
+          traps.add(trap);
+          return trap;
+        },
+        minPeriod: 5.0,
+        maxPeriod: 7.0,
+        area: Rectangle.fromPoints(
+          Vector2(-(size.x / 2), -(size.y / 2)),
+          Vector2((size.x / 2), -(size.y / 2)),
         ),
         random: _random,
       ),
@@ -133,19 +163,18 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   @override
   void onTapDown(TapDownEvent event) {
     // If the player taps on a character, we make it attack.
-    if (frontCharacter.toRect().contains(event.localPosition.toOffset())) {
-      frontCharacter.attack();
+    if (frontCharacter != null && frontCharacter!.toRect().contains(event.localPosition.toOffset())) {
+      frontCharacter!.attack();
       return;
-    } else if (leftCharacter.toRect().contains(event.localPosition.toOffset())) {
-      leftCharacter.attack();
+    } else if (leftCharacter != null && leftCharacter!.toRect().contains(event.localPosition.toOffset())) {
+      leftCharacter!.attack();
       return;
-    } else if (rightCharacter.toRect().contains(event.localPosition.toOffset())) {
-      rightCharacter.attack();
+    } else if (rightCharacter != null && rightCharacter!.toRect().contains(event.localPosition.toOffset())) {
+      rightCharacter!.attack();
       return;
     }
 
-    // If the player taps on a potion, we remove it from the world and increment
-    // the potion count.
+    // If the player taps on a potion, we remove it from the world
     for (final potion in potions) {
       if (potion.toRect().contains(event.localPosition.toOffset())) {
         potion.removeFromParent();
@@ -153,8 +182,29 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         break;
       }
     }
-  }
 
-  /// A helper function to define how fast a certain level should be.
-  static double _calculateSpeed(int level) => 200 + (level * 200);
+    // If the player taps on a trap, we remove it from the world
+    for (final Trap trap in traps) {
+      if (trap.toRect().contains(event.localPosition.toOffset())) {
+        trap.disable();
+        break;
+      }
+    }
+  }
+}
+
+/// Helper method to create a character based on its type
+Character _createCharacter(CharacterType type, Vector2 position) {
+  switch (type) {
+    case CharacterType.warrior:
+      return Warrior(position: position);
+    case CharacterType.archer:
+      return Archer(position: position);
+    case CharacterType.wizard:
+      return Wizard(position: position);
+    case CharacterType.assassin:
+      return Assassin(position: position);
+    case CharacterType.berserk:
+      return Berserk(position: position);
+  }
 }

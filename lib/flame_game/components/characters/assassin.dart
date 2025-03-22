@@ -1,7 +1,7 @@
 import 'package:dungeon_run/audio/sounds.dart';
-import 'package:dungeon_run/flame_game/components/character.dart';
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
-import 'package:dungeon_run/flame_game/effects/dagger_attack_effect.dart';
+import 'package:dungeon_run/flame_game/effects/attacks/dagger_attack_effect.dart';
 import 'package:flame/extensions.dart';
 
 class Assassin extends Character {

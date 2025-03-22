@@ -63,7 +63,7 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () {
                 GoRouter.of(context).pop();
               },
-              child: const Text('Back'),
+              child: const Text('Indietro'),
             ),
             _gap,
           ],

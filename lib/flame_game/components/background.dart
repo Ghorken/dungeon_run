@@ -8,9 +8,7 @@ import 'package:flutter/painting.dart';
 /// images which form a parallax, a way to simulate movement and depth in the
 /// background.
 class Background extends ParallaxComponent {
-  Background({required this.speed});
-
-  final double speed;
+  Background();
 
   @override
   Future<void> onLoad() async {
@@ -23,7 +21,7 @@ class Background extends ParallaxComponent {
     // front, where the character is, we have to calculate what speed the layer in
     // the back should have and then the parallax will take care of setting the
     // speeds for the rest of the layers.
-    final baseVelocity = Vector2(0, speed / pow(2, layers.length));
+    final baseVelocity = Vector2(0, 400 / pow(2, layers.length));
 
     // The multiplier delta is used by the parallax to multiply the speed of
     // each layer compared to the last, starting from the back. Since we only

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:dungeon_run/flame_game/components/warrior.dart';
+import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/geometry.dart';
@@ -16,7 +16,7 @@ class SwordAttackEffect extends Component with ParentIsA<Warrior> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final sprite = await Sprite.load('sword.png');
+    final sprite = await Sprite.load('attacks/sword.png');
 
     final sword = SpriteComponent(
       sprite: sprite,

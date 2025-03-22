@@ -1,6 +1,5 @@
-import 'package:dungeon_run/flame_game/components/assassin.dart';
+import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 
 /// The [DaggerAttackEffect] is an effect that is composed of multiple different effects
 /// that are added to the [Archer] when it attacks.
