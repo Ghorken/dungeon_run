@@ -191,6 +191,12 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       }
     }
   }
+
+  void loose() {
+    game.pauseEngine();
+    game.overlays.remove(GameScreen.backButtonKey);
+    game.overlays.add(GameScreen.looseDialogKey);
+  }
 }
 
 /// Helper method to create a character based on its type

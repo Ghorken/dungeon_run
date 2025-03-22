@@ -16,6 +16,8 @@ import 'endless_runner.dart';
 class GameScreen extends StatelessWidget {
   const GameScreen({required this.selectedCharacters, super.key});
 
+  static const String winDialogKey = 'win_dialog';
+  static const String looseDialogKey = 'loose_dialog';
   static const String backButtonKey = 'back_buttton';
   final List<CharacterType?> selectedCharacters;
 
@@ -38,6 +40,56 @@ class GameScreen extends StatelessWidget {
                 type: NesButtonType.normal,
                 onPressed: GoRouter.of(context).pop,
                 child: NesIcon(iconData: NesIcons.leftArrowIndicator),
+              ),
+            );
+          },
+          winDialogKey: (BuildContext context, EndlessRunner game) {
+            return Center(
+              child: NesContainer(
+                width: 420,
+                height: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Bravo! Hai sconfitto il re goblin!',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    NesButton(
+                      onPressed: () {
+                        GoRouter.of(context).go('/');
+                      },
+                      type: NesButtonType.normal,
+                      child: const Text('Ok'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          looseDialogKey: (BuildContext context, EndlessRunner game) {
+            return Center(
+              child: NesContainer(
+                width: 420,
+                height: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Peccato, sei stato sconfitto!',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    NesButton(
+                      onPressed: () {
+                        GoRouter.of(context).go('/');
+                      },
+                      type: NesButtonType.normal,
+                      child: const Text('Ok'),
+                    ),
+                  ],
+                ),
               ),
             );
           },

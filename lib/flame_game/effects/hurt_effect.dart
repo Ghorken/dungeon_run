@@ -13,25 +13,32 @@ class HurtEffect extends Component with ParentIsA<Character> {
   void onMount() {
     super.onMount();
     const effectTime = 0.5;
-    parent.addAll(
-      [
-        RotateEffect.by(
-          pi * 2,
-          EffectController(
-            duration: effectTime,
-            curve: Curves.easeInOut,
+
+    parent.lifePoints--;
+
+    if (parent.lifePoints <= 0) {
+      parent.world.loose();
+    } else {
+      parent.addAll(
+        [
+          RotateEffect.by(
+            pi * 2,
+            EffectController(
+              duration: effectTime,
+              curve: Curves.easeInOut,
+            ),
           ),
-        ),
-        ColorEffect(
-          Colors.white,
-          EffectController(
-            duration: effectTime / 8,
-            alternate: true,
-            repeatCount: 2,
+          ColorEffect(
+            Colors.white,
+            EffectController(
+              duration: effectTime / 8,
+              alternate: true,
+              repeatCount: 2,
+            ),
+            opacityTo: 0.9,
           ),
-          opacityTo: 0.9,
-        ),
-      ],
-    );
+        ],
+      );
+    }
   }
 }

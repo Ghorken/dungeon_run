@@ -19,6 +19,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
         );
 
   final String srcImage;
+  int lifePoints = 10;
 
   @override
   Future<void> onLoad() async {
