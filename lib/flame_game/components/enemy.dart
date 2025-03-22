@@ -14,6 +14,7 @@ enum EnemyType {
   goblin,
   troll,
   elementale,
+  goblinKing,
 }
 
 /// The [Enemy] component can represent three different types of enemies
@@ -27,6 +28,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _srcImage = 'enemies/goblin.png',
         _hitPoints = 1,
         _speed = 1,
+        _damage = 1,
+        _enemyType = EnemyType.goblin,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -37,6 +40,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _srcImage = 'enemies/troll.png',
         _hitPoints = 2,
         _speed = 1,
+        _damage = 1,
+        _enemyType = EnemyType.troll,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -47,8 +52,22 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _srcImage = 'enemies/elementale.png',
         _hitPoints = 3,
         _speed = 2,
+        _damage = 2,
+        _enemyType = EnemyType.elementale,
         super(
           size: Vector2.all(150),
+          anchor: Anchor.bottomCenter,
+        );
+
+  Enemy.goblinKing({super.position})
+      : _srcSize = Vector2(250, 495),
+        _srcImage = 'enemies/goblin_king.png',
+        _hitPoints = 20,
+        _speed = 1,
+        _damage = 5,
+        _enemyType = EnemyType.goblinKing,
+        super(
+          size: Vector2.all(250),
           anchor: Anchor.bottomCenter,
         );
 
@@ -62,6 +81,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       EnemyType.goblin => Enemy.goblin(position: position),
       EnemyType.troll => Enemy.troll(position: position),
       EnemyType.elementale => Enemy.elementale(position: position),
+      EnemyType.goblinKing => Enemy.goblin(position: position),
     };
   }
 
@@ -69,6 +89,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   final String _srcImage;
   int _hitPoints;
   int _speed;
+  final int _damage;
+  final EnemyType _enemyType;
 
   @override
   Future<void> onLoad() async {
@@ -102,20 +124,9 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       // Apply HurtEffect only if 1 second has passed since the last application
       if (_hurtEffectTimer >= 1.0) {
         _hurtEffectTimer = 0.0; // Reset the timer
-        world.frontCharacter!.add(HurtEffect());
+        world.frontCharacter!.add(HurtEffect(damage: _damage));
         game.audioController.playSfx(SfxType.damage);
       }
-    }
-
-    // When the component is no longer visible on the screen anymore, we
-    // remove it.
-    // The position is defined from the upper left corner of the component (the
-    // anchor) and the center of the world is in (0, 0), so when the components
-    // position minus its size in Y-axis is outside of minus half the world size
-    // we know that it is no longer visible and it can be removed.
-    if (position.y - size.y > world.size.y / 2) {
-      world.enemies.remove(this);
-      removeFromParent();
     }
   }
 
@@ -125,6 +136,9 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     _hitPoints--;
     if (_hitPoints <= 0) {
       die();
+      if (_enemyType == EnemyType.goblinKing) {
+        world.win();
+      }
     } else {
       add(EnemyHurtEffect());
     }

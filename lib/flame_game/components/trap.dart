@@ -21,6 +21,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
         _srcImage = 'traps/spiked_roller.png',
         _speed = 1,
         _trapType = TrapType.spikedRoller,
+        damage = 1,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -31,6 +32,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
         _srcImage = 'traps/spiked_pit.png',
         _speed = 1,
         _trapType = TrapType.spikedPit,
+        damage = 1,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -41,6 +43,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
         _srcImage = 'traps/rotating_blades.png',
         _speed = 1,
         _trapType = TrapType.rotatingBlades,
+        damage = 1,
         super(
           size: Vector2.all(150),
           anchor: Anchor.center,
@@ -63,6 +66,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
   final Vector2 _srcSize;
   final String _srcImage;
   int _speed;
+  final int damage;
 
   @override
   Future<void> onLoad() async {

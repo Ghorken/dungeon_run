@@ -110,6 +110,19 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       ),
     );
 
+    // Schedule the goblinKing to spawn after 5 minutes
+    add(
+      TimerComponent(
+        period: 300, // 5 minutes in seconds
+        repeat: false, // Spawn only once
+        onTick: () {
+          final goblinKing = Enemy.goblinKing(position: Vector2(0, -(size.y / 2)));
+          enemies.add(goblinKing);
+          add(goblinKing);
+        },
+      ),
+    );
+
     // Spawning traps in the world
     add(
       SpawnComponent.periodRange(
@@ -196,6 +209,12 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
     game.overlays.add(GameScreen.looseDialogKey);
+  }
+
+  void win() {
+    game.pauseEngine();
+    game.overlays.remove(GameScreen.backButtonKey);
+    game.overlays.add(GameScreen.winDialogKey);
   }
 }
 

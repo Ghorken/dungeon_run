@@ -52,7 +52,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
     // When the character collides with an obstacle it should increment the hitted counter.
     if (other is Trap && world.traps.contains(other)) {
       game.audioController.playSfx(SfxType.damage);
-      add(HurtEffect());
+      add(HurtEffect(damage: other.damage));
     }
   }
 

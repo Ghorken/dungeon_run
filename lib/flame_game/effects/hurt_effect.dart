@@ -9,12 +9,18 @@ import 'package:flutter/material.dart';
 /// that are added to the [Character] when it is hurt.
 /// It spins the character and makes it blink in white.
 class HurtEffect extends Component with ParentIsA<Character> {
+  final int damage;
+
+  HurtEffect({
+    required this.damage,
+  });
+
   @override
   void onMount() {
     super.onMount();
     const effectTime = 0.5;
 
-    parent.lifePoints--;
+    parent.lifePoints -= damage;
 
     if (parent.lifePoints <= 0) {
       parent.world.loose();
