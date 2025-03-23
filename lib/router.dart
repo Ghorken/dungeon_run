@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
+import 'package:dungeon_run/settings/instruction_screen.dart';
 import 'package:dungeon_run/settings/select_characters_screen.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:flutter/material.dart';
@@ -18,22 +19,30 @@ final router = GoRouter(
       builder: (context, state) => const MainMenuScreen(key: Key('main menu')),
       routes: [
         GoRoute(
-          path: 'selectCharacters',
-          builder: (context, state) => const SelectCharactersScreen(
-            key: Key('selectCharacters'),
+          path: 'instructions',
+          builder: (context, state) => const InstructionScreen(
+            key: Key('instructions'),
           ),
           routes: [
             GoRoute(
-              path: 'play',
-              pageBuilder: (context, state) => buildPageTransition<void>(
-                key: const ValueKey('play'),
-                color: Palette().backgroundMain.color,
-                child: GameScreen(selectedCharacters: [
-                  _parseCharacterType((state.extra as Map<String, String?>)['sx']),
-                  _parseCharacterType((state.extra as Map<String, String?>)['front']),
-                  _parseCharacterType((state.extra as Map<String, String?>)['dx']),
-                ]),
+              path: 'selectCharacters',
+              builder: (context, state) => const SelectCharactersScreen(
+                key: Key('selectCharacters'),
               ),
+              routes: [
+                GoRoute(
+                  path: 'play',
+                  pageBuilder: (context, state) => buildPageTransition<void>(
+                    key: const ValueKey('play'),
+                    color: Palette().backgroundMain.color,
+                    child: GameScreen(selectedCharacters: [
+                      _parseCharacterType((state.extra as Map<String, String?>)['sx']),
+                      _parseCharacterType((state.extra as Map<String, String?>)['front']),
+                      _parseCharacterType((state.extra as Map<String, String?>)['dx']),
+                    ]),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

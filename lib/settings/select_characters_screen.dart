@@ -134,15 +134,6 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                           ),
                       ],
                     ),
-                    _gap,
-                    const Text(
-                      'Il guerriero attacca a corta distanza\n l\'arciere a media distanza\n il mago a lunga distanza\n l\'assassino colpisce un nemico a caso in tutto lo schermo.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Press Start 2P',
-                        fontSize: 14,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -160,7 +151,7 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                   'dx': _getCharacterType(_selectedCharacters[2]),
                 };
 
-                GoRouter.of(context).go('/selectCharacters/play', extra: pathParameters);
+                GoRouter.of(context).go('/instructions/selectCharacters/play', extra: pathParameters);
               },
               child: const Text('Gioca'),
             ),

@@ -6,7 +6,10 @@ import 'package:dungeon_run/flame_game/effects/attacks/axe_attack_effect.dart';
 class Berserk extends Character {
   Berserk({
     super.position,
-  }) : super(srcImage: 'characters/berserk.png');
+  }) : super(
+          srcImage: 'characters/berserk.png',
+          damage: 2,
+        );
 
   @override
   void attack() {
@@ -19,7 +22,7 @@ class Berserk extends Character {
     for (final enemy in enemies) {
       if (enemy.value > 500 && enemy.value < 1000) {
         add(AxeAttackEffect(destination: enemy.key.position));
-        enemy.key.hitted();
+        enemy.key.hitted(damage);
         game.audioController.playSfx(SfxType.score);
         break;
       }

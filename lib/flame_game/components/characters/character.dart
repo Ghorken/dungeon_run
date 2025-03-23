@@ -11,6 +11,7 @@ import 'package:flame/components.dart';
 abstract class Character extends SpriteAnimationGroupComponent<CharacterState> with CollisionCallbacks, HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner> {
   Character({
     required this.srcImage,
+    required this.damage,
     super.position,
   }) : super(
           size: Vector2.all(150),
@@ -19,6 +20,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
         );
 
   final String srcImage;
+  int damage;
   int lifePoints = 10;
 
   @override

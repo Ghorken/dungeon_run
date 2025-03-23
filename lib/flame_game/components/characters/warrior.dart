@@ -6,7 +6,10 @@ import 'package:dungeon_run/flame_game/effects/attacks/sword_attack_effect.dart'
 class Warrior extends Character {
   Warrior({
     super.position,
-  }) : super(srcImage: 'characters/warrior.png');
+  }) : super(
+          srcImage: 'characters/warrior.png',
+          damage: 3,
+        );
 
   @override
   void attack() {
@@ -20,7 +23,7 @@ class Warrior extends Character {
       // The warrior can only hit enemies that are in short range
       if (enemy.value < 300) {
         add(SwordAttackEffect());
-        enemy.key.hitted();
+        enemy.key.hitted(damage);
         game.audioController.playSfx(SfxType.score);
         break;
       }

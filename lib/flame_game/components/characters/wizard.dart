@@ -6,7 +6,7 @@ import 'package:dungeon_run/flame_game/effects/attacks/magic_attack_effect.dart'
 class Wizard extends Character {
   Wizard({
     super.position,
-  }) : super(srcImage: 'characters/wizard.png');
+  }) : super(srcImage: 'characters/wizard.png', damage: 1);
 
   @override
   void attack() {
@@ -19,7 +19,7 @@ class Wizard extends Character {
     for (final enemy in enemies) {
       if (enemy.value > 500 && enemy.value < 1000) {
         add(MagicAttackEffect(destination: enemy.key.position));
-        enemy.key.hitted();
+        enemy.key.hitted(damage);
         game.audioController.playSfx(SfxType.score);
         break;
       }

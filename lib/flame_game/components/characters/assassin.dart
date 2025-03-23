@@ -7,7 +7,10 @@ import 'package:flame/extensions.dart';
 class Assassin extends Character {
   Assassin({
     super.position,
-  }) : super(srcImage: 'characters/assassin.png');
+  }) : super(
+          srcImage: 'characters/assassin.png',
+          damage: 1,
+        );
 
   @override
   void attack() {
@@ -21,7 +24,7 @@ class Assassin extends Character {
     final enemy = enemies.random();
 
     add(DaggerAttackEffect(destination: enemy.key.position));
-    enemy.key.hitted();
+    enemy.key.hitted(damage);
     game.audioController.playSfx(SfxType.score);
   }
 }

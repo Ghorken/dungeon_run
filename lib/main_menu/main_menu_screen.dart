@@ -52,7 +52,7 @@ class MainMenuScreen extends StatelessWidget {
             WobblyButton(
               onPressed: () {
                 audioController.playSfx(SfxType.buttonTap);
-                GoRouter.of(context).go('/selectCharacters');
+                GoRouter.of(context).go('/instructions');
               },
               child: const Text('Gioca'),
             ),

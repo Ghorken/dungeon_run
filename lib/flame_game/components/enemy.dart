@@ -27,7 +27,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       : _srcSize = Vector2(250, 386),
         _srcImage = 'enemies/goblin.png',
         _hitPoints = 1,
-        _speed = 1,
+        speed = 2,
         _damage = 1,
         _enemyType = EnemyType.goblin,
         super(
@@ -39,7 +39,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       : _srcSize = Vector2(250, 309),
         _srcImage = 'enemies/troll.png',
         _hitPoints = 2,
-        _speed = 1,
+        speed = 2,
         _damage = 1,
         _enemyType = EnemyType.troll,
         super(
@@ -51,7 +51,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       : _srcSize = Vector2(215, 386),
         _srcImage = 'enemies/elementale.png',
         _hitPoints = 3,
-        _speed = 2,
+        speed = 4,
         _damage = 2,
         _enemyType = EnemyType.elementale,
         super(
@@ -63,7 +63,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       : _srcSize = Vector2(250, 495),
         _srcImage = 'enemies/goblin_king.png',
         _hitPoints = 20,
-        _speed = 1,
+        speed = 2,
         _damage = 5,
         _enemyType = EnemyType.goblinKing,
         super(
@@ -88,7 +88,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   final Vector2 _srcSize;
   final String _srcImage;
   int _hitPoints;
-  int _speed;
+  int speed;
   final int _damage;
   final EnemyType _enemyType;
 
@@ -119,7 +119,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
     if (position.y < world.frontCharacterPosition.y) {
-      position.y += (400 * _speed) * dt;
+      position.y += (world.speed * speed) * dt;
     } else {
       // Apply HurtEffect only if 1 second has passed since the last application
       if (_hurtEffectTimer >= 1.0) {
@@ -132,8 +132,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// When the enemy is hit by the character we reduce the hit points and
   /// if the hit points are less than or equal to 0 we remove the enemy.
-  void hitted() {
-    _hitPoints--;
+  void hitted(int damage) {
+    _hitPoints -= damage;
     if (_hitPoints <= 0) {
       die();
       if (_enemyType == EnemyType.goblinKing) {
@@ -146,7 +146,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// When the enemy is hit by the character we remove the enemy.
   void die() {
-    _speed = 0;
+    speed = 0;
     // We remove the enemy from the list so that it is no longer hittable even if still present on the screen.
     world.enemies.remove(this);
     DeathEffect deathEffect = DeathEffect();

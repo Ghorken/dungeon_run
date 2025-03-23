@@ -6,7 +6,10 @@ import 'package:dungeon_run/flame_game/effects/attacks/bow_attack_effect.dart';
 class Archer extends Character {
   Archer({
     super.position,
-  }) : super(srcImage: 'characters/archer.png');
+  }) : super(
+          srcImage: 'characters/archer.png',
+          damage: 1,
+        );
 
   @override
   void attack() {
@@ -20,7 +23,7 @@ class Archer extends Character {
       // The archer can only hit enemies that are in mid range
       if (enemy.value > 1000) {
         add(BowAttackEffect(destination: enemy.key.position));
-        enemy.key.hitted();
+        enemy.key.hitted(damage);
         game.audioController.playSfx(SfxType.score);
         break;
       }

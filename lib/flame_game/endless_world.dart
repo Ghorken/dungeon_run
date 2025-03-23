@@ -64,6 +64,8 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// The [Character] that is in the right slot.
   Character? rightCharacter;
 
+  int speed = 200;
+
   @override
   Future<void> onLoad() async {
     // Initialize `leftCharacter` based on the first element of `selectedCharacters`
@@ -145,7 +147,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent.periodRange(
         factory: (_) {
-          Potion potion = Potion();
+          Potion potion = Potion.random(random: _random);
           potions.add(potion);
           return potion;
         },
@@ -190,6 +192,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     // If the player taps on a potion, we remove it from the world
     for (final potion in potions) {
       if (potion.toRect().contains(event.localPosition.toOffset())) {
+        potion.effect();
         potion.removeFromParent();
         potions.remove(potion);
         break;
