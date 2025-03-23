@@ -69,6 +69,7 @@ class Potion extends SpriteAnimationComponent with HasGameReference, HasWorldRef
         stepTime: 0.15,
       ),
     );
+    position = Vector2(_randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), _randomInRange((-world.size.y / 2 + size.y / 2).toInt(), (world.size.y / 2 - world.size.y / 5 - size.y / 2).toInt()));
 
     // When adding a CircleHitbox without any arguments it automatically
     // fills up the size of the component as much as it can without overflowing
@@ -129,5 +130,10 @@ class Potion extends SpriteAnimationComponent with HasGameReference, HasWorldRef
         );
         break;
     }
+  }
+
+  double _randomInRange(int min, int max) {
+    final random = Random();
+    return (min + random.nextInt(max - min + 1)).toDouble();
   }
 }

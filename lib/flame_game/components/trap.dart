@@ -32,6 +32,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
         _srcImage = 'traps/spiked_pit.png',
         _speed = 1,
         _trapType = TrapType.spikedPit,
+        _yPosition = 0.0,
         damage = 1,
         super(
           size: Vector2.all(150),
@@ -66,6 +67,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
   final Vector2 _srcSize;
   final String _srcImage;
   int _speed;
+  double? _yPosition;
   final int damage;
 
   @override
@@ -76,6 +78,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
       _srcImage,
       srcSize: _srcSize,
     );
+    position = Vector2(_randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), _yPosition ?? -world.size.y / 2);
     // When adding a RectangleHitbox without any arguments it automatically
     // fills up the size of the component.
     add(RectangleHitbox());
@@ -126,5 +129,10 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
 
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(Duration(milliseconds: (disableEffect.effectTime * 1000).toInt()), () => removeFromParent());
+  }
+
+  double _randomInRange(int min, int max) {
+    final random = Random();
+    return (min + random.nextInt(max - min + 1)).toDouble();
   }
 }

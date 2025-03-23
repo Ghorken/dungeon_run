@@ -8,7 +8,6 @@ import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
 import 'package:dungeon_run/flame_game/components/trap.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
 import 'components/enemy.dart';
@@ -105,26 +104,22 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           return enemy;
         },
         period: 2,
-        area: Rectangle.fromPoints(
-          Vector2(-(size.x / 2), -(size.y / 2)),
-          Vector2((size.x / 2), -(size.y / 2)),
-        ),
         random: _random,
       ),
     );
 
     // Schedule the goblinKing to spawn after 5 minutes
-    // add(
-    //   TimerComponent(
-    //     period: 300, // 5 minutes in seconds
-    //     repeat: false, // Spawn only once
-    //     onTick: () {
-    //       final goblinKing = Enemy.goblinKing(position: Vector2(0, -(size.y / 2)));
-    //       enemies.add(goblinKing);
-    //       add(goblinKing);
-    //     },
-    //   ),
-    // );
+    add(
+      TimerComponent(
+        period: 300, // 5 minutes in seconds
+        repeat: false, // Spawn only once
+        onTick: () {
+          final goblinKing = Enemy.goblinKing();
+          enemies.add(goblinKing);
+          add(goblinKing);
+        },
+      ),
+    );
 
     // Spawning traps in the world
     add(
@@ -136,10 +131,6 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         },
         minPeriod: 5.0,
         maxPeriod: 7.0,
-        area: Rectangle.fromPoints(
-          Vector2(-(size.x / 2), -(size.y / 2)),
-          Vector2((size.x / 2), -(size.y / 2)),
-        ),
         random: _random,
       ),
     );
@@ -154,10 +145,6 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         },
         minPeriod: 3.0,
         maxPeriod: 6.0,
-        area: Rectangle.fromPoints(
-          Vector2(-(size.x / 2), -(size.y / 2)),
-          Vector2((size.x / 2), (size.y / 2) - (size.y / 5)),
-        ),
       ),
     );
   }
@@ -178,10 +165,6 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// [onTapDown] is called when the character taps the screen
   @override
   void onTapDown(TapDownEvent event) {
-    print("DR: ${frontCharacter?.damage}");
-    print("DR: ${leftCharacter?.damage}");
-    print("DR: ${rightCharacter?.damage}");
-
     // If the player taps on a character, we make it attack.
     if (frontCharacter != null && frontCharacter!.toRect().contains(event.localPosition.toOffset())) {
       frontCharacter!.attack();

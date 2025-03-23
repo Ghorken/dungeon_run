@@ -23,7 +23,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   // Timer to control the application of HurtEffect
   double _hurtEffectTimer = 0.0;
 
-  Enemy.goblin({super.position})
+  Enemy.goblin()
       : _srcSize = Vector2(250, 386),
         _srcImage = 'enemies/goblin.png',
         _hitPoints = 1,
@@ -35,7 +35,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
           anchor: Anchor.bottomCenter,
         );
 
-  Enemy.troll({super.position})
+  Enemy.troll()
       : _srcSize = Vector2(250, 309),
         _srcImage = 'enemies/troll.png',
         _hitPoints = 2,
@@ -47,7 +47,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
           anchor: Anchor.bottomCenter,
         );
 
-  Enemy.elementale({super.position})
+  Enemy.elementale()
       : _srcSize = Vector2(215, 386),
         _srcImage = 'enemies/elementale.png',
         _hitPoints = 3,
@@ -59,13 +59,14 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
           anchor: Anchor.bottomCenter,
         );
 
-  Enemy.goblinKing({super.position})
+  Enemy.goblinKing()
       : _srcSize = Vector2(250, 495),
         _srcImage = 'enemies/goblin_king.png',
         _hitPoints = 20,
         speed = 2,
         _damage = 5,
         _enemyType = EnemyType.goblinKing,
+        _xPosition = 0.0,
         super(
           size: Vector2.all(250),
           anchor: Anchor.bottomCenter,
@@ -73,15 +74,14 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// Generates a random obstacle of type [EnemyType].
   factory Enemy.random({
-    Vector2? position,
     Random? random,
   }) {
     final enemyType = EnemyType.values.random(random);
     return switch (enemyType) {
-      EnemyType.goblin => Enemy.goblin(position: position),
-      EnemyType.troll => Enemy.troll(position: position),
-      EnemyType.elementale => Enemy.elementale(position: position),
-      EnemyType.goblinKing => Enemy.goblin(position: position),
+      EnemyType.goblin => Enemy.goblin(),
+      EnemyType.troll => Enemy.troll(),
+      EnemyType.elementale => Enemy.elementale(),
+      EnemyType.goblinKing => Enemy.goblin(),
     };
   }
 
@@ -91,6 +91,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   int speed;
   final int _damage;
   final EnemyType _enemyType;
+  double? _xPosition;
 
   @override
   Future<void> onLoad() async {
@@ -100,6 +101,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       _srcImage,
       srcSize: _srcSize,
     );
+    position = Vector2(_xPosition ?? _randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), -world.size.y / 2);
     // When adding a RectangleHitbox without any arguments it automatically
     // fills up the size of the component.
     add(RectangleHitbox());
@@ -154,5 +156,10 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(Duration(milliseconds: (deathEffect.effectTime * 1000).toInt()), () => removeFromParent());
+  }
+
+  double _randomInRange(int min, int max) {
+    final random = Random();
+    return (min + random.nextInt(max - min + 1)).toDouble();
   }
 }
