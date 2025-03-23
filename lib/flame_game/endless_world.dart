@@ -64,6 +64,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// The [Character] that is in the right slot.
   Character? rightCharacter;
 
+  /// The base speed at which every elements move.
   int speed = 200;
 
   @override
@@ -103,7 +104,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           enemies.add(enemy);
           return enemy;
         },
-        period: 1.5,
+        period: 2,
         area: Rectangle.fromPoints(
           Vector2(-(size.x / 2), -(size.y / 2)),
           Vector2((size.x / 2), -(size.y / 2)),
@@ -113,17 +114,17 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     );
 
     // Schedule the goblinKing to spawn after 5 minutes
-    add(
-      TimerComponent(
-        period: 300, // 5 minutes in seconds
-        repeat: false, // Spawn only once
-        onTick: () {
-          final goblinKing = Enemy.goblinKing(position: Vector2(0, -(size.y / 2)));
-          enemies.add(goblinKing);
-          add(goblinKing);
-        },
-      ),
-    );
+    // add(
+    //   TimerComponent(
+    //     period: 300, // 5 minutes in seconds
+    //     repeat: false, // Spawn only once
+    //     onTick: () {
+    //       final goblinKing = Enemy.goblinKing(position: Vector2(0, -(size.y / 2)));
+    //       enemies.add(goblinKing);
+    //       add(goblinKing);
+    //     },
+    //   ),
+    // );
 
     // Spawning traps in the world
     add(
@@ -177,6 +178,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// [onTapDown] is called when the character taps the screen
   @override
   void onTapDown(TapDownEvent event) {
+    print("DR: ${frontCharacter?.damage}");
+    print("DR: ${leftCharacter?.damage}");
+    print("DR: ${rightCharacter?.damage}");
+
     // If the player taps on a character, we make it attack.
     if (frontCharacter != null && frontCharacter!.toRect().contains(event.localPosition.toOffset())) {
       frontCharacter!.attack();

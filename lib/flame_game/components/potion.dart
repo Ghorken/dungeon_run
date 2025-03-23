@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
 import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:flame/collisions.dart';
@@ -91,33 +92,38 @@ class Potion extends SpriteAnimationComponent with HasGameReference, HasWorldRef
         world.frontCharacter?.lifePoints += 10;
         break;
       case PotionType.damage:
-        world.frontCharacter?.damage += 2;
-        world.leftCharacter?.damage += 2;
-        world.rightCharacter?.damage += 2;
+        final Character? frontCharacter = world.frontCharacter;
+        final Character? leftCharacter = world.leftCharacter;
+        final Character? rightCharacter = world.rightCharacter;
+        frontCharacter?.damage += 2;
+        leftCharacter?.damage += 2;
+        rightCharacter?.damage += 2;
 
         // Schedule the reversal of the effect after 3 seconds
-        add(
+        world.add(
           TimerComponent(
             period: 3.0,
             repeat: false,
             onTick: () {
-              world.frontCharacter?.damage -= 2; // Revert the damage boost
-              world.leftCharacter?.damage -= 2;
-              world.rightCharacter?.damage -= 2;
+              // Revert the damage boost
+              frontCharacter?.damage -= 2;
+              leftCharacter?.damage -= 2;
+              rightCharacter?.damage -= 2;
             },
           ),
         );
         break;
       case PotionType.slow:
-        world.speed = (world.speed / 2).toInt();
+        final EndlessWorld currentWorld = world;
+        currentWorld.speed = (world.speed / 2).toInt();
 
         // Schedule the reversal of the effect after 3 seconds
-        add(
+        world.add(
           TimerComponent(
             period: 3.0,
             repeat: false,
             onTick: () {
-              world.speed *= 2; // Revert the speed boost
+              currentWorld.speed *= 2; // Revert the speed boost
             },
           ),
         );
