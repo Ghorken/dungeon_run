@@ -26,7 +26,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   Enemy.goblin()
       : _srcSize = Vector2(250, 386),
         _srcImage = 'enemies/goblin.png',
-        _hitPoints = 1,
+        _hitPoints = 5,
         speed = 2,
         _damage = 1,
         _enemyType = EnemyType.goblin,
@@ -38,7 +38,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   Enemy.troll()
       : _srcSize = Vector2(250, 309),
         _srcImage = 'enemies/troll.png',
-        _hitPoints = 2,
+        _hitPoints = 10,
         speed = 2,
         _damage = 1,
         _enemyType = EnemyType.troll,
@@ -50,7 +50,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   Enemy.elementale()
       : _srcSize = Vector2(215, 386),
         _srcImage = 'enemies/elementale.png',
-        _hitPoints = 3,
+        _hitPoints = 15,
         speed = 4,
         _damage = 2,
         _enemyType = EnemyType.elementale,
@@ -62,7 +62,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   Enemy.goblinKing()
       : _srcSize = Vector2(250, 495),
         _srcImage = 'enemies/goblin_king.png',
-        _hitPoints = 20,
+        _hitPoints = 30,
         speed = 2,
         _damage = 5,
         _enemyType = EnemyType.goblinKing,

@@ -6,7 +6,10 @@ import 'package:dungeon_run/flame_game/effects/attacks/magic_attack_effect.dart'
 class Wizard extends Character {
   Wizard({
     super.position,
-  }) : super(srcImage: 'characters/wizard.png', damage: 1);
+  }) : super(
+          srcImage: 'characters/wizard.png',
+          damage: 2,
+        );
 
   @override
   void attack() {

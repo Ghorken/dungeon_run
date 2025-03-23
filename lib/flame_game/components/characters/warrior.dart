@@ -8,7 +8,7 @@ class Warrior extends Character {
     super.position,
   }) : super(
           srcImage: 'characters/warrior.png',
-          damage: 3,
+          damage: 5,
         );
 
   @override

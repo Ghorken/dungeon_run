@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -17,12 +19,13 @@ class MagicAttackEffect extends Component with ParentIsA<Wizard> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final sprite = await Sprite.load('attacks/frost.png');
+    final sprite = await Sprite.load('attacks/fireball.png');
 
     final magic = SpriteComponent(
       sprite: sprite,
       size: Vector2(20, 19),
       anchor: Anchor.bottomCenter,
+      angle: pi,
     );
 
     magic.position = parent.position + Vector2(0, -parent.size.y / 2);

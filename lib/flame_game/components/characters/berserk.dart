@@ -8,7 +8,7 @@ class Berserk extends Character {
     super.position,
   }) : super(
           srcImage: 'characters/berserk.png',
-          damage: 2,
+          damage: 3,
         );
 
   @override

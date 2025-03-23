@@ -8,7 +8,7 @@ class Archer extends Character {
     super.position,
   }) : super(
           srcImage: 'characters/archer.png',
-          damage: 1,
+          damage: 3,
         );
 
   @override
