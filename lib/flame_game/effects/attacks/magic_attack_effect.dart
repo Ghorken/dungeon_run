@@ -23,7 +23,7 @@ class MagicAttackEffect extends Component with ParentIsA<Wizard> {
 
     final magic = SpriteComponent(
       sprite: sprite,
-      size: Vector2(20, 19),
+      size: Vector2(20, 30),
       anchor: Anchor.bottomCenter,
       angle: pi,
     );
