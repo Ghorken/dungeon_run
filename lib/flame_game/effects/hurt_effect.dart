@@ -20,9 +20,9 @@ class HurtEffect extends Component with ParentIsA<Character> {
     super.onMount();
     const effectTime = 0.5;
 
-    parent.lifePoints -= damage;
+    parent.world.lifePoints -= damage;
 
-    if (parent.lifePoints <= 0) {
+    if (parent.world.lifePoints <= 0) {
       parent.world.loose();
     } else {
       parent.addAll(

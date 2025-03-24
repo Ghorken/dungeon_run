@@ -5,6 +5,7 @@ import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
 import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
 import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
+import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:dungeon_run/flame_game/components/trap.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -66,6 +67,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// The base speed at which every elements move.
   int speed = 200;
 
+  /// The lifepoints of the player
+  final int maxLifePoints = 20;
+  int lifePoints = 20;
+
   @override
   Future<void> onLoad() async {
     // Initialize `leftCharacter` based on the first element of `selectedCharacters`
@@ -94,6 +99,12 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       );
       add(rightCharacter!);
     }
+
+    add(
+      LifeBar(
+        segmentWidth: size.x / maxLifePoints,
+      ),
+    );
 
     // Spawning enemies in the world
     add(

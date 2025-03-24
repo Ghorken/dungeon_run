@@ -16,9 +16,9 @@ import 'endless_runner.dart';
 class GameScreen extends StatelessWidget {
   const GameScreen({required this.selectedCharacters, super.key});
 
+  static const String backButtonKey = 'back_buttton';
   static const String winDialogKey = 'win_dialog';
   static const String looseDialogKey = 'loose_dialog';
-  static const String backButtonKey = 'back_buttton';
   final List<CharacterType?> selectedCharacters;
 
   @override

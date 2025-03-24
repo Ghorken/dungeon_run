@@ -21,7 +21,6 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
 
   final String srcImage;
   int damage;
-  int lifePoints = 10;
 
   @override
   Future<void> onLoad() async {

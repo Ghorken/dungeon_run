@@ -90,7 +90,10 @@ class Potion extends SpriteAnimationComponent with HasGameReference, HasWorldRef
   void effect() {
     switch (_potionType) {
       case PotionType.heal:
-        world.frontCharacter?.lifePoints += 10;
+        world.lifePoints += 10;
+        if (world.lifePoints > world.maxLifePoints) {
+          world.lifePoints = world.maxLifePoints;
+        }
         break;
       case PotionType.damage:
         final Character? frontCharacter = world.frontCharacter;

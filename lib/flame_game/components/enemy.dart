@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dungeon_run/audio/sounds.dart';
+import 'package:dungeon_run/flame_game/components/enemy_lifebar.dart';
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
 import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
@@ -26,7 +27,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   Enemy.goblin()
       : _srcSize = Vector2(250, 386),
         _srcImage = 'enemies/goblin.png',
-        _hitPoints = 5,
+        _maxHitPoints = 5,
+        hitPoints = 5,
         speed = 2,
         _damage = 1,
         _enemyType = EnemyType.goblin,
@@ -38,7 +40,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   Enemy.troll()
       : _srcSize = Vector2(250, 309),
         _srcImage = 'enemies/troll.png',
-        _hitPoints = 10,
+        _maxHitPoints = 10,
+        hitPoints = 10,
         speed = 2,
         _damage = 1,
         _enemyType = EnemyType.troll,
@@ -50,7 +53,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   Enemy.elementale()
       : _srcSize = Vector2(215, 386),
         _srcImage = 'enemies/elementale.png',
-        _hitPoints = 15,
+        _maxHitPoints = 15,
+        hitPoints = 15,
         speed = 4,
         _damage = 2,
         _enemyType = EnemyType.elementale,
@@ -62,7 +66,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   Enemy.goblinKing()
       : _srcSize = Vector2(250, 495),
         _srcImage = 'enemies/goblin_king.png',
-        _hitPoints = 30,
+        _maxHitPoints = 30,
+        hitPoints = 30,
         speed = 2,
         _damage = 5,
         _enemyType = EnemyType.goblinKing,
@@ -87,7 +92,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   final Vector2 _srcSize;
   final String _srcImage;
-  int _hitPoints;
+  final int _maxHitPoints;
+  int hitPoints;
   int speed;
   final int _damage;
   final EnemyType _enemyType;
@@ -105,6 +111,11 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     // When adding a RectangleHitbox without any arguments it automatically
     // fills up the size of the component.
     add(RectangleHitbox());
+
+    add(EnemyLifeBar(
+      segmentWidth: size.x / _maxHitPoints,
+      parentEnemy: this,
+    ));
   }
 
   @override
@@ -135,8 +146,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   /// When the enemy is hit by the character we reduce the hit points and
   /// if the hit points are less than or equal to 0 we remove the enemy.
   void hitted(int damage) {
-    _hitPoints -= damage;
-    if (_hitPoints <= 0) {
+    hitPoints -= damage;
+    if (hitPoints <= 0) {
       die();
       if (_enemyType == EnemyType.goblinKing) {
         world.win();
