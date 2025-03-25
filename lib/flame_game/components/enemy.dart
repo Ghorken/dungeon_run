@@ -35,6 +35,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _speed = 2,
         _damage = 1,
         _enemyType = EnemyType.goblin,
+        _moneyValue = 1,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -47,6 +48,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _speed = 2,
         _damage = 1,
         _enemyType = EnemyType.troll,
+        _moneyValue = 2,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -59,6 +61,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _speed = 4,
         _damage = 2,
         _enemyType = EnemyType.elementale,
+        _moneyValue = 5,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -72,6 +75,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _damage = 5,
         _enemyType = EnemyType.goblinKing,
         _xPosition = 0.0,
+        _moneyValue = 30,
         super(
           size: Vector2.all(250),
           anchor: Anchor.bottomCenter,
@@ -108,6 +112,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// The starting x position of the enemy
   double? _xPosition;
+
+  final int _moneyValue;
 
   @override
   Future<void> onLoad() async {
@@ -199,5 +205,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       ),
       () => removeFromParent(),
     );
+
+    // Add the moneyValue to the total collected
+    world.money += _moneyValue;
   }
 }

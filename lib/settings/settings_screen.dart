@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:dungeon_run/settings/settings.dart';
+import 'package:dungeon_run/settings/settings_controller.dart';
 
 /// The page that handles the settings of the game
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+  /// The gap between elements
   static const _gap = SizedBox(height: 60);
 
   @override

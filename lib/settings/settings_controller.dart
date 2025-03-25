@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
-import 'package:dungeon_run/settings/persistence/local_storage_settings_persistence.dart';
-import 'package:dungeon_run/settings/persistence/settings_persistence.dart';
+import 'package:dungeon_run/settings/persistence.dart';
 
 /// A class that holds settings
 /// and saves them to an injected persistence store.
@@ -10,7 +9,7 @@ class SettingsController {
   static final _log = Logger('SettingsController');
 
   /// The persistence store that is used to save settings.
-  final SettingsPersistence _store;
+  final Persistence _store;
 
   /// Whether or not the audio is on at all. This overrides both music
   /// and sounds (sfx).
@@ -27,7 +26,7 @@ class SettingsController {
   /// By default, settings are persisted using [LocalStorageSettingsPersistence]
   /// (i.e. NSUserDefaults on iOS, SharedPreferences on Android or
   /// local storage on the web).
-  SettingsController({SettingsPersistence? store}) : _store = store ?? LocalStorageSettingsPersistence() {
+  SettingsController() : _store = Persistence() {
     _loadStateFromPersistence();
   }
 

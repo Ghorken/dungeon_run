@@ -5,7 +5,7 @@ import 'package:dungeon_run/flame_game/components/characters/character_type.dart
 import 'package:dungeon_run/flame_game/endless_runner.dart';
 import 'package:dungeon_run/flame_game/game_screen.dart';
 import 'package:dungeon_run/main.dart';
-import 'package:dungeon_run/settings/settings.dart';
+import 'package:dungeon_run/settings/settings_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';

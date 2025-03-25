@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/audio/sounds.dart';
-import 'package:dungeon_run/settings/settings.dart';
+import 'package:dungeon_run/settings/settings_controller.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/responsive_screen.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
@@ -62,6 +62,14 @@ class MainMenuScreen extends StatelessWidget {
                 GoRouter.of(context).go('/instructions');
               },
               child: const Text('Gioca'),
+            ),
+            _gap,
+            WobblyButton(
+              onPressed: () {
+                audioController.playSfx(SfxType.buttonTap);
+                GoRouter.of(context).go('/store');
+              },
+              child: const Text('Negozio'),
             ),
             _gap,
             WobblyButton(

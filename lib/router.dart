@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/store/store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -49,6 +50,12 @@ final router = GoRouter(
           path: 'settings',
           builder: (context, state) => const SettingsScreen(
             key: Key('settings'),
+          ),
+        ),
+        GoRoute(
+          path: 'store',
+          builder: (context, state) => const StoreScreen(
+            key: Key('store'),
           ),
         ),
       ],

@@ -1,3 +1,4 @@
+import 'package:dungeon_run/settings/persistence.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -69,6 +70,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
 
   /// The current lifePoints of the player
   int lifePoints = 20;
+
+  /// The amount of money that the player collected
+  int money = 0;
 
   @override
   Future<void> onLoad() async {
@@ -209,15 +213,29 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
 
   /// When the player loose stop the game and shows the relative dialog
   void loose() {
+    // Stop the game and remove the back button
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
+
+    // Show the loose dialog
     game.overlays.add(GameScreen.looseDialogKey);
+
+    // Save the accumulated money
+    Persistence persistence = Persistence();
+    persistence.saveMoney(money);
   }
 
   /// When the player wins stop the game and shows the relative dialog
   void win() {
+    // Stop the game and remove the back button
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
+
+    // Show the win dialog
     game.overlays.add(GameScreen.winDialogKey);
+
+    // Save the accumulated money
+    Persistence persistence = Persistence();
+    persistence.saveMoney(money);
   }
 }

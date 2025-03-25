@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:dungeon_run/app_lifecycle/app_lifecycle.dart';
 import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/router.dart';
-import 'package:dungeon_run/settings/settings.dart';
+import 'package:dungeon_run/settings/settings_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

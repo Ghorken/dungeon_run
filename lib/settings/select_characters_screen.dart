@@ -15,6 +15,7 @@ class SelectCharactersScreen extends StatefulWidget {
 }
 
 class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
+  /// The gap between elements
   static const _gap = SizedBox(height: 60);
 
   /// The list of the characters and the relative postions that the player selected

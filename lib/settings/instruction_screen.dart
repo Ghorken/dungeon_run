@@ -10,6 +10,7 @@ class InstructionScreen extends StatelessWidget {
     super.key,
   });
 
+  /// The gap between elements
   static const _gap = SizedBox(height: 60);
 
   @override

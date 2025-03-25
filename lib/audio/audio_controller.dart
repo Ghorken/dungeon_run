@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 
 import 'package:dungeon_run/app_lifecycle/app_lifecycle.dart';
-import 'package:dungeon_run/settings/settings.dart';
+import 'package:dungeon_run/settings/settings_controller.dart';
 import 'package:dungeon_run/audio/songs.dart';
 import 'package:dungeon_run/audio/sounds.dart';
 
