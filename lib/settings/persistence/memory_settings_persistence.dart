@@ -1,4 +1,4 @@
-import 'settings_persistence.dart';
+import 'package:dungeon_run/settings/persistence/settings_persistence.dart';
 
 /// An in-memory implementation of [SettingsPersistence].
 /// Useful for testing.

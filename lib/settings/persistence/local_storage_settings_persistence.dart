@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'settings_persistence.dart';
+import 'package:dungeon_run/settings/persistence/settings_persistence.dart';
 
 /// An implementation of [SettingsPersistence] that uses
 /// `package:shared_preferences`.

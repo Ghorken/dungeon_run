@@ -1,16 +1,19 @@
 import 'dart:math';
 
+import 'package:dungeon_run/flame_game/components/lifebar.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
+
 import 'package:dungeon_run/audio/sounds.dart';
-import 'package:dungeon_run/flame_game/components/enemy_lifebar.dart';
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
 import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
 import 'package:dungeon_run/flame_game/endless_runner.dart';
 import 'package:dungeon_run/flame_game/endless_world.dart';
-import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
+import 'package:flutter/material.dart';
 
+/// Enums of the type of enemies
 enum EnemyType {
   goblin,
   troll,
@@ -18,18 +21,18 @@ enum EnemyType {
   goblinKing,
 }
 
-/// The [Enemy] component can represent three different types of enemies
+/// The [Enemy] component can represent the different types of enemies
 /// that the character can run into.
 class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner> {
-  // Timer to control the application of HurtEffect
+  /// Timer to control the application of HurtEffect
   double _hurtEffectTimer = 0.0;
 
+  // Constructors for every tipe of enemy
   Enemy.goblin()
-      : _srcSize = Vector2(250, 386),
-        _srcImage = 'enemies/goblin.png',
-        _maxHitPoints = 5,
-        hitPoints = 5,
-        speed = 2,
+      : _srcImage = 'enemies/goblin.png',
+        _maxLifePoints = 5,
+        lifePoints = 5,
+        _speed = 2,
         _damage = 1,
         _enemyType = EnemyType.goblin,
         super(
@@ -38,11 +41,10 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.troll()
-      : _srcSize = Vector2(250, 309),
-        _srcImage = 'enemies/troll.png',
-        _maxHitPoints = 10,
-        hitPoints = 10,
-        speed = 2,
+      : _srcImage = 'enemies/troll.png',
+        _maxLifePoints = 10,
+        lifePoints = 10,
+        _speed = 2,
         _damage = 1,
         _enemyType = EnemyType.troll,
         super(
@@ -51,11 +53,10 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.elementale()
-      : _srcSize = Vector2(215, 386),
-        _srcImage = 'enemies/elementale.png',
-        _maxHitPoints = 15,
-        hitPoints = 15,
-        speed = 4,
+      : _srcImage = 'enemies/elementale.png',
+        _maxLifePoints = 15,
+        lifePoints = 15,
+        _speed = 4,
         _damage = 2,
         _enemyType = EnemyType.elementale,
         super(
@@ -64,11 +65,10 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.goblinKing()
-      : _srcSize = Vector2(250, 495),
-        _srcImage = 'enemies/goblin_king.png',
-        _maxHitPoints = 30,
-        hitPoints = 30,
-        speed = 2,
+      : _srcImage = 'enemies/goblin_king.png',
+        _maxLifePoints = 30,
+        lifePoints = 30,
+        _speed = 2,
         _damage = 5,
         _enemyType = EnemyType.goblinKing,
         _xPosition = 0.0,
@@ -77,11 +77,9 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
           anchor: Anchor.bottomCenter,
         );
 
-  /// Generates a random obstacle of type [EnemyType].
-  factory Enemy.random({
-    Random? random,
-  }) {
-    final enemyType = EnemyType.values.random(random);
+  /// Generates a random enemy.
+  factory Enemy.random() {
+    final enemyType = EnemyType.values.random();
     return switch (enemyType) {
       EnemyType.goblin => Enemy.goblin(),
       EnemyType.troll => Enemy.troll(),
@@ -90,32 +88,53 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     };
   }
 
-  final Vector2 _srcSize;
+  /// The path of the image to load
   final String _srcImage;
-  final int _maxHitPoints;
-  int hitPoints;
-  int speed;
+
+  /// The max lifePoints of the enemy
+  final int _maxLifePoints;
+
+  /// The current lifePoints of the enemy
+  int lifePoints;
+
+  /// The speed of the enemy
+  int _speed;
+
+  /// The damage that the enemy deal
   final int _damage;
+
+  /// The type of the enemy
   final EnemyType _enemyType;
+
+  /// The starting x position of the enemy
   double? _xPosition;
 
   @override
   Future<void> onLoad() async {
-    // Since all the obstacles reside in the same image, srcSize and srcPosition
-    // are used to determine what part of the image that should be used.
+    // Load the sprite of the enemy
     sprite = await Sprite.load(
       _srcImage,
-      srcSize: _srcSize,
     );
+
+    // Position the enemy in a random spot at the top of the screen
+    // or in a specific spot at the top of the screen if specified
     position = Vector2(_xPosition ?? _randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), -world.size.y / 2);
+
     // When adding a RectangleHitbox without any arguments it automatically
     // fills up the size of the component.
-    add(RectangleHitbox());
+    add(
+      RectangleHitbox(),
+    );
 
-    add(EnemyLifeBar(
-      segmentWidth: size.x / _maxHitPoints,
-      parentEnemy: this,
-    ));
+    // Add the lifebar to display the lifepoints
+    add(
+      LifeBar(
+        segmentWidth: size.x / _maxLifePoints,
+        color: Colors.red,
+        parentEnemy: this,
+        barHeight: 10.0,
+      ),
+    );
   }
 
   @override
@@ -125,52 +144,60 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     // Update the timer
     _hurtEffectTimer += dt;
 
-    // We need to move the component to the left together with the speed that we
+    // We need to move the component to the bottom together with the speed that we
     // have set for the world.
     // `dt` here stands for delta time and it is the time, in seconds, since the
     // last update ran. We need to multiply the speed by `dt` to make sure that
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
     if (position.y < world.frontCharacterPosition.y) {
-      position.y += (world.speed * speed) * dt;
+      position.y += (world.speed * _speed) * dt;
     } else {
-      // Apply HurtEffect only if 1 second has passed since the last application
+      // When the enemy reach the character's position attacks the player immediately and every 1 second
       if (_hurtEffectTimer >= 1.0) {
         _hurtEffectTimer = 0.0; // Reset the timer
-        world.frontCharacter!.add(HurtEffect(damage: _damage));
+        world.lifePoints -= _damage;
+        world.frontCharacter!.add(HurtEffect());
         game.audioController.playSfx(SfxType.damage);
       }
     }
   }
 
-  /// When the enemy is hit by the character we reduce the hit points and
-  /// if the hit points are less than or equal to 0 we remove the enemy.
+  /// Determine a random number between the min and max
+  double _randomInRange(int min, int max) {
+    final random = Random();
+    return (min + random.nextInt(max - min + 1)).toDouble();
+  }
+
+  /// When the enemy is hit by the character we reduce the lifePoints and
+  /// if the lifePoints are less than or equal to 0 we remove the enemy.
   void hitted(int damage) {
-    hitPoints -= damage;
-    if (hitPoints <= 0) {
+    lifePoints -= damage;
+    if (lifePoints > 0) {
+      add(EnemyHurtEffect());
+    } else {
       die();
+      // When the goblinKing is defeated the player wins
       if (_enemyType == EnemyType.goblinKing) {
         world.win();
       }
-    } else {
-      add(EnemyHurtEffect());
     }
   }
 
-  /// When the enemy is hit by the character we remove the enemy.
+  /// When the enemy is killed by the character we remove the enemy.
   void die() {
-    speed = 0;
+    _speed = 0;
     // We remove the enemy from the list so that it is no longer hittable even if still present on the screen.
     world.enemies.remove(this);
     DeathEffect deathEffect = DeathEffect();
     add(deathEffect);
 
     // We remove the enemy from the screen after the effect has been played.
-    Future.delayed(Duration(milliseconds: (deathEffect.effectTime * 1000).toInt()), () => removeFromParent());
-  }
-
-  double _randomInRange(int min, int max) {
-    final random = Random();
-    return (min + random.nextInt(max - min + 1)).toDouble();
+    Future.delayed(
+      Duration(
+        milliseconds: (deathEffect.effectTime * 1000).toInt(),
+      ),
+      () => removeFromParent(),
+    );
   }
 }

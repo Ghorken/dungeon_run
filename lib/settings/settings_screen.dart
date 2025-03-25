@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'settings.dart';
+import 'package:dungeon_run/settings/settings.dart';
 
+/// The page that handles the settings of the game
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
@@ -38,6 +39,7 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     _gap,
+                    // The sounds effects
                     ValueListenableBuilder<bool>(
                       valueListenable: settings.soundsOn,
                       builder: (context, soundsOn, child) => _SettingsLine(
@@ -46,6 +48,7 @@ class SettingsScreen extends StatelessWidget {
                         onSelected: () => settings.toggleSoundsOn(),
                       ),
                     ),
+                    // The base music
                     ValueListenableBuilder<bool>(
                       valueListenable: settings.musicOn,
                       builder: (context, musicOn, child) => _SettingsLine(

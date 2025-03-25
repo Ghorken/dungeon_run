@@ -1,15 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
 import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/settings/settings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/responsive_screen.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
+/// The class that defines the main page of the game
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
+
+  /// The gap between elements
+  static const _gap = SizedBox(height: 10);
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +28,13 @@ class MainMenuScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // The main image
               Image.asset(
                 'assets/images/dungeon_door.png',
                 filterQuality: FilterQuality.none,
               ),
               _gap,
+              // The title of the game
               Transform.rotate(
                 angle: -0.1,
                 child: ConstrainedBox(
@@ -79,6 +86,4 @@ class MainMenuScreen extends StatelessWidget {
       ),
     );
   }
-
-  static const _gap = SizedBox(height: 10);
 }

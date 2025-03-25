@@ -1,12 +1,16 @@
-import 'package:dungeon_run/flame_game/components/characters/archer.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
-/// The [BowAttackEffect] is an effect that is composed of multiple different effects
-/// that are added to the [Archer] when it attacks.
-/// It spins the sword.
+import 'package:dungeon_run/flame_game/components/characters/archer.dart';
+
+/// The BowAttackEffect is an effect that is composed of multiple different effects
+/// that are added to the Archer when it attacks.
+/// It moves the arrow from the Archer to the enemy.
 class BowAttackEffect extends Component with ParentIsA<Archer> {
+  /// The duration of the effect
   final effectTime = 0.5;
+
+  /// The destination of the movement
   final Vector2 destination;
 
   BowAttackEffect({
@@ -17,18 +21,23 @@ class BowAttackEffect extends Component with ParentIsA<Archer> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final sprite = await Sprite.load('attacks/arrow.png');
+    // Load the sprite
+    final sprite = await Sprite.load(
+      'attacks/arrow.png',
+    );
 
+    // Instantiate the arrow
     final arrow = SpriteComponent(
       sprite: sprite,
       size: Vector2(40, 45),
-      anchor: Anchor.bottomCenter,
+      anchor: Anchor.center,
     );
 
-    // The arrow should start at the bottom of the character
-    arrow.position = parent.position + Vector2(0, -parent.size.y / 2);
+    // The arrow should start from the character
+    arrow.position = parent.position;
 
-    parent.parent?.add(arrow);
+    // Add the arrow to the parent's world
+    parent.world.add(arrow);
 
     // Move the arrow to the destination and remove from the world when it reaches it
     arrow.add(

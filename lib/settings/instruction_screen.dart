@@ -1,8 +1,10 @@
-import 'package:dungeon_run/style/palette.dart';
-import 'package:dungeon_run/style/wobbly_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:dungeon_run/style/palette.dart';
+import 'package:dungeon_run/style/wobbly_button.dart';
+
+/// The page to display the game instructions
 class InstructionScreen extends StatelessWidget {
   const InstructionScreen({
     super.key,
@@ -51,7 +53,6 @@ class InstructionScreen extends StatelessWidget {
             WobblyButton(
               onPressed: () {
                 // Handle button press
-
                 GoRouter.of(context).go('/instructions/selectCharacters');
               },
               child: const Text('Gioca'),

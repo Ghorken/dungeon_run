@@ -1,14 +1,18 @@
 import 'dart:math';
 
-import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
-/// The [MagicAttackEffect] is an effect that is composed of multiple different effects
-/// that are added to the [Wizard] when it attacks.
-/// It spins the sword.
+import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
+
+/// The MagicAttackEffect is an effect that is composed of multiple different effects
+/// that are added to the Wizard when it attacks.
+/// It enlarge the magic while moving to the enemy.
 class MagicAttackEffect extends Component with ParentIsA<Wizard> {
+  /// The duration of the effect
   final effectTime = 0.5;
+
+  /// The destination of the movement
   final Vector2 destination;
 
   MagicAttackEffect({
@@ -19,26 +23,35 @@ class MagicAttackEffect extends Component with ParentIsA<Wizard> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final sprite = await Sprite.load('attacks/fireball.png');
+    // Load the sprite
+    final sprite = await Sprite.load(
+      'attacks/fireball.png',
+    );
 
+    // Create the magic component
     final magic = SpriteComponent(
       sprite: sprite,
       size: Vector2(20, 30),
-      anchor: Anchor.bottomCenter,
+      anchor: Anchor.center,
       angle: pi,
     );
 
-    magic.position = parent.position + Vector2(0, -parent.size.y / 2);
+    // The magic should start from the character
+    magic.position = parent.position;
 
-    parent.parent?.add(magic);
+    // Add the magic to the parent'sworld
+    parent.world.add(magic);
 
+    // Add the effect to the magic
     magic.addAll([
+      // Enlarge the magic
       SizeEffect.to(
         Vector2(200, 197),
         EffectController(
           duration: effectTime,
         ),
       ),
+      // Move to the enemy target
       MoveToEffect(
         destination,
         EffectController(

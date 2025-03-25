@@ -1,3 +1,13 @@
+/// Enums of all available sounds type
+enum SfxType {
+  score,
+  jump,
+  doubleJump,
+  hit,
+  damage,
+  buttonTap,
+}
+
 List<String> soundTypeToFilename(SfxType type) => switch (type) {
       SfxType.jump => const [
           'jump1.mp3',
@@ -37,13 +47,4 @@ double soundTypeToVolume(SfxType type) {
     case SfxType.buttonTap:
       return 1.0;
   }
-}
-
-enum SfxType {
-  score,
-  jump,
-  doubleJump,
-  hit,
-  damage,
-  buttonTap,
 }

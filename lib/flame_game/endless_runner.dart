@@ -1,10 +1,10 @@
-import 'package:dungeon_run/audio/audio_controller.dart';
-import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-import 'components/background.dart';
-import 'endless_world.dart';
+import 'package:dungeon_run/audio/audio_controller.dart';
+import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/flame_game/components/background.dart';
+import 'package:dungeon_run/flame_game/endless_world.dart';
 
 /// This is the base of the game which is added to the [GameWidget].
 ///
@@ -31,6 +31,7 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
   /// A helper for playing sound effects and background audio.
   final AudioController audioController;
 
+  /// The list of character selected by the player
   final List<CharacterType?> selectedCharacters;
 
   /// In the [onLoad] method you load different type of assets and set things

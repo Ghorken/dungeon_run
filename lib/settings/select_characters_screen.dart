@@ -1,8 +1,12 @@
-import 'package:dungeon_run/style/palette.dart';
-import 'package:dungeon_run/style/wobbly_button.dart';
+import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:dungeon_run/style/palette.dart';
+import 'package:dungeon_run/style/wobbly_button.dart';
+
+/// The class that handle the compositions of the party
 class SelectCharactersScreen extends StatefulWidget {
   const SelectCharactersScreen({super.key});
 
@@ -13,7 +17,8 @@ class SelectCharactersScreen extends StatefulWidget {
 class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
   static const _gap = SizedBox(height: 60);
 
-  final List<int?> _selectedCharacters = List<int?>.filled(4, null);
+  /// The list of the characters and the relative postions that the player selected
+  final List<CharacterType?> _selectedCharacters = List<CharacterType?>.filled(3, null);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +45,7 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                       ),
                     ),
                     _gap,
+                    // The grid with the checkboxes
                     Table(
                       border: TableBorder.all(color: Colors.white),
                       columnWidths: const {
@@ -99,13 +105,14 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                           ],
                         ),
                         // Data rows
-                        for (int rowIndex = 0; rowIndex < 5; rowIndex++)
+                        for (CharacterType characterType in CharacterType.values)
                           TableRow(
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  _getRowLabel(rowIndex),
+                                  // The label of the character
+                                  getLabel(characterType),
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     fontFamily: 'Press Start 2P',
@@ -117,12 +124,12 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Checkbox(
-                                    value: _selectedCharacters[colIndex] == rowIndex,
+                                    value: _selectedCharacters[colIndex] == characterType,
                                     onChanged: (value) {
                                       setState(() {
                                         // Update the selected row for the current column
                                         if (value == true) {
-                                          _selectedCharacters[colIndex] = rowIndex;
+                                          _selectedCharacters[colIndex] = characterType;
                                         } else {
                                           _selectedCharacters[colIndex] = null;
                                         }
@@ -141,17 +148,22 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
             WobblyButton(
               onPressed: () {
                 // Handle button press
-                // Map the selected row indices to character types
+                // Send the selected character types to the game and alert the player otherwise
                 if (_selectedCharacters.every((element) => element == null)) {
+                  Fluttertoast.showToast(
+                    msg: "Seleziona almeno un personaggio",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+
                   return;
                 }
-                final Map<String, String?> pathParameters = {
-                  'sx': _getCharacterType(_selectedCharacters[0]),
-                  'front': _getCharacterType(_selectedCharacters[1]),
-                  'dx': _getCharacterType(_selectedCharacters[2]),
-                };
 
-                GoRouter.of(context).go('/instructions/selectCharacters/play', extra: pathParameters);
+                GoRouter.of(context).go('/instructions/selectCharacters/play', extra: _selectedCharacters);
               },
               child: const Text('Gioca'),
             ),
@@ -167,40 +179,5 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
         ),
       ),
     );
-  }
-
-  // Helper method to get the label for each row
-  String _getRowLabel(int rowIndex) {
-    switch (rowIndex) {
-      case 0:
-        return 'Guerriero';
-      case 1:
-        return 'Arciere';
-      case 2:
-        return 'Mago';
-      case 3:
-        return 'Assassino';
-      case 4:
-        return 'Berserk';
-      default:
-        return '';
-    }
-  }
-
-  String? _getCharacterType(int? rowIndex) {
-    switch (rowIndex) {
-      case 0:
-        return 'warrior';
-      case 1:
-        return 'archer';
-      case 2:
-        return 'wizard';
-      case 3:
-        return 'assassin';
-      case 4:
-        return 'berserk';
-      default:
-        return null; // Return null if no character is selected
-    }
   }
 }

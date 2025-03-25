@@ -1,20 +1,15 @@
-import 'dart:math';
-
-import 'package:dungeon_run/flame_game/components/characters/archer.dart';
-import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
-import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
-import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
-import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
-import 'package:dungeon_run/flame_game/components/lifebar.dart';
-import 'package:dungeon_run/flame_game/components/trap.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-import 'components/enemy.dart';
-import 'components/characters/character.dart';
-import 'components/potion.dart';
-import 'game_screen.dart';
+import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/flame_game/components/lifebar.dart';
+import 'package:dungeon_run/flame_game/components/trap.dart';
+import 'package:dungeon_run/flame_game/components/enemy.dart';
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
+import 'package:dungeon_run/flame_game/components/potion.dart';
+import 'package:dungeon_run/flame_game/game_screen.dart';
+import 'package:flutter/material.dart';
 
 /// The world is where you place all the components that should live inside of
 /// the game, like the character, enemies, obstacles and points for example.
@@ -31,19 +26,21 @@ import 'game_screen.dart';
 class EndlessWorld extends World with TapCallbacks, HasGameReference {
   EndlessWorld({
     required this.selectedCharacters,
-    Random? random,
-  }) : _random = random ?? Random();
+  });
 
+  /// The size of the game screen
+  Vector2 get size => (parent as FlameGame).size;
+
+  /// Define the positions for the three possible characters to show
+  // These are late because they need the size of the screen
   late Vector2 frontCharacterPosition = Vector2(0, (size.y / 2) - (size.y / 10));
   late Vector2 leftCharacterPosition = Vector2(-(size.x / 2) + (size.x / 5), (size.y / 2) - (size.y / 20));
   late Vector2 rightCharacterPosition = Vector2((size.x / 2) - (size.x / 5), (size.y / 2) - (size.y / 20));
 
+  /// This is used to measure the duration of the effects
   late final DateTime timeStarted;
-  Vector2 get size => (parent as FlameGame).size;
 
-  /// The random number generator that is used to spawn periodic components.
-  final Random _random;
-
+  /// List of characters selected from the player
   final List<CharacterType?> selectedCharacters;
 
   /// List to keep track of potions int the world.
@@ -67,55 +64,59 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// The base speed at which every elements move.
   int speed = 200;
 
-  /// The lifepoints of the player
+  /// The max lifePoints of the player
   final int maxLifePoints = 20;
+
+  /// The current lifePoints of the player
   int lifePoints = 20;
 
   @override
   Future<void> onLoad() async {
-    // Initialize `leftCharacter` based on the first element of `selectedCharacters`
+    // If the player selected a leftCharacter initialize id and add id to the screen
     if (selectedCharacters[0] != null) {
-      leftCharacter = _createCharacter(
+      leftCharacter = createCharacter(
         selectedCharacters[0]!,
         leftCharacterPosition,
       );
       add(leftCharacter!);
     }
 
-    // Initialize `frontCharacter` based on the second element of `selectedCharacters`
+    // If the player selected a frontCharacter initialize id and add id to the screen
     if (selectedCharacters[1] != null) {
-      frontCharacter = _createCharacter(
+      frontCharacter = createCharacter(
         selectedCharacters[1]!,
         frontCharacterPosition,
       );
       add(frontCharacter!);
     }
 
-    // Initialize `rightCharacter` based on the third element of `selectedCharacters`
+    // If the player selected a rightCharacter initialize id and add id to the screen
     if (selectedCharacters[2] != null) {
-      rightCharacter = _createCharacter(
+      rightCharacter = createCharacter(
         selectedCharacters[2]!,
         rightCharacterPosition,
       );
       add(rightCharacter!);
     }
 
+    // The player lifebar to the screen
+    // The dimension of every segment depends from the screen and how many max lifepoint the player has
     add(
       LifeBar(
         segmentWidth: size.x / maxLifePoints,
+        color: Colors.green,
       ),
     );
 
-    // Spawning enemies in the world
+    // Spawning random enemies in the world at a fixed interval
     add(
       SpawnComponent(
         factory: (_) {
-          Enemy enemy = Enemy.random(random: _random);
+          Enemy enemy = Enemy.random();
           enemies.add(enemy);
           return enemy;
         },
         period: 2,
-        random: _random,
       ),
     );
 
@@ -132,25 +133,24 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       ),
     );
 
-    // Spawning traps in the world
+    // Spawning traps in the world at a random interval between fixed values
     add(
       SpawnComponent.periodRange(
         factory: (_) {
-          Trap trap = Trap.random(random: _random);
+          Trap trap = Trap.random();
           traps.add(trap);
           return trap;
         },
         minPeriod: 5.0,
         maxPeriod: 7.0,
-        random: _random,
       ),
     );
 
-    // Spawning potions in the world
+    // Spawning potions in the world at a random interval between fixed values
     add(
       SpawnComponent.periodRange(
         factory: (_) {
-          Potion potion = Potion.random(random: _random);
+          Potion potion = Potion.random();
           potions.add(potion);
           return potion;
         },
@@ -188,7 +188,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       return;
     }
 
-    // If the player taps on a potion, we remove it from the world
+    // If the player taps on a potion, we apply its effect and remove it from the world
     for (final potion in potions) {
       if (potion.toRect().contains(event.localPosition.toOffset())) {
         potion.effect();
@@ -207,31 +207,17 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     }
   }
 
+  /// When the player loose stop the game and shows the relative dialog
   void loose() {
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
     game.overlays.add(GameScreen.looseDialogKey);
   }
 
+  /// When the player wins stop the game and shows the relative dialog
   void win() {
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
     game.overlays.add(GameScreen.winDialogKey);
-  }
-}
-
-/// Helper method to create a character based on its type
-Character _createCharacter(CharacterType type, Vector2 position) {
-  switch (type) {
-    case CharacterType.warrior:
-      return Warrior(position: position);
-    case CharacterType.archer:
-      return Archer(position: position);
-    case CharacterType.wizard:
-      return Wizard(position: position);
-    case CharacterType.assassin:
-      return Assassin(position: position);
-    case CharacterType.berserk:
-      return Berserk(position: position);
   }
 }

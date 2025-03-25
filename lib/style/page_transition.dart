@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+/// The transition between pages
 CustomTransitionPage<T> buildPageTransition<T>({
+  /// The page to go to
   required Widget child,
+
+  /// The color of the transition
   required Color color,
   String? name,
   Object? arguments,
@@ -26,6 +30,7 @@ CustomTransitionPage<T> buildPageTransition<T>({
   );
 }
 
+/// The animation to change page
 class _PageReveal extends StatelessWidget {
   final Widget child;
 

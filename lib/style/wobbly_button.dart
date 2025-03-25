@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 
+/// Handles animation for the buttons
 class WobblyButton extends StatefulWidget {
   final Widget child;
 
@@ -14,8 +15,7 @@ class WobblyButton extends StatefulWidget {
   State<WobblyButton> createState() => _WobblyButtonState();
 }
 
-class _WobblyButtonState extends State<WobblyButton>
-    with SingleTickerProviderStateMixin {
+class _WobblyButtonState extends State<WobblyButton> with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: 300),
     vsync: this,

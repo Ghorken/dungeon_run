@@ -1,14 +1,18 @@
 import 'dart:math';
 
-import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
-/// The [AxeAttackEffect] is an effect that is composed of multiple different effects
-/// that are added to the [Berserk] when it attacks.
-/// It spins the sword.
+import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
+
+/// The AxeAttackEffect is an effect that is composed of multiple different effects
+/// that are added to the Berserk when it attacks.
+/// It launch the axe toward the enemy and spin it.
 class AxeAttackEffect extends Component with ParentIsA<Berserk> {
+  /// The duration of the effect
   final effectTime = 0.5;
+
+  /// The destination of the movement
   final Vector2 destination;
 
   AxeAttackEffect({
@@ -19,34 +23,41 @@ class AxeAttackEffect extends Component with ParentIsA<Berserk> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final sprite = await Sprite.load('attacks/axe.png');
-
-    final arrow = SpriteComponent(
-      sprite: sprite,
-      size: Vector2(40, 45),
-      anchor: Anchor.bottomCenter,
+    // Load the sprite
+    final sprite = await Sprite.load(
+      'attacks/axe.png',
     );
 
-    // The arrow should start at the bottom of the character
-    arrow.position = parent.position + Vector2(0, -parent.size.y / 2);
+    // Instantiate the axe component
+    final axe = SpriteComponent(
+      sprite: sprite,
+      size: Vector2(40, 45),
+      anchor: Anchor.center,
+    );
 
-    parent.parent?.add(arrow);
+    // The axe should start from the character
+    axe.position = parent.position;
 
-    // Move the arrow to the destination and remove from the world when it reaches it
-    arrow.addAll(
+    // Add the axe to the world
+    parent.world.add(axe);
+
+    // Move the axe to the destination and remove from the world when it reaches it
+    axe.addAll(
       [
+        // Rotate the axe by 360°
         RotateEffect.by(
-          pi,
+          pi * 2,
           EffectController(
             duration: effectTime,
           ),
         ),
+        // Move the axe from the Berserk to the enemy
         MoveToEffect(
           destination,
           EffectController(
             duration: effectTime,
           ),
-          onComplete: () => arrow.removeFromParent(),
+          onComplete: () => axe.removeFromParent(),
         ),
       ],
     );

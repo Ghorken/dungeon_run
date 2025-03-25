@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
-import 'persistence/local_storage_settings_persistence.dart';
-import 'persistence/settings_persistence.dart';
+import 'package:dungeon_run/settings/persistence/local_storage_settings_persistence.dart';
+import 'package:dungeon_run/settings/persistence/settings_persistence.dart';
 
-/// An class that holds settings
+/// A class that holds settings
 /// and saves them to an injected persistence store.
 class SettingsController {
   static final _log = Logger('SettingsController');

@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:provider/provider.dart';
 
-import 'app_lifecycle/app_lifecycle.dart';
-import 'audio/audio_controller.dart';
-import 'router.dart';
-import 'settings/settings.dart';
+import 'package:dungeon_run/app_lifecycle/app_lifecycle.dart';
+import 'package:dungeon_run/audio/audio_controller.dart';
+import 'package:dungeon_run/router.dart';
+import 'package:dungeon_run/settings/settings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Set the device in portrait mode and in full screen
   await Flame.device.setPortraitUpOnly();
   await Flame.device.fullScreen();
   runApp(const DungeonRun());

@@ -4,6 +4,7 @@ const List<Song> songs = [
   Song('tropical_fantasy.mp3', 'Tropical Fantasy', artist: 'Spring Spring'),
 ];
 
+/// The model of the song
 class Song {
   final String filename;
 

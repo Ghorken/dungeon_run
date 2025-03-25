@@ -1,11 +1,15 @@
-import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
 import 'package:flame/components.dart';
 
-/// The [DaggerAttackEffect] is an effect that is composed of multiple different effects
-/// that are added to the [Archer] when it attacks.
-/// It spins the sword.
+import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
+
+/// The DaggerAttackEffect is an effect that is composed of multiple different effects
+/// that are added to the Assassin when it attacks.
+/// It teleport the Assassin to the enemy and back in the original position.
 class DaggerAttackEffect extends Component with ParentIsA<Assassin> {
+  // The duration of the effect
   final effectTime = 0.5;
+
+  // The destination of the movement
   final Vector2 destination;
 
   DaggerAttackEffect({
@@ -16,24 +20,36 @@ class DaggerAttackEffect extends Component with ParentIsA<Assassin> {
   Future<void> onLoad() async {
     await super.onLoad();
 
+    // Make the parent invisible
     parent.opacity = 0;
 
-    final sprite = await Sprite.load('characters/assassin.png');
+    // Load the sprite
+    final sprite = await Sprite.load(
+      'characters/assassin.png',
+    );
 
+    // Instantiate the image of the assassin to attack the enemy
     final assassin = SpriteComponent(
       sprite: sprite,
       size: Vector2(100, 150),
-      anchor: Anchor.bottomCenter,
+      anchor: Anchor.center,
     );
 
-    // The arrow should start at the bottom of the character
+    // The assassin should appear at the enemy position
     assassin.position = destination;
 
-    parent.parent?.add(assassin);
+    // Add the assassin to the parent's world
+    parent.world.add(assassin);
 
-    Future.delayed(Duration(milliseconds: (effectTime * 300).toInt()), () {
-      assassin.removeFromParent();
-      parent.opacity = 1;
-    });
+    // When the effect is finished remove the attack image and make the original assassin reappear
+    Future.delayed(
+      Duration(
+        milliseconds: (effectTime * 300).toInt(),
+      ),
+      () {
+        assassin.removeFromParent();
+        parent.opacity = 1;
+      },
+    );
   }
 }
