@@ -108,19 +108,18 @@ class Potion extends SpriteComponent with HasWorldReference<EndlessWorld> {
     switch (_potionType) {
       // The heal potion heal the player
       case PotionType.heal:
-        world.lifePoints += 10;
-        if (world.lifePoints > world.maxLifePoints) {
-          world.lifePoints = world.maxLifePoints;
+        for (Character character in world.characters) {
+          character.lifePoints += 10;
+          if (character.lifePoints > character.maxLifePoints) {
+            character.lifePoints = character.maxLifePoints;
+          }
         }
         break;
       // The damage potion double the damage dealed by the characters
       case PotionType.damage:
-        final Character? frontCharacter = world.frontCharacter;
-        final Character? leftCharacter = world.leftCharacter;
-        final Character? rightCharacter = world.rightCharacter;
-        frontCharacter?.damage *= 2;
-        leftCharacter?.damage *= 2;
-        rightCharacter?.damage *= 2;
+        for (Character character in world.characters) {
+          character.damage *= 2;
+        }
 
         // Schedule the reversal of the effect after the duration
         world.add(
@@ -129,9 +128,9 @@ class Potion extends SpriteComponent with HasWorldReference<EndlessWorld> {
             repeat: false,
             onTick: () {
               // Revert the damage boost
-              frontCharacter?.damage = (frontCharacter.damage / 2).toInt();
-              leftCharacter?.damage = (leftCharacter.damage / 2).toInt();
-              rightCharacter?.damage = (rightCharacter.damage / 2).toInt();
+              for (Character character in world.characters) {
+                character.damage = (character.damage / 2).toInt();
+              }
             },
           ),
         );

@@ -1,16 +1,14 @@
-import 'package:dungeon_run/settings/persistence.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
+import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
-import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:dungeon_run/flame_game/components/trap.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/potion.dart';
 import 'package:dungeon_run/flame_game/game_screen.dart';
-import 'package:flutter/material.dart';
 
 /// The world is where you place all the components that should live inside of
 /// the game, like the character, enemies, obstacles and points for example.
@@ -44,7 +42,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// List of characters selected from the player
   final List<CharacterType?> selectedCharacters;
 
-  /// List to keep track of potions int the world.
+  /// List to keep trak of characters in the world.
+  final List<Character> characters = [];
+
+  /// List to keep track of potions in the world.
   final List<Potion> potions = [];
 
   /// List to keep track of enemies in the world.
@@ -65,12 +66,6 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// The base speed at which every elements move.
   int speed = 200;
 
-  /// The max lifePoints of the player
-  final int maxLifePoints = 20;
-
-  /// The current lifePoints of the player
-  int lifePoints = 20;
-
   /// The amount of money that the player collected
   int money = 0;
 
@@ -83,6 +78,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         leftCharacterPosition,
       );
       add(leftCharacter!);
+      characters.add(leftCharacter!);
     }
 
     // If the player selected a frontCharacter initialize id and add id to the screen
@@ -92,6 +88,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         frontCharacterPosition,
       );
       add(frontCharacter!);
+      characters.add(frontCharacter!);
     }
 
     // If the player selected a rightCharacter initialize id and add id to the screen
@@ -101,16 +98,8 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         rightCharacterPosition,
       );
       add(rightCharacter!);
+      characters.add(rightCharacter!);
     }
-
-    // The player lifebar to the screen
-    // The dimension of every segment depends from the screen and how many max lifepoint the player has
-    add(
-      LifeBar(
-        segmentWidth: size.x / maxLifePoints,
-        color: Colors.green,
-      ),
-    );
 
     // Spawning random enemies in the world at a fixed interval
     add(

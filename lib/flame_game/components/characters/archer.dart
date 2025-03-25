@@ -11,6 +11,8 @@ class Archer extends Character {
   }) : super(
           srcImage: 'characters/archer.png',
           damage: 3,
+          maxLifePoints: 15,
+          lifePoints: 15,
         );
 
   @override

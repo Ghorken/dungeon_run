@@ -9,14 +9,14 @@ import 'package:dungeon_run/flame_game/components/enemy.dart';
 /// The [DeathEffect] is an effect that is composed of multiple different effects
 /// that are added to the [Enemy] when it is killed.
 /// It spins the enemy and makes it blink in red.
-class DeathEffect extends Component with ParentIsA<Enemy> {
+class DeathEffect extends Component {
   /// The duration of the effect
   final effectTime = 0.5;
 
   @override
   void onMount() {
     super.onMount();
-    parent.addAll(
+    parent!.addAll(
       [
         // Make the enemy spins by 360°
         RotateEffect.by(

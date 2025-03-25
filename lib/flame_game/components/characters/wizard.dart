@@ -12,6 +12,8 @@ class Wizard extends Character {
   }) : super(
           srcImage: 'characters/wizard.png',
           damage: 2,
+          maxLifePoints: 10,
+          lifePoints: 10,
         );
 
   @override

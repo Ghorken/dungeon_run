@@ -13,6 +13,8 @@ class Assassin extends Character {
   }) : super(
           srcImage: 'characters/assassin.png',
           damage: 1,
+          maxLifePoints: 10,
+          lifePoints: 10,
         );
 
   @override

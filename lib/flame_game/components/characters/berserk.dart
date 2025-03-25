@@ -11,6 +11,8 @@ class Berserk extends Character {
   }) : super(
           srcImage: 'characters/berserk.png',
           damage: 3,
+          maxLifePoints: 20,
+          lifePoints: 20,
         );
 
   @override

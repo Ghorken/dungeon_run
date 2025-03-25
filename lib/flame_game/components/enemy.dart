@@ -1,14 +1,15 @@
 import 'dart:math';
 
+import 'package:dungeon_run/audio/sounds.dart';
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
+import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
-import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
-import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
 import 'package:dungeon_run/flame_game/endless_runner.dart';
 import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:flutter/material.dart';
@@ -24,16 +25,13 @@ enum EnemyType {
 /// The [Enemy] component can represent the different types of enemies
 /// that the character can run into.
 class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner> {
-  /// Timer to control the application of HurtEffect
-  double _hurtEffectTimer = 0.0;
-
   // Constructors for every tipe of enemy
   Enemy.goblin()
       : _srcImage = 'enemies/goblin.png',
         _maxLifePoints = 5,
         lifePoints = 5,
         _speed = 2,
-        _damage = 1,
+        damage = 1,
         _enemyType = EnemyType.goblin,
         _moneyValue = 1,
         super(
@@ -46,7 +44,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _maxLifePoints = 10,
         lifePoints = 10,
         _speed = 2,
-        _damage = 1,
+        damage = 1,
         _enemyType = EnemyType.troll,
         _moneyValue = 2,
         super(
@@ -59,7 +57,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _maxLifePoints = 15,
         lifePoints = 15,
         _speed = 4,
-        _damage = 2,
+        damage = 2,
         _enemyType = EnemyType.elementale,
         _moneyValue = 5,
         super(
@@ -72,7 +70,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _maxLifePoints = 30,
         lifePoints = 30,
         _speed = 2,
-        _damage = 5,
+        damage = 5,
         _enemyType = EnemyType.goblinKing,
         _xPosition = 0.0,
         _moneyValue = 30,
@@ -105,7 +103,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   int _speed;
 
   /// The damage that the enemy deal
-  final int _damage;
+  final int damage;
 
   /// The type of the enemy
   final EnemyType _enemyType;
@@ -113,7 +111,11 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   /// The starting x position of the enemy
   double? _xPosition;
 
+  /// The money value of the enemy
   final int _moneyValue;
+
+  /// The timer for periodic attacks
+  TimerComponent? attackTimer;
 
   @override
   Future<void> onLoad() async {
@@ -137,8 +139,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       LifeBar(
         segmentWidth: size.x / _maxLifePoints,
         color: Colors.red,
-        parentEnemy: this,
-        barHeight: 10.0,
+        parentComponent: this,
       ),
     );
   }
@@ -147,32 +148,44 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   void update(double dt) {
     super.update(dt);
 
-    // Update the timer
-    _hurtEffectTimer += dt;
-
     // We need to move the component to the bottom together with the speed that we
     // have set for the world.
     // `dt` here stands for delta time and it is the time, in seconds, since the
     // last update ran. We need to multiply the speed by `dt` to make sure that
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
-    if (position.y < world.frontCharacterPosition.y) {
-      position.y += (world.speed * _speed) * dt;
-    } else {
-      // When the enemy reach the character's position attacks the player immediately and every 1 second
-      if (_hurtEffectTimer >= 1.0) {
-        _hurtEffectTimer = 0.0; // Reset the timer
-        world.lifePoints -= _damage;
-        world.frontCharacter!.add(HurtEffect());
-        game.audioController.playSfx(SfxType.damage);
-      }
-    }
+    position.y += (world.speed * _speed) * dt;
   }
 
   /// Determine a random number between the min and max
   double _randomInRange(int min, int max) {
     final random = Random();
     return (min + random.nextInt(max - min + 1)).toDouble();
+  }
+
+  /// Set the speed of the enemy to 0 to stop it
+  void stop() {
+    _speed = 0;
+  }
+
+  /// Start a timer to attack the character every second
+  void startAttacking(Character character) {
+    attackTimer = TimerComponent(
+      period: 1.0, // Attack every second
+      repeat: true,
+      tickWhenLoaded: true,
+      onTick: () {
+        character.lifePoints -= damage;
+        character.add(HurtEffect());
+        character.game.audioController.playSfx(SfxType.damage);
+
+        // If the character's life points reach 0, call its `die` method
+        if (character.lifePoints <= 0) {
+          character.die();
+        }
+      },
+    );
+    add(attackTimer!);
   }
 
   /// When the enemy is hit by the character we reduce the lifePoints and

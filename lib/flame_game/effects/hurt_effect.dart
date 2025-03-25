@@ -17,33 +17,27 @@ class HurtEffect extends Component with ParentIsA<Character> {
   void onMount() {
     super.onMount();
 
-    // When the lifePoints of the player goes to 0 or less the player loose
-    //TODO: ha senso che ogni effetto faccia il controllo invece che il mondo stesso?
-    if (parent.world.lifePoints <= 0) {
-      parent.world.loose();
-    } else {
-      parent.addAll(
-        [
-          // Rotate the character by 360°
-          RotateEffect.by(
-            pi * 2,
-            EffectController(
-              duration: effectTime,
-              curve: Curves.easeInOut,
-            ),
+    parent.addAll(
+      [
+        // Rotate the character by 360°
+        RotateEffect.by(
+          pi * 2,
+          EffectController(
+            duration: effectTime,
+            curve: Curves.easeInOut,
           ),
-          // Make che character blinks in white
-          ColorEffect(
-            Colors.white,
-            EffectController(
-              duration: effectTime / 8,
-              alternate: true,
-              repeatCount: 2,
-            ),
-            opacityTo: 0.9,
+        ),
+        // Make che character blinks in white
+        ColorEffect(
+          Colors.white,
+          EffectController(
+            duration: effectTime / 8,
+            alternate: true,
+            repeatCount: 2,
           ),
-        ],
-      );
-    }
+          opacityTo: 0.9,
+        ),
+      ],
+    );
   }
 }

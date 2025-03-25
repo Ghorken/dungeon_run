@@ -11,6 +11,8 @@ class Warrior extends Character {
   }) : super(
           srcImage: 'characters/warrior.png',
           damage: 5,
+          maxLifePoints: 20,
+          lifePoints: 20,
         );
 
   @override
