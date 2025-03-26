@@ -43,7 +43,7 @@ flutter:
     - assets/images/scenery/
     - assets/images/attacks/
     - assets/images/traps/
-    - assets/images/potions/
+    - assets/images/collectables/
     - assets/music/
     - assets/sfx/
 

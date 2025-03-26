@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/effects/disable_effect.dart';
 import 'package:dungeon_run/flame_game/endless_world.dart';
 
@@ -17,7 +18,7 @@ enum TrapType {
 
 /// The [Trap] component can represent three different types of obstacles
 /// that the character can run into.
-class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
+class Trap extends SpriteComponent with HasWorldReference<EndlessWorld>, CollisionCallbacks {
   // Constructor for every type of trap
   Trap.spikedRoller()
       : _srcImage = 'traps/spiked_roller.png',
@@ -104,12 +105,6 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
     }
   }
 
-  /// Determine a random number between the min and max
-  double _randomInRange(int min, int max) {
-    final random = Random();
-    return (min + random.nextInt(max - min + 1)).toDouble();
-  }
-
   @override
   void update(double dt) {
     // We need to move the component to the bottom of the screen together with
@@ -120,19 +115,33 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld> {
     // of your device.
     position.y += (world.speed * _speed) * dt;
 
-    // When the component is no longer visible on the screen anymore, we
-    // remove it.
-    // The position is defined from the upper left corner of the component (the
-    // anchor) and the center of the world is in (0, 0), so when the components
-    // position minus its size in Y-axis is outside of minus half the world size
-    // we know that it is no longer visible and it can be removed.
-    if (position.y - size.y > world.size.y / 2) {
+    // When the component is no longer visible on the screen anymore, remove it.
+    if (position.y - size.y / 2 > world.size.y / 2) {
       world.traps.remove(this);
       removeFromParent();
     }
   }
 
-  /// When the trap is hit by the player stop it and remove it.
+  /// When the [Trap] collides with a [Character] it should make damage.
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent character,
+  ) {
+    super.onCollisionStart(intersectionPoints, character);
+
+    if (character is Character && world.characters.contains(character)) {
+      character.hit(damage);
+    }
+  }
+
+  /// Determine a random number between the min and max
+  double _randomInRange(int min, int max) {
+    final random = Random();
+    return (min + random.nextInt(max - min + 1)).toDouble();
+  }
+
+  /// When the [Trap] is hit by the player stop it and remove it.
   void disable() {
     _speed = 0;
 

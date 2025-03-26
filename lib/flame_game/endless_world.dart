@@ -7,7 +7,7 @@ import 'package:dungeon_run/flame_game/components/characters/character_type.dart
 import 'package:dungeon_run/flame_game/components/trap.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
-import 'package:dungeon_run/flame_game/components/potion.dart';
+import 'package:dungeon_run/flame_game/components/collectable.dart';
 import 'package:dungeon_run/flame_game/game_screen.dart';
 
 /// The world is where you place all the components that should live inside of
@@ -24,8 +24,8 @@ import 'package:dungeon_run/flame_game/game_screen.dart';
 ///  to.
 class EndlessWorld extends World with TapCallbacks, HasGameReference {
   EndlessWorld({
-    required this.selectedCharacters,
-  });
+    required List<CharacterType?> selectedCharacters,
+  }) : _selectedCharacters = selectedCharacters;
 
   /// The size of the game screen
   Vector2 get size => (parent as FlameGame).size;
@@ -40,13 +40,16 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   late final DateTime timeStarted;
 
   /// List of characters selected from the player
-  final List<CharacterType?> selectedCharacters;
+  final List<CharacterType?> _selectedCharacters;
 
-  /// List to keep trak of characters in the world.
+  /// List to keep track of [Character] in the world.
   final List<Character> characters = [];
 
-  /// List to keep track of potions in the world.
-  final List<Potion> potions = [];
+  /// List to keep track of dead [Character]
+  final List<Character> deadCharacters = [];
+
+  /// List to keep track of [Collectable] in the world.
+  final List<Collectable> collectables = [];
 
   /// List to keep track of enemies in the world.
   final List<Enemy> enemies = [];
@@ -72,9 +75,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   @override
   Future<void> onLoad() async {
     // If the player selected a leftCharacter initialize id and add id to the screen
-    if (selectedCharacters[0] != null) {
+    if (_selectedCharacters[0] != null) {
       leftCharacter = createCharacter(
-        selectedCharacters[0]!,
+        _selectedCharacters[0]!,
         leftCharacterPosition,
       );
       add(leftCharacter!);
@@ -82,9 +85,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     }
 
     // If the player selected a frontCharacter initialize id and add id to the screen
-    if (selectedCharacters[1] != null) {
+    if (_selectedCharacters[1] != null) {
       frontCharacter = createCharacter(
-        selectedCharacters[1]!,
+        _selectedCharacters[1]!,
         frontCharacterPosition,
       );
       add(frontCharacter!);
@@ -92,9 +95,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     }
 
     // If the player selected a rightCharacter initialize id and add id to the screen
-    if (selectedCharacters[2] != null) {
+    if (_selectedCharacters[2] != null) {
       rightCharacter = createCharacter(
-        selectedCharacters[2]!,
+        _selectedCharacters[2]!,
         rightCharacterPosition,
       );
       add(rightCharacter!);
@@ -139,13 +142,13 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       ),
     );
 
-    // Spawning potions in the world at a random interval between fixed values
+    // Spawning [Collectable] in the world at a random interval between fixed values
     add(
       SpawnComponent.periodRange(
         factory: (_) {
-          Potion potion = Potion.random();
-          potions.add(potion);
-          return potion;
+          Collectable collectable = Collectable.random();
+          collectables.add(collectable);
+          return collectable;
         },
         minPeriod: 3.0,
         maxPeriod: 6.0,
@@ -181,12 +184,12 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       return;
     }
 
-    // If the player taps on a potion, we apply its effect and remove it from the world
-    for (final potion in potions) {
-      if (potion.toRect().contains(event.localPosition.toOffset())) {
-        potion.effect();
-        potion.removeFromParent();
-        potions.remove(potion);
+    // If the player taps on a [Collectable], we apply its effect and remove it from the world
+    for (final collectable in collectables) {
+      if (collectable.toRect().contains(event.localPosition.toOffset())) {
+        collectable.effect();
+        collectable.removeFromParent();
+        collectables.remove(collectable);
         break;
       }
     }

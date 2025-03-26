@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
-import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -24,13 +22,14 @@ enum EnemyType {
 
 /// The [Enemy] component can represent the different types of enemies
 /// that the character can run into.
-class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner> {
+class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, CollisionCallbacks {
   // Constructors for every tipe of enemy
   Enemy.goblin()
       : _srcImage = 'enemies/goblin.png',
         _maxLifePoints = 5,
         lifePoints = 5,
         _speed = 2,
+        _actualSpeed = 2,
         damage = 1,
         _enemyType = EnemyType.goblin,
         _moneyValue = 1,
@@ -44,6 +43,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _maxLifePoints = 10,
         lifePoints = 10,
         _speed = 2,
+        _actualSpeed = 2,
         damage = 1,
         _enemyType = EnemyType.troll,
         _moneyValue = 2,
@@ -57,6 +57,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _maxLifePoints = 15,
         lifePoints = 15,
         _speed = 4,
+        _actualSpeed = 4,
         damage = 2,
         _enemyType = EnemyType.elementale,
         _moneyValue = 5,
@@ -70,6 +71,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _maxLifePoints = 30,
         lifePoints = 30,
         _speed = 2,
+        _actualSpeed = 2,
         damage = 5,
         _enemyType = EnemyType.goblinKing,
         _xPosition = 0.0,
@@ -101,6 +103,9 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// The speed of the enemy
   int _speed;
+
+  /// The actual speed of the enemy
+  int _actualSpeed;
 
   /// The damage that the enemy deal
   final int damage;
@@ -154,38 +159,62 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     // last update ran. We need to multiply the speed by `dt` to make sure that
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
-    position.y += (world.speed * _speed) * dt;
+    position.y += (world.speed * _actualSpeed) * dt;
+
+    // When the component is no longer visible on the screen anymore, remove it.
+    if (position.y - size.y > world.size.y / 2) {
+      world.enemies.remove(this);
+      removeFromParent();
+    }
   }
+
+  /// When the [Enemy] collides with a [Character] it should make damage
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent character,
+  ) {
+    super.onCollisionStart(intersectionPoints, character);
+
+    // The [Enemy] should stop and the [Character] should receive periodic damage.
+    if (character is Character && world.characters.contains(character)) {
+      // Set the speed of the enemy to 0 to stop it
+      _actualSpeed = 0;
+
+      // Start a timer to attack the character every second
+      attackTimer = TimerComponent(
+        period: 1.0, // Attack every second
+        repeat: true,
+        tickWhenLoaded: true,
+        onTick: () {
+          if (world.characters.contains(character)) {
+            character.hit(damage);
+          }
+        },
+      );
+      add(attackTimer!);
+    }
+  }
+
+  /// When the [Enemy] ends the collision with the [Character]
+  // @override
+  // void onCollisionEnd(
+  //   PositionComponent character,
+  // ) {
+  //   super.onCollisionEnd(character);
+  //   print(this);
+
+  //   // When the [Enemy] is not colliding with the [Character]
+  //   // The enemy should start move again
+  //   if (character is Character && world.characters.contains(character)) {
+  //     _actualSpeed = _speed;
+  //   }
+  // }
 
   /// Determine a random number between the min and max
   double _randomInRange(int min, int max) {
     final random = Random();
     return (min + random.nextInt(max - min + 1)).toDouble();
-  }
-
-  /// Set the speed of the enemy to 0 to stop it
-  void stop() {
-    _speed = 0;
-  }
-
-  /// Start a timer to attack the character every second
-  void startAttacking(Character character) {
-    attackTimer = TimerComponent(
-      period: 1.0, // Attack every second
-      repeat: true,
-      tickWhenLoaded: true,
-      onTick: () {
-        character.lifePoints -= damage;
-        character.add(HurtEffect());
-        character.game.audioController.playSfx(SfxType.damage);
-
-        // If the character's life points reach 0, call its `die` method
-        if (character.lifePoints <= 0) {
-          character.die();
-        }
-      },
-    );
-    add(attackTimer!);
   }
 
   /// When the enemy is hit by the character we reduce the lifePoints and
@@ -205,7 +234,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// When the enemy is killed by the character we remove the enemy.
   void die() {
-    _speed = 0;
+    _actualSpeed = 0;
     // We remove the enemy from the list so that it is no longer hittable even if still present on the screen.
     world.enemies.remove(this);
     DeathEffect deathEffect = DeathEffect();

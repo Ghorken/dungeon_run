@@ -4,11 +4,10 @@ import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
 import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
-import 'package:dungeon_run/flame_game/components/enemy.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
-import 'package:dungeon_run/flame_game/components/trap.dart';
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
+import 'package:dungeon_run/flame_game/effects/invincible_effect.dart';
 import 'package:dungeon_run/flame_game/endless_runner.dart';
 import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:dungeon_run/audio/sounds.dart';
@@ -44,6 +43,9 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   /// The amount of damage that the attack does
   int damage;
 
+  /// If the character can receive damage or not
+  bool invincible = false;
+
   @override
   Future<void> onLoad() async {
     // This defines the different animation states that the character can be in.
@@ -76,16 +78,14 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
     );
   }
 
-  @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    super.onCollisionStart(intersectionPoints, other);
-    // When the character collides with an obstacle it should receive damage.
-    if (other is Trap && world.traps.contains(other)) {
+  /// Handles the character being hitted
+  void hit(int damage) {
+    if (invincible) {
       game.audioController.playSfx(SfxType.damage);
-      lifePoints -= other.damage;
+      add(InvincibleEffect());
+    } else {
+      game.audioController.playSfx(SfxType.damage);
+      lifePoints -= damage;
       add(HurtEffect());
 
       // When the character lifePoints go to 0 kill the character
@@ -93,19 +93,15 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
         die();
       }
     }
-
-    // When the character collides with an enemy it should receive periodic damage.
-    if (other is Enemy && world.enemies.contains(other)) {
-      other.stop();
-      other.startAttacking(this);
-    }
   }
 
   /// Apply the death effect and then remove the character from the screen
   void die() {
     DeathEffect deathEffect = DeathEffect();
     add(deathEffect);
+    // Remove the character from the list and add it to the new list
     world.characters.remove(this);
+    world.deadCharacters.add(this);
 
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(

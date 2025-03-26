@@ -1,0 +1,33 @@
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
+
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
+
+/// The [InvincibleEffect] is an effect that is composed of multiple different effects
+/// that are added to the [Character] when it is hit.
+/// It makes it blinks in blueGrey.
+class InvincibleEffect extends Component with ParentIsA<Character> {
+  /// The duration of the effect
+  final double effectTime = 0.5;
+
+  @override
+  void onMount() {
+    super.onMount();
+
+    parent.addAll(
+      [
+        // Make che character blinks in blueGrey
+        ColorEffect(
+          Colors.blueGrey,
+          EffectController(
+            duration: effectTime / 8,
+            alternate: true,
+            repeatCount: 2,
+          ),
+          opacityTo: 0.9,
+        ),
+      ],
+    );
+  }
+}
