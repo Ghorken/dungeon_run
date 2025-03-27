@@ -9,7 +9,7 @@ import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
 /// The SwordAttackEffect is an effect that is composed of multiple different effects
 /// that are added to the Warrior when it attacks.
 /// It spins the sword in front of the Warrior.
-class SwordAttackEffect extends Component with ParentIsA<Warrior> {
+class WarriorAttackEffect extends Component with ParentIsA<Warrior> {
   /// The duration of the effect
   final effectTime = 0.5;
 

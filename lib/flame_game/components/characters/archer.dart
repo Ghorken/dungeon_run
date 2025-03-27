@@ -1,7 +1,7 @@
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
-import 'package:dungeon_run/flame_game/effects/attacks/bow_attack_effect.dart';
+import 'package:dungeon_run/flame_game/effects/attacks/archer_attack_effect.dart';
 
 /// The class that handles the attack and the damage of the Archer
 /// The Archer attacks the closest enemy in the top area of the screen
@@ -33,8 +33,23 @@ class Archer extends Character {
 
     // If there is one attack it
     if (closestEnemy != null) {
-      add(BowAttackEffect(destination: closestEnemy.position));
+      add(ArcherAttackEffect(destination: closestEnemy.position));
       closestEnemy.hitted(damage);
+      game.audioController.playSfx(SfxType.score);
+    }
+  }
+
+  @override
+  void specialAttack() {
+    // Retrieve every enemy in range
+    final List<Enemy> enemiesToAttack = List<Enemy>.from(world.enemies).where((Enemy enemy) => enemy.position.y < 200).toList();
+    if (enemiesToAttack.isNotEmpty) {
+      // Attack them
+      for (final Enemy enemy in enemiesToAttack) {
+        enemy.hitted(damage);
+        add(ArcherAttackEffect(destination: enemy.position));
+      }
+
       game.audioController.playSfx(SfxType.score);
     }
   }

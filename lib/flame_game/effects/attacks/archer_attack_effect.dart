@@ -3,17 +3,17 @@ import 'package:flame/effects.dart';
 
 import 'package:dungeon_run/flame_game/components/characters/archer.dart';
 
-/// The BowAttackEffect is an effect that is composed of multiple different effects
+/// The ArcherAttackEffect is an effect that is composed of multiple different effects
 /// that are added to the Archer when it attacks.
 /// It moves the arrow from the Archer to the enemy.
-class BowAttackEffect extends Component with ParentIsA<Archer> {
+class ArcherAttackEffect extends Component with ParentIsA<Archer> {
   /// The duration of the effect
   final effectTime = 0.5;
 
   /// The destination of the movement
   final Vector2 destination;
 
-  BowAttackEffect({
+  ArcherAttackEffect({
     required this.destination,
   });
 

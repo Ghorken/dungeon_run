@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:provider/provider.dart';
 
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
+import 'package:dungeon_run/style/special_attack_button.dart';
 import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/endless_runner.dart';
@@ -20,6 +22,9 @@ class GameScreen extends StatelessWidget {
   });
 
   static const String backButtonKey = 'back_buttton';
+  static const String firstSpecialAttackKey = 'first_pecial_attack_button';
+  static const String secondSpecialAttackKey = 'second_pecial_attack_button';
+  static const String thirdSpecialAttackKey = 'third_pecial_attack_button';
   static const String winDialogKey = 'win_dialog';
   static const String looseDialogKey = 'loose_dialog';
   final List<CharacterType?> selectedCharacters;
@@ -45,6 +50,31 @@ class GameScreen extends StatelessWidget {
                 onPressed: GoRouter.of(context).pop,
                 child: NesIcon(iconData: NesIcons.leftArrowIndicator),
               ),
+            );
+          },
+          // The button that cause the special attack
+          firstSpecialAttackKey: (BuildContext context, EndlessRunner game) {
+            final Character character = game.world.characters[0];
+
+            return SpecialAttackButton(
+              character: character,
+              topPosition: 100,
+            );
+          },
+          secondSpecialAttackKey: (BuildContext context, EndlessRunner game) {
+            final Character character = game.world.characters[1];
+
+            return SpecialAttackButton(
+              character: character,
+              topPosition: 180,
+            );
+          },
+          thirdSpecialAttackKey: (BuildContext context, EndlessRunner game) {
+            final Character character = game.world.characters[2];
+
+            return SpecialAttackButton(
+              character: character,
+              topPosition: 260,
             );
           },
           // The win dialog of the level

@@ -46,6 +46,9 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   /// If the character can receive damage or not
   bool invincible = false;
 
+  /// Cooldown for the special attack
+  int cooldownTimer = 5;
+
   @override
   Future<void> onLoad() async {
     // This defines the different animation states that the character can be in.
@@ -118,6 +121,9 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
 
   /// The abstract attack function that every character should implement
   void attack();
+
+  /// The abstract special attack function that every character should implement
+  void specialAttack();
 }
 
 /// The possible states of the character

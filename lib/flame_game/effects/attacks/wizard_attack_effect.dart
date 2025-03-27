@@ -8,14 +8,14 @@ import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
 /// The MagicAttackEffect is an effect that is composed of multiple different effects
 /// that are added to the Wizard when it attacks.
 /// It enlarge the magic while moving to the enemy.
-class MagicAttackEffect extends Component with ParentIsA<Wizard> {
+class WizardAttackEffect extends Component with ParentIsA<Wizard> {
   /// The duration of the effect
   final effectTime = 0.5;
 
   /// The destination of the movement
   final Vector2 destination;
 
-  MagicAttackEffect({
+  WizardAttackEffect({
     required this.destination,
   });
 

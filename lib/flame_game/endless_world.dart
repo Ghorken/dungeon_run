@@ -82,6 +82,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       );
       add(leftCharacter!);
       characters.add(leftCharacter!);
+      game.overlays.add(GameScreen.firstSpecialAttackKey);
     }
 
     // If the player selected a frontCharacter initialize id and add id to the screen
@@ -92,6 +93,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       );
       add(frontCharacter!);
       characters.add(frontCharacter!);
+      game.overlays.add(GameScreen.secondSpecialAttackKey);
     }
 
     // If the player selected a rightCharacter initialize id and add id to the screen
@@ -102,6 +104,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       );
       add(rightCharacter!);
       characters.add(rightCharacter!);
+      game.overlays.add(GameScreen.thirdSpecialAttackKey);
     }
 
     // Spawning random enemies in the world at a fixed interval
@@ -112,7 +115,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           enemies.add(enemy);
           return enemy;
         },
-        period: 2,
+        period: 0.5,
       ),
     );
 
@@ -167,6 +170,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   @override
   void onRemove() {
     game.overlays.remove(GameScreen.backButtonKey);
+    game.overlays.remove(GameScreen.firstSpecialAttackKey);
+    game.overlays.remove(GameScreen.secondSpecialAttackKey);
+    game.overlays.remove(GameScreen.thirdSpecialAttackKey);
   }
 
   /// [onTapDown] is called when the character taps the screen
@@ -208,6 +214,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     // Stop the game and remove the back button
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
+    game.overlays.remove(GameScreen.firstSpecialAttackKey);
+    game.overlays.remove(GameScreen.secondSpecialAttackKey);
+    game.overlays.remove(GameScreen.thirdSpecialAttackKey);
 
     // Show the loose dialog
     game.overlays.add(GameScreen.looseDialogKey);
@@ -222,6 +231,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     // Stop the game and remove the back button
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
+    game.overlays.remove(GameScreen.firstSpecialAttackKey);
+    game.overlays.remove(GameScreen.secondSpecialAttackKey);
+    game.overlays.remove(GameScreen.thirdSpecialAttackKey);
 
     // Show the win dialog
     game.overlays.add(GameScreen.winDialogKey);

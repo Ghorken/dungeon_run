@@ -5,17 +5,17 @@ import 'package:flame/effects.dart';
 
 import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 
-/// The AxeAttackEffect is an effect that is composed of multiple different effects
-/// that are added to the Berserk when it attacks.
-/// It launch the axe toward the enemy and spin it.
-class AxeAttackEffect extends Component with ParentIsA<Berserk> {
+/// The [BerserkAttackEffect] is an effect that is composed of multiple different effects
+/// that are added to the [Berserk] when it attacks.
+/// It launch the axe toward the [Enemy] and spin it.
+class BerserkAttackEffect extends Component with ParentIsA<Berserk> {
   /// The duration of the effect
   final effectTime = 0.5;
 
   /// The destination of the movement
   final Vector2 destination;
 
-  AxeAttackEffect({
+  BerserkAttackEffect({
     required this.destination,
   });
 

@@ -1,7 +1,7 @@
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
-import 'package:dungeon_run/flame_game/effects/attacks/magic_attack_effect.dart';
+import 'package:dungeon_run/flame_game/effects/attacks/wizard_attack_effect.dart';
 
 /// The class that handles the attack and the damage of the Wizard
 /// The Wizard attacks a random enemy in the middle area of the screen
@@ -34,7 +34,7 @@ class Wizard extends Character {
 
     // If there is one attack it
     if (closestEnemy != null) {
-      add(MagicAttackEffect(destination: closestEnemy.position));
+      add(WizardAttackEffect(destination: closestEnemy.position));
       closestEnemy.hitted(damage);
 
       // Cycle through the enemies in the screen to find the ones that are near the target
@@ -47,6 +47,33 @@ class Wizard extends Character {
       // Apply damage to all nearby enemies
       for (final Enemy nearEnemy in nearbyEnemies) {
         nearEnemy.hitted(damage);
+      }
+
+      game.audioController.playSfx(SfxType.score);
+    }
+  }
+
+  @override
+  void specialAttack() {
+    // Retrieve every enemy in range
+    final List<Enemy> enemiesToAttack = List<Enemy>.from(world.enemies).where((Enemy enemy) => enemy.position.y > -200 && enemy.position.y < 400).toList();
+    if (enemiesToAttack.isNotEmpty) {
+      // Attack them
+      for (final Enemy enemy in enemiesToAttack) {
+        enemy.hitted(damage);
+        add(WizardAttackEffect(destination: enemy.position));
+
+        // Cycle through the enemies in the screen to find the ones that are near the target
+        final List<Enemy> nearbyEnemies = world.enemies
+            .where((Enemy nearEnemy) =>
+                nearEnemy != enemy && // Exclude the target enemy itself
+                nearEnemy.position.distanceTo(enemy.position) < 200)
+            .toList();
+
+        // Apply damage to all nearby enemies
+        for (final Enemy nearEnemy in nearbyEnemies) {
+          nearEnemy.hitted(damage);
+        }
       }
 
       game.audioController.playSfx(SfxType.score);

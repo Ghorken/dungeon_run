@@ -5,14 +5,14 @@ import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
 /// The DaggerAttackEffect is an effect that is composed of multiple different effects
 /// that are added to the Assassin when it attacks.
 /// It teleport the Assassin to the enemy and back in the original position.
-class DaggerAttackEffect extends Component with ParentIsA<Assassin> {
+class AssassinAttackEffect extends Component with ParentIsA<Assassin> {
   // The duration of the effect
   final effectTime = 0.5;
 
   // The destination of the movement
   final Vector2 destination;
 
-  DaggerAttackEffect({
+  AssassinAttackEffect({
     required this.destination,
   });
 

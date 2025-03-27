@@ -1,7 +1,8 @@
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
-import 'package:dungeon_run/flame_game/effects/attacks/sword_attack_effect.dart';
+import 'package:dungeon_run/flame_game/effects/attacks/warrior_attack_effect.dart';
+import 'package:dungeon_run/flame_game/effects/attacks/warrior_special_attack_effect.dart';
 
 /// The class that handles the attack and the damage of the Warrior
 /// The Warrior attacks the closest enemy in the bottom area of the screen
@@ -33,8 +34,23 @@ class Warrior extends Character {
 
     // If there is one attack it
     if (closestEnemy != null) {
-      add(SwordAttackEffect());
+      add(WarriorAttackEffect());
       closestEnemy.hitted(damage);
+      game.audioController.playSfx(SfxType.score);
+    }
+  }
+
+  @override
+  void specialAttack() {
+    // Retrieve every enemy in range
+    final List<Enemy> enemiesToAttack = List<Enemy>.from(world.enemies).where((Enemy enemy) => enemy.position.y > 400).toList();
+    if (enemiesToAttack.isNotEmpty) {
+      // Attack them
+      for (final Enemy enemy in enemiesToAttack) {
+        enemy.hitted(damage);
+        add(WarriorSpecialAttackEffect(enemy: enemy));
+      }
+
       game.audioController.playSfx(SfxType.score);
     }
   }
