@@ -136,59 +136,74 @@ class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
             character.lifePoints = character.maxLifePoints;
           }
         }
+
+        removeFromParent();
         break;
       // The damage potion double the damage dealed by the characters
       case CollectableType.potionDamage:
-        for (Character character in world.characters) {
+        // Capture the world reference to access it in the onTick callback
+        final EndlessWorld currentWorld = world;
+
+        for (Character character in currentWorld.characters) {
           character.damage *= 2;
         }
 
         // Schedule the reversal of the effect after the duration
-        world.add(
+        currentWorld.add(
           TimerComponent(
             period: _duration,
             repeat: false,
             onTick: () {
               // Revert the damage boost
-              for (Character character in world.characters) {
+              for (Character character in currentWorld.characters) {
                 character.damage = (character.damage / 2).toInt();
               }
+
+              removeFromParent();
             },
           ),
         );
         break;
       // The slow parchment half the speed of the world so it slows down enemies and traps
       case CollectableType.parchmentSlow:
+        // Capture the world reference to access it in the onTick callback
         final EndlessWorld currentWorld = world;
-        currentWorld.speed = (world.speed / 2).toInt();
+
+        currentWorld.speed = (currentWorld.speed / 2).toInt();
 
         // Schedule the reversal of the effect after the duration
-        world.add(
+        currentWorld.add(
           TimerComponent(
             period: _duration,
             repeat: false,
             onTick: () {
               currentWorld.speed *= 2; // Revert the speed boost
+
+              removeFromParent();
             },
           ),
         );
         break;
       // The invicibility shield avoid that the characters takes any damage
       case CollectableType.shieldInvincibility:
-        for (Character character in world.characters) {
+        // Capture the world reference to access it in the onTick callback
+        final EndlessWorld currentWorld = world;
+
+        for (Character character in currentWorld.characters) {
           character.invincible = true;
         }
 
         // Schedule the reversal of the effect after the duration
-        world.add(
+        currentWorld.add(
           TimerComponent(
             period: _duration,
             repeat: false,
             onTick: () {
               // Revert the damage boost
-              for (Character character in world.characters) {
+              for (Character character in currentWorld.characters) {
                 character.invincible = false;
               }
+              removeFromParent();
             },
           ),
         );
@@ -196,11 +211,17 @@ class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
       // The resurrection parchment resurrect one dead character
       case CollectableType.parchmentResurrection:
         // Retrieve one of the dead and remove from the list
-        Character resurrectedCharacter = world.deadCharacters.random();
-        world.deadCharacters.remove(resurrectedCharacter);
-        // Add it to the alive list with half life points
-        resurrectedCharacter.lifePoints = (resurrectedCharacter.maxLifePoints / 2).toInt();
-        world.characters.add(resurrectedCharacter);
+        if (world.deadCharacters.isNotEmpty) {
+          Character resurrectedCharacter = world.deadCharacters.random();
+          world.deadCharacters.remove(resurrectedCharacter);
+          // Add it to the alive list with half life points
+          resurrectedCharacter.lifePoints = (resurrectedCharacter.maxLifePoints / 2).toInt();
+          world.characters.add(resurrectedCharacter);
+
+          world.add(resurrectedCharacter);
+        }
+
+        removeFromParent();
         break;
     }
   }

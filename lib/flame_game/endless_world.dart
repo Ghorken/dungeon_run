@@ -108,7 +108,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent(
         factory: (_) {
-          Enemy enemy = Enemy.random();
+          final Enemy enemy = Enemy.random();
           enemies.add(enemy);
           return enemy;
         },
@@ -122,7 +122,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         period: 300, // 5 minutes in seconds
         repeat: false, // Spawn only once
         onTick: () {
-          final goblinKing = Enemy.goblinKing();
+          final Enemy goblinKing = Enemy.goblinKing();
           enemies.add(goblinKing);
           add(goblinKing);
         },
@@ -133,7 +133,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent.periodRange(
         factory: (_) {
-          Trap trap = Trap.random();
+          final Trap trap = Trap.random();
           traps.add(trap);
           return trap;
         },
@@ -173,13 +173,13 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   @override
   void onTapDown(TapDownEvent event) {
     // If the player taps on a character, we make it attack.
-    if (frontCharacter != null && frontCharacter!.toRect().contains(event.localPosition.toOffset())) {
+    if (frontCharacter != null && characters.contains(frontCharacter) && frontCharacter!.toRect().contains(event.localPosition.toOffset())) {
       frontCharacter!.attack();
       return;
-    } else if (leftCharacter != null && leftCharacter!.toRect().contains(event.localPosition.toOffset())) {
+    } else if (leftCharacter != null && characters.contains(leftCharacter) && leftCharacter!.toRect().contains(event.localPosition.toOffset())) {
       leftCharacter!.attack();
       return;
-    } else if (rightCharacter != null && rightCharacter!.toRect().contains(event.localPosition.toOffset())) {
+    } else if (rightCharacter != null && characters.contains(rightCharacter) && rightCharacter!.toRect().contains(event.localPosition.toOffset())) {
       rightCharacter!.attack();
       return;
     }
@@ -188,7 +188,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     for (final collectable in collectables) {
       if (collectable.toRect().contains(event.localPosition.toOffset())) {
         collectable.effect();
-        collectable.removeFromParent();
+        collectable.opacity = 0.0;
         collectables.remove(collectable);
         break;
       }

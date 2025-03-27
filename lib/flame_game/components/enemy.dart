@@ -197,19 +197,16 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   }
 
   /// When the [Enemy] ends the collision with the [Character]
-  // @override
-  // void onCollisionEnd(
-  //   PositionComponent character,
-  // ) {
-  //   super.onCollisionEnd(character);
-  //   print(this);
+  @override
+  void onCollisionEnd(
+    PositionComponent character,
+  ) {
+    super.onCollisionEnd(character);
 
-  //   // When the [Enemy] is not colliding with the [Character]
-  //   // The enemy should start move again
-  //   if (character is Character && world.characters.contains(character)) {
-  //     _actualSpeed = _speed;
-  //   }
-  // }
+    // When the [Enemy] is not colliding with the [Character] because the [Character] died
+    // The enemy should start move again
+    _actualSpeed = _speed;
+  }
 
   /// Determine a random number between the min and max
   double _randomInRange(int min, int max) {
