@@ -43,10 +43,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   final List<CharacterType?> _selectedCharacters;
 
   /// List to keep track of [Character] in the world.
-  final List<Character> characters = [];
+  final List<Character?> characters = List<Character?>.filled(3, null);
 
   /// List to keep track of dead [Character]
-  final List<Character> deadCharacters = [];
+  final List<Character?> deadCharacters = List<Character?>.filled(3, null);
 
   /// List to keep track of [Collectable] in the world.
   final List<Collectable> collectables = [];
@@ -81,8 +81,8 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         leftCharacterPosition,
       );
       add(leftCharacter!);
-      characters.add(leftCharacter!);
-      game.overlays.add(GameScreen.firstSpecialAttackKey);
+      characters[0] = (leftCharacter!);
+      game.overlays.add(GameScreen.leftSpecialAttackKey);
     }
 
     // If the player selected a frontCharacter initialize id and add id to the screen
@@ -92,8 +92,8 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         frontCharacterPosition,
       );
       add(frontCharacter!);
-      characters.add(frontCharacter!);
-      game.overlays.add(GameScreen.secondSpecialAttackKey);
+      characters[1] = (frontCharacter!);
+      game.overlays.add(GameScreen.frontSpecialAttackKey);
     }
 
     // If the player selected a rightCharacter initialize id and add id to the screen
@@ -103,8 +103,8 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         rightCharacterPosition,
       );
       add(rightCharacter!);
-      characters.add(rightCharacter!);
-      game.overlays.add(GameScreen.thirdSpecialAttackKey);
+      characters[2] = (rightCharacter!);
+      game.overlays.add(GameScreen.rightSpecialAttackKey);
     }
 
     // Spawning random enemies in the world at a fixed interval
@@ -170,9 +170,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   @override
   void onRemove() {
     game.overlays.remove(GameScreen.backButtonKey);
-    game.overlays.remove(GameScreen.firstSpecialAttackKey);
-    game.overlays.remove(GameScreen.secondSpecialAttackKey);
-    game.overlays.remove(GameScreen.thirdSpecialAttackKey);
+    game.overlays.remove(GameScreen.leftSpecialAttackKey);
+    game.overlays.remove(GameScreen.frontSpecialAttackKey);
+    game.overlays.remove(GameScreen.rightSpecialAttackKey);
   }
 
   /// [onTapDown] is called when the character taps the screen
@@ -210,36 +210,38 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   }
 
   /// When the player loose stop the game and shows the relative dialog
-  void loose() {
+  Future<void> loose() async {
     // Stop the game and remove the back button
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
-    game.overlays.remove(GameScreen.firstSpecialAttackKey);
-    game.overlays.remove(GameScreen.secondSpecialAttackKey);
-    game.overlays.remove(GameScreen.thirdSpecialAttackKey);
+    game.overlays.remove(GameScreen.leftSpecialAttackKey);
+    game.overlays.remove(GameScreen.frontSpecialAttackKey);
+    game.overlays.remove(GameScreen.rightSpecialAttackKey);
 
     // Show the loose dialog
     game.overlays.add(GameScreen.looseDialogKey);
 
     // Save the accumulated money
     Persistence persistence = Persistence();
-    persistence.saveMoney(money);
+    int storedMoney = await persistence.getMoney();
+    persistence.saveMoney(money + storedMoney);
   }
 
   /// When the player wins stop the game and shows the relative dialog
-  void win() {
+  Future<void> win() async {
     // Stop the game and remove the back button
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
-    game.overlays.remove(GameScreen.firstSpecialAttackKey);
-    game.overlays.remove(GameScreen.secondSpecialAttackKey);
-    game.overlays.remove(GameScreen.thirdSpecialAttackKey);
+    game.overlays.remove(GameScreen.leftSpecialAttackKey);
+    game.overlays.remove(GameScreen.frontSpecialAttackKey);
+    game.overlays.remove(GameScreen.rightSpecialAttackKey);
 
     // Show the win dialog
     game.overlays.add(GameScreen.winDialogKey);
 
     // Save the accumulated money
     Persistence persistence = Persistence();
-    persistence.saveMoney(money);
+    int storedMoney = await persistence.getMoney();
+    persistence.saveMoney(money + storedMoney);
   }
 }

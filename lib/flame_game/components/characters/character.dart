@@ -103,8 +103,11 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
     DeathEffect deathEffect = DeathEffect();
     add(deathEffect);
     // Remove the character from the list and add it to the new list
-    world.characters.remove(this);
-    world.deadCharacters.add(this);
+    final int index = world.characters.indexOf(this);
+    if (index != -1) {
+      world.characters[index] = null;
+    }
+    world.deadCharacters[index] = this;
 
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(
@@ -114,7 +117,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
       () => removeFromParent(),
     );
 
-    if (world.characters.isEmpty) {
+    if (world.characters.nonNulls.isEmpty) {
       world.loose();
     }
   }

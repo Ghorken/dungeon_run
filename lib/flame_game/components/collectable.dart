@@ -130,7 +130,7 @@ class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
     switch (_collectableType) {
       // The heal potion heal the player
       case CollectableType.potionHeal:
-        for (Character character in world.characters) {
+        for (Character character in world.characters.nonNulls) {
           character.lifePoints += 10;
           if (character.lifePoints > character.maxLifePoints) {
             character.lifePoints = character.maxLifePoints;
@@ -144,7 +144,7 @@ class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
         // Capture the world reference to access it in the onTick callback
         final EndlessWorld currentWorld = world;
 
-        for (Character character in currentWorld.characters) {
+        for (Character character in currentWorld.characters.nonNulls) {
           character.damage *= 2;
         }
 
@@ -155,7 +155,7 @@ class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
             repeat: false,
             onTick: () {
               // Revert the damage boost
-              for (Character character in currentWorld.characters) {
+              for (Character character in currentWorld.characters.nonNulls) {
                 character.damage = (character.damage / 2).toInt();
               }
 
@@ -189,7 +189,7 @@ class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
         // Capture the world reference to access it in the onTick callback
         final EndlessWorld currentWorld = world;
 
-        for (Character character in currentWorld.characters) {
+        for (Character character in currentWorld.characters.nonNulls) {
           character.invincible = true;
         }
 
@@ -200,7 +200,7 @@ class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
             repeat: false,
             onTick: () {
               // Revert the damage boost
-              for (Character character in currentWorld.characters) {
+              for (Character character in currentWorld.characters.nonNulls) {
                 character.invincible = false;
               }
               removeFromParent();
@@ -211,12 +211,13 @@ class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
       // The resurrection parchment resurrect one dead character
       case CollectableType.parchmentResurrection:
         // Retrieve one of the dead and remove from the list
-        if (world.deadCharacters.isNotEmpty) {
-          Character resurrectedCharacter = world.deadCharacters.random();
-          world.deadCharacters.remove(resurrectedCharacter);
+        if (world.deadCharacters.nonNulls.isNotEmpty) {
+          int resurrectedCharacterIndex = world.deadCharacters.indexOf((world.deadCharacters.nonNulls as List<Character>).random());
+          Character resurrectedCharacter = world.deadCharacters[resurrectedCharacterIndex]!;
+          world.deadCharacters[resurrectedCharacterIndex] = null;
           // Add it to the alive list with half life points
           resurrectedCharacter.lifePoints = (resurrectedCharacter.maxLifePoints / 2).toInt();
-          world.characters.add(resurrectedCharacter);
+          world.characters[resurrectedCharacterIndex] = resurrectedCharacter;
 
           world.add(resurrectedCharacter);
         }

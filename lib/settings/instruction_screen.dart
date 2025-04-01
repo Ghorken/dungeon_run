@@ -1,3 +1,5 @@
+import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/settings/persistence.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -5,13 +7,47 @@ import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
 
 /// The page to display the game instructions
-class InstructionScreen extends StatelessWidget {
+class InstructionScreen extends StatefulWidget {
   const InstructionScreen({
     super.key,
   });
 
+  @override
+  State<InstructionScreen> createState() => _InstructionScreenState();
+}
+
+class _InstructionScreenState extends State<InstructionScreen> {
   /// The gap between elements
   static const _gap = SizedBox(height: 60);
+
+  /// The container of the local saved data
+  final Persistence _persistence = Persistence();
+
+  /// The map to store recovered upgrades
+  Map<String, dynamic> _upgrades = {};
+
+  /// The unlocked characeters
+  List<CharacterType> _unlockedCharacters = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUpgrades();
+  }
+
+  /// Recover the buyed upgrades
+  Future<void> _loadUpgrades() async {
+    final Map<String, dynamic> recoveredUpgrades = await _persistence.getUpgrades();
+    setState(() {
+      _upgrades = recoveredUpgrades;
+    });
+    _retrieveUnlockedCharacters();
+  }
+
+  /// Recover the unlocked Characters
+  Future<void> _retrieveUnlockedCharacters() async {
+    _unlockedCharacters = _upgrades.entries.where((MapEntry<String, dynamic> entry) => entry.key.contains('_unlocked') && (entry.value['unlocked'] as int) > 0).map((MapEntry<String, dynamic> entry) => getCharacterType(entry.value['character_type'] as String)).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +89,15 @@ class InstructionScreen extends StatelessWidget {
             ),
             WobblyButton(
               onPressed: () {
-                // Handle button press
-                GoRouter.of(context).go('/instructions/selectCharacters');
+                // If there are more than one characters unlocked go to the selection screen
+                if (_unlockedCharacters.length > 1) {
+                  GoRouter.of(context).go('/selectCharacters', extra: _unlockedCharacters);
+                } else {
+                  // Otherwise prepare the party with only the [Warrior] and go to game screen
+                  final List<CharacterType?> selectedCharacters = List<CharacterType?>.filled(3, null);
+                  selectedCharacters[1] = CharacterType.warrior;
+                  GoRouter.of(context).go('/play', extra: selectedCharacters);
+                }
               },
               child: const Text('Gioca'),
             ),

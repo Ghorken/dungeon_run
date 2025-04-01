@@ -22,9 +22,9 @@ class GameScreen extends StatelessWidget {
   });
 
   static const String backButtonKey = 'back_buttton';
-  static const String firstSpecialAttackKey = 'first_pecial_attack_button';
-  static const String secondSpecialAttackKey = 'second_pecial_attack_button';
-  static const String thirdSpecialAttackKey = 'third_pecial_attack_button';
+  static const String leftSpecialAttackKey = 'left_special_attack_button';
+  static const String frontSpecialAttackKey = 'front_special_attack_button';
+  static const String rightSpecialAttackKey = 'right_special_attack_button';
   static const String winDialogKey = 'win_dialog';
   static const String looseDialogKey = 'loose_dialog';
   final List<CharacterType?> selectedCharacters;
@@ -47,35 +47,47 @@ class GameScreen extends StatelessWidget {
               right: 10,
               child: NesButton(
                 type: NesButtonType.normal,
-                onPressed: GoRouter.of(context).pop,
+                onPressed: () {
+                  // When pressed return to the home page
+                  GoRouter.of(context).go('/');
+                },
                 child: NesIcon(iconData: NesIcons.leftArrowIndicator),
               ),
             );
           },
           // The button that cause the special attack
-          firstSpecialAttackKey: (BuildContext context, EndlessRunner game) {
-            final Character character = game.world.characters[0];
+          leftSpecialAttackKey: (BuildContext context, EndlessRunner game) {
+            if (game.world.characters[0] != null) {
+              final Character character = game.world.characters[0]!;
 
-            return SpecialAttackButton(
-              character: character,
-              topPosition: 100,
-            );
+              return SpecialAttackButton(
+                character: character,
+                topPosition: 100,
+              );
+            }
+            return const SizedBox.shrink();
           },
-          secondSpecialAttackKey: (BuildContext context, EndlessRunner game) {
-            final Character character = game.world.characters[1];
+          frontSpecialAttackKey: (BuildContext context, EndlessRunner game) {
+            if (game.world.characters[1] != null) {
+              final Character character = game.world.characters[1]!;
 
-            return SpecialAttackButton(
-              character: character,
-              topPosition: 180,
-            );
+              return SpecialAttackButton(
+                character: character,
+                topPosition: 180,
+              );
+            }
+            return const SizedBox.shrink();
           },
-          thirdSpecialAttackKey: (BuildContext context, EndlessRunner game) {
-            final Character character = game.world.characters[2];
+          rightSpecialAttackKey: (BuildContext context, EndlessRunner game) {
+            if (game.world.characters[2] != null) {
+              final Character character = game.world.characters[2]!;
 
-            return SpecialAttackButton(
-              character: character,
-              topPosition: 260,
-            );
+              return SpecialAttackButton(
+                character: character,
+                topPosition: 260,
+              );
+            }
+            return const SizedBox.shrink();
           },
           // The win dialog of the level
           winDialogKey: (BuildContext context, EndlessRunner game) {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// An implementation of [Persistence] that uses
@@ -25,6 +27,15 @@ class Persistence {
     return prefs.getInt('money') ?? 0;
   }
 
+  Future<Map<String, dynamic>> getUpgrades() async {
+    final prefs = await instanceFuture;
+
+    String encodedMap = prefs.getString('upgrades') ?? '{}';
+    Map<String, dynamic> decodedMap = json.decode(encodedMap) as Map<String, dynamic>;
+
+    return decodedMap;
+  }
+
   Future<void> saveAudioOn(bool value) async {
     final prefs = await instanceFuture;
     await prefs.setBool('audioOn', value);
@@ -42,7 +53,14 @@ class Persistence {
 
   Future<void> saveMoney(int value) async {
     final prefs = await instanceFuture;
-    final int currentMoney = await getMoney();
-    await prefs.setInt('money', currentMoney + value);
+
+    await prefs.setInt('money', value);
+  }
+
+  Future<void> saveUpgrades(Map<String, dynamic> value) async {
+    final prefs = await instanceFuture;
+    String encodedMap = json.encode(value);
+
+    await prefs.setString('upgrades', encodedMap);
   }
 }
