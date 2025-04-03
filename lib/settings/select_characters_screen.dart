@@ -8,10 +8,17 @@ import 'package:dungeon_run/style/wobbly_button.dart';
 
 /// The class that handle the compositions of the party
 class SelectCharactersScreen extends StatefulWidget {
-  /// The list of unlocked characters
+  /// The list of unlocked characters recovered from upgrades
   final List<CharacterType> unlockedCharacters;
 
-  const SelectCharactersScreen({required this.unlockedCharacters, super.key});
+  /// The state of the upgraded
+  final Map<String, dynamic> upgrades;
+
+  const SelectCharactersScreen({
+    required this.unlockedCharacters,
+    required this.upgrades,
+    super.key,
+  });
 
   @override
   State<SelectCharactersScreen> createState() => _SelectCharactersScreenState();
@@ -167,7 +174,11 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                   return;
                 }
 
-                GoRouter.of(context).go('/play', extra: _selectedCharacters);
+                Map<String, dynamic> extra = {
+                  "upgrades": widget.upgrades,
+                  "selectedCharacters": _selectedCharacters,
+                };
+                GoRouter.of(context).go('/play', extra: extra);
               },
               child: const Text('Gioca'),
             ),

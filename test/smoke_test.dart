@@ -5,13 +5,23 @@ import 'package:dungeon_run/flame_game/components/characters/character_type.dart
 import 'package:dungeon_run/flame_game/endless_runner.dart';
 import 'package:dungeon_run/flame_game/game_screen.dart';
 import 'package:dungeon_run/main.dart';
+import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/settings/settings_controller.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  late Map<String, dynamic> upgrades;
+
+  Future<Map<String, dynamic>> loadUpgrades() async {
+    final Map<String, dynamic> recoveredUpgrades = await Persistence().getUpgrades();
+    return recoveredUpgrades;
+  }
+
   testWidgets('smoke test menus', (tester) async {
+    upgrades = await loadUpgrades();
+
     // Build our game and trigger a frame.
     await tester.pumpWidget(const DungeonRun());
 
@@ -51,6 +61,7 @@ void main() {
           CharacterType.wizard,
           CharacterType.archer
         ],
+        upgrades: upgrades,
       );
     },
     (game) async {

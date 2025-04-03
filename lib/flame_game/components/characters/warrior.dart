@@ -9,11 +9,12 @@ import 'package:dungeon_run/flame_game/effects/attacks/warrior_special_attack_ef
 class Warrior extends Character {
   Warrior({
     super.position,
+    required super.maxLifePoints,
+    required super.damage,
+    required super.cooldownTimer,
   }) : super(
           srcImage: 'characters/warrior.png',
-          damage: 5,
-          maxLifePoints: 20,
-          lifePoints: 20,
+          lifePoints: maxLifePoints,
         );
 
   @override

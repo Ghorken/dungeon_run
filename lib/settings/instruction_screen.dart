@@ -91,12 +91,20 @@ class _InstructionScreenState extends State<InstructionScreen> {
               onPressed: () {
                 // If there are more than one characters unlocked go to the selection screen
                 if (_unlockedCharacters.length > 1) {
-                  GoRouter.of(context).go('/selectCharacters', extra: _unlockedCharacters);
+                  Map<String, dynamic> extra = {
+                    "upgrades": _upgrades,
+                    "unlockedCharacters": _unlockedCharacters,
+                  };
+                  GoRouter.of(context).go('/selectCharacters', extra: extra);
                 } else {
                   // Otherwise prepare the party with only the [Warrior] and go to game screen
                   final List<CharacterType?> selectedCharacters = List<CharacterType?>.filled(3, null);
                   selectedCharacters[1] = CharacterType.warrior;
-                  GoRouter.of(context).go('/play', extra: selectedCharacters);
+                  Map<String, dynamic> extra = {
+                    "upgrades": _upgrades,
+                    "selectedCharacters": selectedCharacters,
+                  };
+                  GoRouter.of(context).go('/play', extra: extra);
                 }
               },
               child: const Text('Gioca'),

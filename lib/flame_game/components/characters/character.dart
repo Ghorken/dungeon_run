@@ -24,6 +24,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
     required this.damage,
     required this.maxLifePoints,
     required this.lifePoints,
+    required this.cooldownTimer,
     super.position,
   }) : super(
           size: Vector2.all(150),
@@ -47,7 +48,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   bool invincible = false;
 
   /// Cooldown for the special attack
-  int cooldownTimer = 5;
+  int cooldownTimer;
 
   @override
   Future<void> onLoad() async {
@@ -135,17 +136,62 @@ enum CharacterState {
 }
 
 /// Create a character based on its type
-Character createCharacter(CharacterType type, Vector2 position) {
+Character createCharacter(CharacterType type, Vector2 position, Map<String, dynamic> upgrades) {
   switch (type) {
     case CharacterType.warrior:
-      return Warrior(position: position);
+      final int life = upgrades['warrior_life']['unlocked'] as int;
+      final int damage = upgrades['warrior_damage']['unlocked'] as int;
+      final int special = upgrades['warrior_special']['unlocked'] as int;
+
+      return Warrior(
+        position: position,
+        maxLifePoints: life,
+        damage: damage,
+        cooldownTimer: special,
+      );
     case CharacterType.archer:
-      return Archer(position: position);
+      final int life = upgrades['archer_life']['unlocked'] as int;
+      final int damage = upgrades['archer_damage']['unlocked'] as int;
+      final int special = upgrades['archer_special']['unlocked'] as int;
+
+      return Archer(
+        position: position,
+        maxLifePoints: life,
+        damage: damage,
+        cooldownTimer: special,
+      );
     case CharacterType.wizard:
-      return Wizard(position: position);
+      final int life = upgrades['wizard_life']['unlocked'] as int;
+      final int damage = upgrades['wizard_damage']['unlocked'] as int;
+      final int special = upgrades['wizard_special']['unlocked'] as int;
+
+      return Wizard(
+        position: position,
+        maxLifePoints: life,
+        damage: damage,
+        cooldownTimer: special,
+      );
     case CharacterType.assassin:
-      return Assassin(position: position);
+      final int life = upgrades['assassin_life']['unlocked'] as int;
+      final int damage = upgrades['assassin_damage']['unlocked'] as int;
+      final int special = upgrades['assassin_special']['unlocked'] as int;
+
+      return Assassin(
+        position: position,
+        maxLifePoints: life,
+        damage: damage,
+        cooldownTimer: special,
+      );
     case CharacterType.berserk:
-      return Berserk(position: position);
+      final int life = upgrades['berserk_life']['unlocked'] as int;
+      final int damage = upgrades['berserk_damage']['unlocked'] as int;
+      final int special = upgrades['berserk_special']['unlocked'] as int;
+
+      return Berserk(
+        position: position,
+        maxLifePoints: life,
+        damage: damage,
+        cooldownTimer: special,
+      );
   }
 }

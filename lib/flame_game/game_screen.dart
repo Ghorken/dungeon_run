@@ -18,16 +18,27 @@ import 'package:dungeon_run/flame_game/endless_runner.dart';
 class GameScreen extends StatelessWidget {
   const GameScreen({
     required this.selectedCharacters,
+    required this.upgrades,
     super.key,
   });
 
+  /// The keys for the back buttons
   static const String backButtonKey = 'back_buttton';
+
+  /// The keys for the special attack buttons
   static const String leftSpecialAttackKey = 'left_special_attack_button';
   static const String frontSpecialAttackKey = 'front_special_attack_button';
   static const String rightSpecialAttackKey = 'right_special_attack_button';
+
+  /// The keys for the win and loose dialogs
   static const String winDialogKey = 'win_dialog';
   static const String looseDialogKey = 'loose_dialog';
+
+  /// The selected characters to show
   final List<CharacterType?> selectedCharacters;
+
+  /// The state of the upgrades
+  final Map<String, dynamic> upgrades;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +49,7 @@ class GameScreen extends StatelessWidget {
         game: EndlessRunner(
           audioController: audioController,
           selectedCharacters: selectedCharacters,
+          upgrades: upgrades,
         ),
         overlayBuilderMap: {
           // The button the allows to quit the level

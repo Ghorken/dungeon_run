@@ -23,8 +23,12 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
   EndlessRunner({
     required this.audioController,
     required this.selectedCharacters,
+    required this.upgrades,
   }) : super(
-          world: EndlessWorld(selectedCharacters: selectedCharacters),
+          world: EndlessWorld(
+            selectedCharacters: selectedCharacters,
+            upgrades: upgrades,
+          ),
           camera: CameraComponent.withFixedResolution(width: 720, height: 1600),
         );
 
@@ -33,6 +37,9 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
 
   /// The list of character selected by the player
   final List<CharacterType?> selectedCharacters;
+
+  /// The state of the upgrades
+  final Map<String, dynamic> upgrades;
 
   /// In the [onLoad] method you load different type of assets and set things
   /// that only needs to be set once when the level starts up.

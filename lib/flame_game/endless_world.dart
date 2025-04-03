@@ -24,11 +24,15 @@ import 'package:dungeon_run/flame_game/game_screen.dart';
 ///  to.
 class EndlessWorld extends World with TapCallbacks, HasGameReference {
   EndlessWorld({
-    required List<CharacterType?> selectedCharacters,
-  }) : _selectedCharacters = selectedCharacters;
+    required this.selectedCharacters,
+    required this.upgrades,
+  });
 
   /// The size of the game screen
   Vector2 get size => (parent as FlameGame).size;
+
+  /// The state of the upgrades
+  final Map<String, dynamic> upgrades;
 
   /// Define the positions for the three possible characters to show
   // These are late because they need the size of the screen
@@ -40,7 +44,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   late final DateTime timeStarted;
 
   /// List of characters selected from the player
-  final List<CharacterType?> _selectedCharacters;
+  final List<CharacterType?> selectedCharacters;
 
   /// List to keep track of [Character] in the world.
   final List<Character?> characters = List<Character?>.filled(3, null);
@@ -75,10 +79,11 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   @override
   Future<void> onLoad() async {
     // If the player selected a leftCharacter initialize id and add id to the screen
-    if (_selectedCharacters[0] != null) {
+    if (selectedCharacters[0] != null) {
       leftCharacter = createCharacter(
-        _selectedCharacters[0]!,
+        selectedCharacters[0]!,
         leftCharacterPosition,
+        upgrades,
       );
       add(leftCharacter!);
       characters[0] = (leftCharacter!);
@@ -86,21 +91,27 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     }
 
     // If the player selected a frontCharacter initialize id and add id to the screen
-    if (_selectedCharacters[1] != null) {
+    if (selectedCharacters[1] != null) {
       frontCharacter = createCharacter(
-        _selectedCharacters[1]!,
+        selectedCharacters[1]!,
         frontCharacterPosition,
+        upgrades,
       );
       add(frontCharacter!);
       characters[1] = (frontCharacter!);
-      game.overlays.add(GameScreen.frontSpecialAttackKey);
+
+      final int special = upgrades['warrior_special']['unlocked'] as int;
+      if (special > 0) {
+        game.overlays.add(GameScreen.frontSpecialAttackKey);
+      }
     }
 
     // If the player selected a rightCharacter initialize id and add id to the screen
-    if (_selectedCharacters[2] != null) {
+    if (selectedCharacters[2] != null) {
       rightCharacter = createCharacter(
-        _selectedCharacters[2]!,
+        selectedCharacters[2]!,
         rightCharacterPosition,
+        upgrades,
       );
       add(rightCharacter!);
       characters[2] = (rightCharacter!);

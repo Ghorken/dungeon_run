@@ -10,11 +10,12 @@ import 'package:dungeon_run/flame_game/effects/attacks/assassin_attack_effect.da
 class Assassin extends Character {
   Assassin({
     super.position,
+    required super.maxLifePoints,
+    required super.damage,
+    required super.cooldownTimer,
   }) : super(
           srcImage: 'characters/assassin.png',
-          damage: 1,
-          maxLifePoints: 10,
-          lifePoints: 10,
+          lifePoints: maxLifePoints,
         );
 
   @override

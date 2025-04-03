@@ -8,11 +8,12 @@ import 'package:dungeon_run/flame_game/effects/attacks/archer_attack_effect.dart
 class Archer extends Character {
   Archer({
     super.position,
+    required super.maxLifePoints,
+    required super.damage,
+    required super.cooldownTimer,
   }) : super(
           srcImage: 'characters/archer.png',
-          damage: 3,
-          maxLifePoints: 15,
-          lifePoints: 15,
+          lifePoints: maxLifePoints,
         );
 
   @override

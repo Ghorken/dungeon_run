@@ -9,11 +9,12 @@ import 'package:dungeon_run/flame_game/effects/attacks/wizard_attack_effect.dart
 class Wizard extends Character {
   Wizard({
     super.position,
+    required super.maxLifePoints,
+    required super.damage,
+    required super.cooldownTimer,
   }) : super(
           srcImage: 'characters/wizard.png',
-          damage: 2,
-          maxLifePoints: 10,
-          lifePoints: 10,
+          lifePoints: maxLifePoints,
         );
 
   @override

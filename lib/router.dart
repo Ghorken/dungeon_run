@@ -24,18 +24,22 @@ final router = GoRouter(
         GoRoute(
           path: 'selectCharacters',
           builder: (context, state) => SelectCharactersScreen(
-            unlockedCharacters: state.extra as List<CharacterType>,
+            upgrades: (state.extra as Map)['upgrades'] as Map<String, dynamic>,
+            unlockedCharacters: (state.extra as Map)['unlockedCharacters'] as List<CharacterType>,
+            // unlockedCharacters: state.extra as List<CharacterType>,
           ),
         ),
         GoRoute(
-          path: 'play',
-          pageBuilder: (context, state) => buildPageTransition<void>(
-            color: Palette().backgroundMain.color,
-            child: GameScreen(
-              selectedCharacters: state.extra as List<CharacterType?>,
-            ),
-          ),
-        ),
+            path: 'play',
+            pageBuilder: (context, state) {
+              return buildPageTransition<void>(
+                color: Palette().backgroundMain.color,
+                child: GameScreen(
+                  upgrades: (state.extra as Map)['upgrades'] as Map<String, dynamic>,
+                  selectedCharacters: (state.extra as Map)['selectedCharacters'] as List<CharacterType?>,
+                ),
+              );
+            }),
         GoRoute(
           path: 'settings',
           builder: (context, state) => const SettingsScreen(),
