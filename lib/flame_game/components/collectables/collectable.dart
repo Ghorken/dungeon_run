@@ -23,15 +23,45 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
         );
 
   /// Generates a random [Collectable].
-  factory Collectable.random() {
+  factory Collectable.random({required Map<String, dynamic> upgrades}) {
     final CollectableType collectableType = CollectableType.values.random();
-    return switch (collectableType) {
-      CollectableType.heal => Heal(healing: 10),
-      CollectableType.damage => Damage(duration: 3, damage: 1),
-      CollectableType.slow => Slow(duration: 3, velocity: 1),
-      CollectableType.invincibility => Invincibility(duration: 3),
-      CollectableType.resurrection => Resurrection(fullHealt: false),
-    };
+
+    switch (collectableType) {
+      case CollectableType.heal:
+        final int healing = upgrades['collectable_heal']['unlocked'] as int;
+
+        return Heal(
+          healing: healing,
+        );
+      case CollectableType.damage:
+        final double duration = (upgrades['collectable_damage_duration']['unlocked'] as int).toDouble();
+        final int damage = upgrades['collectable_damage']['unlocked'] as int;
+
+        return Damage(
+          duration: duration,
+          damage: damage,
+        );
+      case CollectableType.slow:
+        final double duration = (upgrades['collectable_slow_duration']['unlocked'] as int).toDouble();
+        final int slow = upgrades['collectable_slow']['unlocked'] as int;
+
+        return Slow(
+          duration: duration,
+          velocity: slow,
+        );
+      case CollectableType.invincibility:
+        final double duration = (upgrades['collectable_invincibility']['unlocked'] as int).toDouble();
+
+        return Invincibility(
+          duration: duration,
+        );
+      case CollectableType.resurrection:
+        final bool fullHealt = (upgrades['collectable_resurrection_full']['unlocked'] as int) > 0;
+
+        return Resurrection(
+          fullHealt: fullHealt,
+        );
+    }
   }
 
   /// When the [Collectable] has been collected
@@ -39,9 +69,6 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
 
   /// The path of the image to load
   final String srcImage;
-
-  /// How many seconds the effect should last
-  // final double duration;
 
   @override
   Future<void> onLoad() async {

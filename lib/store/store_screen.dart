@@ -196,8 +196,22 @@ class _StoreScreenState extends State<StoreScreen> {
       "upgradable": true,
       "sub_menu": 1,
     },
+    "collectable_slow_duration": {
+      "string": "Aumento durata rallentamento pergamena",
+      "value": 50,
+      "unlocked": 0,
+      "upgradable": true,
+      "sub_menu": 1,
+    },
     "collectable_slow": {
-      "string": "Aumento tempo di rallentamento pergamena",
+      "string": "Aumento rallentamento pergamena",
+      "value": 50,
+      "unlocked": 0,
+      "upgradable": true,
+      "sub_menu": 1,
+    },
+    "collectable_damage_duration": {
+      "string": "Aumento durata pozione danno",
       "value": 50,
       "unlocked": 0,
       "upgradable": true,
@@ -211,7 +225,7 @@ class _StoreScreenState extends State<StoreScreen> {
       "sub_menu": 1,
     },
     "collectable_invincibility": {
-      "string": "Aumento tempo invincibilità scudo",
+      "string": "Aumento durata invincibilità scudo",
       "value": 50,
       "unlocked": 0,
       "upgradable": true,

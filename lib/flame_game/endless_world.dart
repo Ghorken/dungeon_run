@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 
 import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
-import 'package:dungeon_run/flame_game/components/trap.dart';
+import 'package:dungeon_run/flame_game/components/traps/trap.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/collectables/collectable.dart';
@@ -160,7 +160,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent.periodRange(
         factory: (_) {
-          Collectable collectable = Collectable.random();
+          Collectable collectable = Collectable.random(upgrades: upgrades);
           collectables.add(collectable);
           return collectable;
         },

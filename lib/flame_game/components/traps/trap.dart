@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dungeon_run/flame_game/components/traps/trap_type.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -8,13 +9,6 @@ import 'package:flame/extensions.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/effects/disable_effect.dart';
 import 'package:dungeon_run/flame_game/endless_world.dart';
-
-// Enums of the type of the traps
-enum TrapType {
-  spikedRoller,
-  spikedPit,
-  rotatingBlades,
-}
 
 /// The [Trap] component can represent three different types of obstacles
 /// that the character can run into.
