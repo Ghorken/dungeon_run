@@ -24,50 +24,51 @@ enum EnemyType {
 /// that the character can run into.
 class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, CollisionCallbacks {
   // Constructors for every tipe of enemy
-  Enemy.goblin()
-      : _srcImage = 'enemies/goblin.png',
+  Enemy.goblin({
+    required this.moneyValue,
+  })  : _srcImage = 'enemies/goblin.png',
         _maxLifePoints = 5,
         lifePoints = 5,
         _speed = 2,
         _actualSpeed = 2,
         damage = 1,
         _enemyType = EnemyType.goblin,
-        _moneyValue = 1,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
         );
 
-  Enemy.troll()
-      : _srcImage = 'enemies/troll.png',
+  Enemy.troll({
+    required this.moneyValue,
+  })  : _srcImage = 'enemies/troll.png',
         _maxLifePoints = 10,
         lifePoints = 10,
         _speed = 2,
         _actualSpeed = 2,
         damage = 1,
         _enemyType = EnemyType.troll,
-        _moneyValue = 2,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
         );
 
-  Enemy.elementale()
-      : _srcImage = 'enemies/elementale.png',
+  Enemy.elementale({
+    required this.moneyValue,
+  })  : _srcImage = 'enemies/elementale.png',
         _maxLifePoints = 15,
         lifePoints = 15,
         _speed = 4,
         _actualSpeed = 4,
         damage = 2,
         _enemyType = EnemyType.elementale,
-        _moneyValue = 5,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
         );
 
-  Enemy.goblinKing()
-      : _srcImage = 'enemies/goblin_king.png',
+  Enemy.goblinKing({
+    required this.moneyValue,
+  })  : _srcImage = 'enemies/goblin_king.png',
         _maxLifePoints = 30,
         lifePoints = 30,
         _speed = 2,
@@ -75,20 +76,19 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         damage = 5,
         _enemyType = EnemyType.goblinKing,
         _xPosition = 0.0,
-        _moneyValue = 30,
         super(
           size: Vector2.all(250),
           anchor: Anchor.bottomCenter,
         );
 
   /// Generates a random enemy.
-  factory Enemy.random() {
+  factory Enemy.random({required int value}) {
     final enemyType = EnemyType.values.random();
     return switch (enemyType) {
-      EnemyType.goblin => Enemy.goblin(),
-      EnemyType.troll => Enemy.troll(),
-      EnemyType.elementale => Enemy.elementale(),
-      EnemyType.goblinKing => Enemy.goblin(),
+      EnemyType.goblin => Enemy.goblin(moneyValue: value),
+      EnemyType.troll => Enemy.troll(moneyValue: value),
+      EnemyType.elementale => Enemy.elementale(moneyValue: value),
+      EnemyType.goblinKing => Enemy.goblin(moneyValue: value),
     };
   }
 
@@ -117,7 +117,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   double? _xPosition;
 
   /// The money value of the enemy
-  final int _moneyValue;
+  final int moneyValue;
 
   /// The timer for periodic attacks
   TimerComponent? attackTimer;
@@ -246,6 +246,6 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     );
 
     // Add the moneyValue to the total collected
-    world.money += _moneyValue;
+    world.money += moneyValue;
   }
 }

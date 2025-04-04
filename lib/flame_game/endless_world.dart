@@ -122,7 +122,8 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent(
         factory: (_) {
-          final Enemy enemy = Enemy.random();
+          final int value = upgrades['enemy_money']['unlocked'] as int;
+          final Enemy enemy = Enemy.random(value: value);
           enemies.add(enemy);
           return enemy;
         },
@@ -136,7 +137,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         period: 300, // 5 minutes in seconds
         repeat: false, // Spawn only once
         onTick: () {
-          final Enemy goblinKing = Enemy.goblinKing();
+          final Enemy goblinKing = Enemy.goblinKing(moneyValue: 5);
           enemies.add(goblinKing);
           add(goblinKing);
         },
@@ -164,7 +165,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           collectables.add(collectable);
           return collectable;
         },
-        minPeriod: 3.0,
+        minPeriod: (upgrades['collectable_frequency']['unlocked'] as int).toDouble(),
         maxPeriod: 6.0,
       ),
     );

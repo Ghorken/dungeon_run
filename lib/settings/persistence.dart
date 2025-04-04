@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dungeon_run/store/default_upgrades.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// An implementation of [Persistence] that uses
@@ -30,8 +31,8 @@ class Persistence {
   Future<Map<String, dynamic>> getUpgrades() async {
     final prefs = await instanceFuture;
 
-    String encodedMap = prefs.getString('upgrades') ?? '{}';
-    Map<String, dynamic> decodedMap = json.decode(encodedMap) as Map<String, dynamic>;
+    String? encodedMap = prefs.getString('upgrades');
+    Map<String, dynamic> decodedMap = encodedMap != null ? json.decode(encodedMap) as Map<String, dynamic> : defaultUpgrades;
 
     return decodedMap;
   }

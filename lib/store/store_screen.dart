@@ -1,4 +1,5 @@
 import 'package:dungeon_run/settings/persistence.dart';
+import 'package:dungeon_run/store/default_upgrades.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
 import 'package:flutter/material.dart';
@@ -22,245 +23,12 @@ class _StoreScreenState extends State<StoreScreen> {
   /// The amount of money the player has
   int _money = 0;
 
-  /// Map that store the starting situation of upgrades
-  final Map<String, dynamic> _defaultUpgrades = {
-    "warrior_unlocked": {
-      "string": "Guerriero",
-      "character_type": "warrior",
-      "value": 100,
-      "unlocked": 1,
-      "upgradable": false,
-      "sub_menu": 0,
-    },
-    "warrior_life": {
-      "string": "Vita",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "warrior_unlocked",
-    },
-    "warrior_damage": {
-      "string": "Danni",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "warrior_unlocked",
-    },
-    "warrior_special": {
-      "string": "Attacco speciale",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "warrior_unlocked",
-    },
-    "archer_unlocked": {
-      "string": "Arciere",
-      "character_type": "archer",
-      "value": 100,
-      "unlocked": 0,
-      "upgradable": false,
-      "sub_menu": 0,
-    },
-    "archer_life": {
-      "string": "Vita",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "archer_unlocked",
-    },
-    "archer_damage": {
-      "string": "Danni",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "archer_unlocked",
-    },
-    "archer_special": {
-      "string": "Attacco speciale",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "archer_unlocked",
-    },
-    "wizard_unlocked": {
-      "string": "Mago",
-      "character_type": "wizard",
-      "value": 100,
-      "unlocked": 0,
-      "upgradable": false,
-      "sub_menu": 0,
-    },
-    "wizard_life": {
-      "string": "Vita",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "wizard_unlocked",
-    },
-    "wizard_damage": {
-      "string": "Danni",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "wizard_unlocked",
-    },
-    "wizard_special": {
-      "string": "Attacco speciale",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "wizard_unlocked",
-    },
-    "berserk_unlocked": {
-      "string": "Berserk",
-      "character_type": "berserk",
-      "value": 100,
-      "unlocked": 0,
-      "upgradable": false,
-      "sub_menu": 0,
-    },
-    "berserk_life": {
-      "string": "Vita",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "berserk_unlocked",
-    },
-    "berserk_damage": {
-      "string": "Danni",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "berserk_unlocked",
-    },
-    "berserk_special": {
-      "string": "Attacco speciale",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "berserk_unlocked",
-    },
-    "assassin_unlocked": {
-      "string": "Assassino",
-      "character_type": "assassin",
-      "value": 100,
-      "unlocked": 0,
-      "upgradable": false,
-      "sub_menu": 0,
-    },
-    "assassin_life": {
-      "string": "Vita",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "assassin_unlocked",
-    },
-    "assassin_damage": {
-      "string": "Danni",
-      "value": 20,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "assassin_unlocked",
-    },
-    "assassin_special": {
-      "string": "Attacco speciale",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-      "dependency": "assassin_unlocked",
-    },
-    "collectable": {
-      "string": "Collezionabili",
-      "value": 0,
-      "sub_menu": 0,
-    },
-    "collectable_heal": {
-      "string": "Aumento cura pozione",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-    },
-    "collectable_slow_duration": {
-      "string": "Aumento durata rallentamento pergamena",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-    },
-    "collectable_slow": {
-      "string": "Aumento rallentamento pergamena",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-    },
-    "collectable_damage_duration": {
-      "string": "Aumento durata pozione danno",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-    },
-    "collectable_damage": {
-      "string": "Aumento danno pozione",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-    },
-    "collectable_invincibility": {
-      "string": "Aumento durata invincibilità scudo",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-    },
-    "collectable_resurrection_full": {
-      "string": "Aumento cura ripristinata pergamena",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": false,
-      "sub_menu": 1,
-    },
-    "collectable_frequenzy": {
-      "string": "Aumento frequenza collezionabili",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 1,
-    },
-    "enemy_money": {
-      "string": "Aumento soldi dei nemici",
-      "value": 50,
-      "unlocked": 0,
-      "upgradable": true,
-      "sub_menu": 0,
-    },
-  };
-
   /// Map that store every purchase made
   Map<String, dynamic> _upgrades = {};
 
   @override
   void initState() {
     super.initState();
-    _upgrades = _defaultUpgrades;
     _loadItemsFromPersistence();
   }
 
@@ -270,10 +38,7 @@ class _StoreScreenState extends State<StoreScreen> {
     final Map<String, dynamic> fetchedUpgrades = await _persistence.getUpgrades();
     setState(() {
       _money = fetchedMoney;
-      _money = 200;
-      if (fetchedUpgrades.isNotEmpty) {
-        _upgrades = fetchedUpgrades;
-      }
+      _upgrades = fetchedUpgrades;
     });
   }
 
@@ -440,7 +205,7 @@ class _StoreScreenState extends State<StoreScreen> {
                             onPressed: () {
                               setState(() {
                                 _money = 0;
-                                _upgrades = _defaultUpgrades;
+                                _upgrades = defaultUpgrades;
                               });
                             },
                             child: Text('Resetta'),
