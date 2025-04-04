@@ -1,4 +1,4 @@
-/// Enums of available character type
+/// Enums of available [CharacterType]
 enum CharacterType {
   warrior,
   archer,

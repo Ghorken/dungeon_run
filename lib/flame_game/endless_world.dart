@@ -7,7 +7,7 @@ import 'package:dungeon_run/flame_game/components/characters/character_type.dart
 import 'package:dungeon_run/flame_game/components/trap.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
-import 'package:dungeon_run/flame_game/components/collectable.dart';
+import 'package:dungeon_run/flame_game/components/collectables/collectable.dart';
 import 'package:dungeon_run/flame_game/game_screen.dart';
 
 /// The world is where you place all the components that should live inside of
