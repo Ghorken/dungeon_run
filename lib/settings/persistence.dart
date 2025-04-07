@@ -32,7 +32,7 @@ class Persistence {
     final prefs = await instanceFuture;
 
     String? encodedMap = prefs.getString('upgrades');
-    Map<String, dynamic> decodedMap = encodedMap != null ? json.decode(encodedMap) as Map<String, dynamic> : defaultUpgrades;
+    Map<String, dynamic> decodedMap = encodedMap != null ? json.decode(encodedMap) as Map<String, dynamic> : Map.of(defaultUpgrades);
 
     return decodedMap;
   }
