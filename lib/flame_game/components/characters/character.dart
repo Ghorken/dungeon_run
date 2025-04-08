@@ -83,6 +83,10 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   }
 
   /// Handles the character being hitted
+  /// [damage] is the amount of damage that the character should take
+  /// If the character is invincible it will not take damage and the invincible effect will be played
+  /// If the character is not invincible it will take damage and the hurt effect will be played
+  /// If the character lifePoints go to 0 the die function will be called
   void hit(int damage) {
     if (invincible) {
       game.audioController.playSfx(SfxType.damage);
@@ -135,63 +139,86 @@ enum CharacterState {
   running,
 }
 
-/// Create a character based on its type
+/// Create a character based on its type and on the upgrades that the player has bought
+/// [type] is the type of the character to create
+/// [position] is the position of the character in the screen
+/// [upgrades] is the map of the upgrades that the player has bought
 Character createCharacter(CharacterType type, Vector2 position, Map<String, dynamic> upgrades) {
   switch (type) {
     case CharacterType.warrior:
-      final int life = upgrades['warrior_life']['unlocked'] as int;
-      final int damage = upgrades['warrior_damage']['unlocked'] as int;
-      final int special = upgrades['warrior_special']['unlocked'] as int;
+      final int life = upgrades['warrior_life']['current_level'] as int;
+      final int lifeStep = upgrades['warrior_life']['step'] as int;
+      final int damage = upgrades['warrior_damage']['current_level'] as int;
+      final int damageStep = upgrades['warrior_damage']['step'] as int;
+      final int baseCooldown = upgrades['warrior_special']['base_cooldown'] as int;
+      final int special = upgrades['warrior_special']['current_level'] as int;
+      final double specialStep = upgrades['warrior_special']['step'] as double;
 
       return Warrior(
         position: position,
-        maxLifePoints: life,
-        damage: damage,
-        cooldownTimer: special,
+        maxLifePoints: (life + 1) * lifeStep,
+        damage: (damage + 1) * damageStep,
+        cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
     case CharacterType.archer:
-      final int life = upgrades['archer_life']['unlocked'] as int;
-      final int damage = upgrades['archer_damage']['unlocked'] as int;
-      final int special = upgrades['archer_special']['unlocked'] as int;
+      final int life = upgrades['archer_life']['current_level'] as int;
+      final int lifeStep = upgrades['archer_life']['step'] as int;
+      final int damage = upgrades['archer_damage']['current_level'] as int;
+      final int damageStep = upgrades['archer_damage']['step'] as int;
+      final int baseCooldown = upgrades['archer_special']['base_cooldown'] as int;
+      final int special = upgrades['archer_special']['current_level'] as int;
+      final double specialStep = upgrades['archer_special']['step'] as double;
 
       return Archer(
         position: position,
-        maxLifePoints: life,
-        damage: damage,
-        cooldownTimer: special,
+        maxLifePoints: (life + 1) * lifeStep,
+        damage: (damage + 1) * damageStep,
+        cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
     case CharacterType.wizard:
-      final int life = upgrades['wizard_life']['unlocked'] as int;
-      final int damage = upgrades['wizard_damage']['unlocked'] as int;
-      final int special = upgrades['wizard_special']['unlocked'] as int;
+      final int life = upgrades['wizard_life']['current_level'] as int;
+      final int lifeStep = upgrades['wizard_life']['step'] as int;
+      final int damage = upgrades['wizard_damage']['current_level'] as int;
+      final int damageStep = upgrades['wizard_damage']['step'] as int;
+      final int baseCooldown = upgrades['wizard_special']['base_cooldown'] as int;
+      final int special = upgrades['wizard_special']['current_level'] as int;
+      final double specialStep = upgrades['wizard_special']['step'] as double;
 
       return Wizard(
         position: position,
-        maxLifePoints: life,
-        damage: damage,
-        cooldownTimer: special,
+        maxLifePoints: (life + 1) * lifeStep,
+        damage: (damage + 1) * damageStep,
+        cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
     case CharacterType.assassin:
-      final int life = upgrades['assassin_life']['unlocked'] as int;
-      final int damage = upgrades['assassin_damage']['unlocked'] as int;
-      final int special = upgrades['assassin_special']['unlocked'] as int;
+      final int life = upgrades['assassin_life']['current_level'] as int;
+      final int lifeStep = upgrades['assassin_life']['step'] as int;
+      final int damage = upgrades['assassin_damage']['current_level'] as int;
+      final int damageStep = upgrades['assassin_damage']['step'] as int;
+      final int baseCooldown = upgrades['assassin_special']['base_cooldown'] as int;
+      final int special = upgrades['assassin_special']['current_level'] as int;
+      final double specialStep = upgrades['assassin_special']['step'] as double;
 
       return Assassin(
         position: position,
-        maxLifePoints: life,
-        damage: damage,
-        cooldownTimer: special,
+        maxLifePoints: (life + 1) * lifeStep,
+        damage: (damage + 1) * damageStep,
+        cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
     case CharacterType.berserk:
-      final int life = upgrades['berserk_life']['unlocked'] as int;
-      final int damage = upgrades['berserk_damage']['unlocked'] as int;
-      final int special = upgrades['berserk_special']['unlocked'] as int;
+      final int life = upgrades['berserk_life']['current_level'] as int;
+      final int lifeStep = upgrades['berserk_life']['step'] as int;
+      final int damage = upgrades['berserk_damage']['current_level'] as int;
+      final int damageStep = upgrades['berserk_damage']['step'] as int;
+      final int baseCooldown = upgrades['berserk_special']['base_cooldown'] as int;
+      final int special = upgrades['berserk_special']['current_level'] as int;
+      final double specialStep = upgrades['berserk_special']['step'] as double;
 
       return Berserk(
         position: position,
-        maxLifePoints: life,
-        damage: damage,
-        cooldownTimer: special,
+        maxLifePoints: (life + 1) * lifeStep,
+        damage: (damage + 1) * damageStep,
+        cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
   }
 }

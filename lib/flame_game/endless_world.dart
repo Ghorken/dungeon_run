@@ -100,7 +100,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       add(frontCharacter!);
       characters[1] = (frontCharacter!);
 
-      final int special = upgrades['warrior_special']['unlocked'] as int;
+      final int special = upgrades['warrior_special']['current_level'] as int;
       if (special > 0) {
         game.overlays.add(GameScreen.frontSpecialAttackKey);
       }
@@ -122,7 +122,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent(
         factory: (_) {
-          final int value = upgrades['enemy_money']['unlocked'] as int;
+          final int value = upgrades['enemy_money']['current_level'] as int;
           final Enemy enemy = Enemy.random(value: value);
           enemies.add(enemy);
           return enemy;
@@ -165,7 +165,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           collectables.add(collectable);
           return collectable;
         },
-        minPeriod: (upgrades['collectable_frequency']['unlocked'] as int).toDouble(),
+        minPeriod: (upgrades['collectable_frequency']['current_level'] as int).toDouble(),
         maxPeriod: 6.0,
       ),
     );

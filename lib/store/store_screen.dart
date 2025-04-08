@@ -46,14 +46,14 @@ class _StoreScreenState extends State<StoreScreen> {
 
   /// Try to buy an item and advice the user if there aren't enough money
   void buy(String item) {
-    if (_money >= (_upgrades[item]!["cost"] as int)) {
+    if (_money >= (_upgrades[item]!['cost'] as int)) {
       setState(() {
-        _money -= _upgrades[item]!["cost"] as int;
-        _upgrades[item]!["current_level"] += 1;
+        _money -= _upgrades[item]!['cost'] as int;
+        _upgrades[item]!['current_level'] += 1;
       });
     } else {
       Fluttertoast.showToast(
-        msg: "Non ci sono abbastanza soldi",
+        msg: 'Non ci sono abbastanza soldi',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
@@ -89,7 +89,7 @@ class _StoreScreenState extends State<StoreScreen> {
                 children: [
                   const Expanded(
                     child: Text(
-                      "Monete:",
+                      'Monete:',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -99,7 +99,7 @@ class _StoreScreenState extends State<StoreScreen> {
                     ),
                   ),
                   Text(
-                    "$_money",
+                    '$_money',
                     style: const TextStyle(
                       fontFamily: 'Press Start 2P',
                       fontSize: 15,
@@ -129,14 +129,14 @@ class _StoreScreenState extends State<StoreScreen> {
                       (entry) {
                         final String key = entry.key;
                         final Map<String, dynamic> upgrade = entry.value as Map<String, dynamic>;
-                        final String? dependency = upgrade["dependency"] as String?;
+                        final String? dependency = upgrade['dependency'] as String?;
 
                         /// An element is buyable if:
                         /// - it has no dependency (null)
                         /// - or it has a dependency and the dependency is unlocked (current_level > 0)
                         final bool isBuyable = ((dependency == null) || (_upgrades[dependency]!['current_level'] as int > 0));
 
-                        final int cost = upgrade["cost"] != null ? (pow(upgrade["cost_factor"] as double, upgrade["current_level"] as int) * (upgrade["cost"] as int) / 10).round() * 10 : 0;
+                        final int cost = upgrade['cost'] != null ? (pow(upgrade['cost_factor'] as double, upgrade['current_level'] as int) * (upgrade['cost'] as int) / 10).round() * 10 : 0;
 
                         return SizedBox(
                           height: 60,
@@ -147,9 +147,9 @@ class _StoreScreenState extends State<StoreScreen> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: (upgrade["sub_menu"] as int) * 20.0),
+                                    padding: EdgeInsets.only(left: (upgrade['sub_menu'] as int) * 20.0),
                                     child: Text(
-                                      upgrade["string"] as String,
+                                      upgrade['string'] as String,
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -160,13 +160,13 @@ class _StoreScreenState extends State<StoreScreen> {
                                   ),
                                 ),
                                 // If the item has been buyed at least once show the current level
-                                if (upgrade["cost"] != null && (upgrade["current_level"] as int) >= 1)
+                                if (upgrade['cost'] != null && (upgrade['current_level'] as int) >= 1)
                                   Padding(
                                     padding: EdgeInsets.only(
                                       right: 10.0,
                                     ),
                                     child: Text(
-                                      (upgrade["current_level"] as int).toString(),
+                                      (upgrade['current_level'] as int).toString(),
                                       style: TextStyle(
                                         fontFamily: 'Press Start 2P',
                                         fontSize: 15,
@@ -174,9 +174,9 @@ class _StoreScreenState extends State<StoreScreen> {
                                     ),
                                   ),
                                 // If the item has no value it should not be available to buy
-                                if (upgrade["cost"] != null)
+                                if (upgrade['cost'] != null)
                                   // If it has a value show if it's already unlocked or if it's unlockable/upgradable
-                                  ((upgrade["current_level"] as int) >= (upgrade["max_level"] as int))
+                                  ((upgrade['current_level'] as int) >= (upgrade['max_level'] as int))
                                       ? const Text(
                                           'Sbloccato',
                                           style: TextStyle(
@@ -206,7 +206,7 @@ class _StoreScreenState extends State<StoreScreen> {
                         children: [
                           const Expanded(
                             child: Text(
-                              "Resetta potenziamenti e soldi",
+                              'Resetta potenziamenti e soldi',
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(

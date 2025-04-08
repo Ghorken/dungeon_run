@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 /// main area, a smaller menu area, and a small area for a message on top.
 /// It works in both orientations on mobile- and tablet-sized screens.
 class ResponsiveScreen extends StatelessWidget {
-  /// This is the "hero" of the screen. It's more or less square, and will
-  /// be placed in the visual "center" of the screen.
+  /// This is the 'hero' of the screen. It's more or less square, and will
+  /// be placed in the visual 'center' of the screen.
   final Widget squarishMainArea;
 
   /// The second-largest area after [squarishMainArea]. It can be narrow
@@ -31,7 +31,7 @@ class ResponsiveScreen extends StatelessWidget {
         final padding = EdgeInsets.all(size.shortestSide / 30);
 
         if (size.height >= size.width) {
-          // "Portrait" / "mobile" mode.
+          // 'Portrait' / 'mobile' mode.
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

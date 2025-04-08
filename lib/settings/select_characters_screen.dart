@@ -162,7 +162,7 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                 // Send the selected character types to the game and alert the player otherwise
                 if (_selectedCharacters.every((element) => element == null)) {
                   Fluttertoast.showToast(
-                    msg: "Seleziona almeno un personaggio",
+                    msg: 'Seleziona almeno un personaggio',
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
@@ -175,8 +175,8 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                 }
 
                 Map<String, dynamic> extra = {
-                  "upgrades": widget.upgrades,
-                  "selectedCharacters": _selectedCharacters,
+                  'upgrades': widget.upgrades,
+                  'selectedCharacters': _selectedCharacters,
                 };
                 GoRouter.of(context).go('/play', extra: extra);
               },

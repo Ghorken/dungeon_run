@@ -46,7 +46,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
 
   /// Recover the unlocked Characters
   Future<void> _retrieveUnlockedCharacters() async {
-    _unlockedCharacters = _upgrades.entries.where((MapEntry<String, dynamic> entry) => entry.key.contains('_unlocked') && (entry.value['unlocked'] as int) > 0).map((MapEntry<String, dynamic> entry) => getCharacterType(entry.value['character_type'] as String)).toList();
+    _unlockedCharacters = _upgrades.entries.where((MapEntry<String, dynamic> entry) => entry.key.contains('_unlocked') && (entry.value['current_level'] as int) > 0).map((MapEntry<String, dynamic> entry) => getCharacterType(entry.value['character_type'] as String)).toList();
   }
 
   @override
@@ -92,8 +92,8 @@ class _InstructionScreenState extends State<InstructionScreen> {
                 // If there are more than one characters unlocked go to the selection screen
                 if (_unlockedCharacters.length > 1) {
                   Map<String, dynamic> extra = {
-                    "upgrades": _upgrades,
-                    "unlockedCharacters": _unlockedCharacters,
+                    'upgrades': _upgrades,
+                    'unlockedCharacters': _unlockedCharacters,
                   };
                   GoRouter.of(context).go('/selectCharacters', extra: extra);
                 } else {
@@ -101,8 +101,8 @@ class _InstructionScreenState extends State<InstructionScreen> {
                   final List<CharacterType?> selectedCharacters = List<CharacterType?>.filled(3, null);
                   selectedCharacters[1] = CharacterType.warrior;
                   Map<String, dynamic> extra = {
-                    "upgrades": _upgrades,
-                    "selectedCharacters": selectedCharacters,
+                    'upgrades': _upgrades,
+                    'selectedCharacters': selectedCharacters,
                   };
                   GoRouter.of(context).go('/play', extra: extra);
                 }

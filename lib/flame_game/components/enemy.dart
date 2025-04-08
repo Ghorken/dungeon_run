@@ -84,12 +84,20 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   /// Generates a random enemy.
   factory Enemy.random({required int value}) {
     final enemyType = EnemyType.values.random();
-    return switch (enemyType) {
-      EnemyType.goblin => Enemy.goblin(moneyValue: value),
-      EnemyType.troll => Enemy.troll(moneyValue: value),
-      EnemyType.elementale => Enemy.elementale(moneyValue: value),
-      EnemyType.goblinKing => Enemy.goblin(moneyValue: value),
-    };
+    switch (enemyType) {
+      case EnemyType.goblin:
+        final int moneyValue = (value + 1) * 1;
+        return Enemy.goblin(moneyValue: moneyValue);
+      case EnemyType.troll:
+        final int moneyValue = (value + 1) * 2;
+        return Enemy.troll(moneyValue: moneyValue);
+      case EnemyType.elementale:
+        final int moneyValue = (value + 1) * 3;
+        return Enemy.elementale(moneyValue: moneyValue);
+      case EnemyType.goblinKing:
+        final int moneyValue = (value + 1) * 5;
+        return Enemy.goblin(moneyValue: moneyValue);
+    }
   }
 
   /// The path of the image to load

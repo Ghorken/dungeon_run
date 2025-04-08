@@ -28,35 +28,35 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
 
     switch (collectableType) {
       case CollectableType.heal:
-        final int healing = upgrades['collectable_heal']['unlocked'] as int;
+        final int healing = upgrades['collectable_heal']['current_level'] as int;
 
         return Heal(
           healing: healing,
         );
       case CollectableType.damage:
-        final double duration = (upgrades['collectable_damage_duration']['unlocked'] as int).toDouble();
-        final int damage = upgrades['collectable_damage']['unlocked'] as int;
+        final double duration = (upgrades['collectable_damage_duration']['current_level'] as int).toDouble();
+        final int damage = upgrades['collectable_damage']['current_level'] as int;
 
         return Damage(
           duration: duration,
           damage: damage,
         );
       case CollectableType.slow:
-        final double duration = (upgrades['collectable_slow_duration']['unlocked'] as int).toDouble();
-        final int slow = upgrades['collectable_slow']['unlocked'] as int;
+        final double duration = (upgrades['collectable_slow_duration']['current_level'] as int).toDouble();
+        final int slow = upgrades['collectable_slow']['current_level'] as int;
 
         return Slow(
           duration: duration,
           velocity: slow,
         );
       case CollectableType.invincibility:
-        final double duration = (upgrades['collectable_invincibility']['unlocked'] as int).toDouble();
+        final double duration = (upgrades['collectable_invincibility']['current_level'] as int).toDouble();
 
         return Invincibility(
           duration: duration,
         );
       case CollectableType.resurrection:
-        final bool fullHealt = (upgrades['collectable_resurrection_full']['unlocked'] as int) > 0;
+        final bool fullHealt = (upgrades['collectable_resurrection_full']['current_level'] as int) > 0;
 
         return Resurrection(
           fullHealt: fullHealt,
