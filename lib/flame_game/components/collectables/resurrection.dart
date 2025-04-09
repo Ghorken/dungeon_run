@@ -24,7 +24,7 @@ class Resurrection extends Collectable {
       Character resurrectedCharacter = world.deadCharacters[resurrectedCharacterIndex]!;
       world.deadCharacters[resurrectedCharacterIndex] = null;
       // Add it to the alive list with half life points or full life points
-      resurrectedCharacter.lifePoints = fullHealt ? resurrectedCharacter.maxLifePoints : (resurrectedCharacter.maxLifePoints / 2).toInt();
+      resurrectedCharacter.lifePoints = fullHealt ? resurrectedCharacter.maxLifePoints : resurrectedCharacter.maxLifePoints / 2;
       world.characters[resurrectedCharacterIndex] = resurrectedCharacter;
 
       world.add(resurrectedCharacter);

@@ -29,31 +29,37 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
     switch (collectableType) {
       case CollectableType.heal:
         final int healing = upgrades['collectable_heal']['current_level'] as int;
+        final double healingStep = upgrades['collectable_heal']['step'] as double;
 
         return Heal(
-          healing: healing,
+          healing: (healing + 1) * healingStep,
         );
       case CollectableType.damage:
         final double duration = (upgrades['collectable_damage_duration']['current_level'] as int).toDouble();
+        final double durationStep = upgrades['collectable_damage_duration']['step'] as double;
         final int damage = upgrades['collectable_damage']['current_level'] as int;
+        final double damageStep = upgrades['collectable_damage']['step'] as double;
 
         return Damage(
-          duration: duration,
-          damage: damage,
+          duration: (duration + 1) * durationStep,
+          damage: (damage + 1) * damageStep,
         );
       case CollectableType.slow:
         final double duration = (upgrades['collectable_slow_duration']['current_level'] as int).toDouble();
+        final double durationStep = upgrades['collectable_slow_duration']['step'] as double;
         final int slow = upgrades['collectable_slow']['current_level'] as int;
+        final double slowStep = upgrades['collectable_slow']['step'] as double;
 
         return Slow(
-          duration: duration,
-          velocity: slow,
+          duration: (duration + 1) * durationStep,
+          velocity: (slow + 1) * slowStep,
         );
       case CollectableType.invincibility:
-        final double duration = (upgrades['collectable_invincibility']['current_level'] as int).toDouble();
+        final double duration = (upgrades['collectable_invincibility_duration']['current_level'] as int).toDouble();
+        final double durationStep = upgrades['collectable_invincibility_duration']['step'] as double;
 
         return Invincibility(
-          duration: duration,
+          duration: (duration + 1) * durationStep,
         );
       case CollectableType.resurrection:
         final bool fullHealt = (upgrades['collectable_resurrection_full']['current_level'] as int) > 0;

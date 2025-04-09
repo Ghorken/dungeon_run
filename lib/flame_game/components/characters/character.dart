@@ -36,13 +36,13 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   final String srcImage;
 
   /// The max lifePoints of the character
-  final int maxLifePoints;
+  final double maxLifePoints;
 
   /// The current lifePoints of the player
-  int lifePoints;
+  double lifePoints;
 
   /// The amount of damage that the attack does
-  int damage;
+  double damage;
 
   /// If the character can receive damage or not
   bool invincible = false;
@@ -147,9 +147,9 @@ Character createCharacter(CharacterType type, Vector2 position, Map<String, dyna
   switch (type) {
     case CharacterType.warrior:
       final int life = upgrades['warrior_life']['current_level'] as int;
-      final int lifeStep = upgrades['warrior_life']['step'] as int;
+      final double lifeStep = upgrades['warrior_life']['step'] as double;
       final int damage = upgrades['warrior_damage']['current_level'] as int;
-      final int damageStep = upgrades['warrior_damage']['step'] as int;
+      final double damageStep = upgrades['warrior_damage']['step'] as double;
       final int baseCooldown = upgrades['warrior_special']['base_cooldown'] as int;
       final int special = upgrades['warrior_special']['current_level'] as int;
       final double specialStep = upgrades['warrior_special']['step'] as double;
@@ -162,9 +162,9 @@ Character createCharacter(CharacterType type, Vector2 position, Map<String, dyna
       );
     case CharacterType.archer:
       final int life = upgrades['archer_life']['current_level'] as int;
-      final int lifeStep = upgrades['archer_life']['step'] as int;
+      final double lifeStep = upgrades['archer_life']['step'] as double;
       final int damage = upgrades['archer_damage']['current_level'] as int;
-      final int damageStep = upgrades['archer_damage']['step'] as int;
+      final double damageStep = upgrades['archer_damage']['step'] as double;
       final int baseCooldown = upgrades['archer_special']['base_cooldown'] as int;
       final int special = upgrades['archer_special']['current_level'] as int;
       final double specialStep = upgrades['archer_special']['step'] as double;
@@ -177,9 +177,9 @@ Character createCharacter(CharacterType type, Vector2 position, Map<String, dyna
       );
     case CharacterType.wizard:
       final int life = upgrades['wizard_life']['current_level'] as int;
-      final int lifeStep = upgrades['wizard_life']['step'] as int;
+      final double lifeStep = upgrades['wizard_life']['step'] as double;
       final int damage = upgrades['wizard_damage']['current_level'] as int;
-      final int damageStep = upgrades['wizard_damage']['step'] as int;
+      final double damageStep = upgrades['wizard_damage']['step'] as double;
       final int baseCooldown = upgrades['wizard_special']['base_cooldown'] as int;
       final int special = upgrades['wizard_special']['current_level'] as int;
       final double specialStep = upgrades['wizard_special']['step'] as double;
@@ -192,9 +192,9 @@ Character createCharacter(CharacterType type, Vector2 position, Map<String, dyna
       );
     case CharacterType.assassin:
       final int life = upgrades['assassin_life']['current_level'] as int;
-      final int lifeStep = upgrades['assassin_life']['step'] as int;
+      final double lifeStep = upgrades['assassin_life']['step'] as double;
       final int damage = upgrades['assassin_damage']['current_level'] as int;
-      final int damageStep = upgrades['assassin_damage']['step'] as int;
+      final double damageStep = upgrades['assassin_damage']['step'] as double;
       final int baseCooldown = upgrades['assassin_special']['base_cooldown'] as int;
       final int special = upgrades['assassin_special']['current_level'] as int;
       final double specialStep = upgrades['assassin_special']['step'] as double;
@@ -207,9 +207,9 @@ Character createCharacter(CharacterType type, Vector2 position, Map<String, dyna
       );
     case CharacterType.berserk:
       final int life = upgrades['berserk_life']['current_level'] as int;
-      final int lifeStep = upgrades['berserk_life']['step'] as int;
+      final double lifeStep = upgrades['berserk_life']['step'] as double;
       final int damage = upgrades['berserk_damage']['current_level'] as int;
-      final int damageStep = upgrades['berserk_damage']['step'] as int;
+      final double damageStep = upgrades['berserk_damage']['step'] as double;
       final int baseCooldown = upgrades['berserk_special']['base_cooldown'] as int;
       final int special = upgrades['berserk_special']['current_level'] as int;
       final double specialStep = upgrades['berserk_special']['step'] as double;

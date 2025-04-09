@@ -107,7 +107,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   final int _maxLifePoints;
 
   /// The current lifePoints of the enemy
-  int lifePoints;
+  double lifePoints;
 
   /// The speed of the enemy
   int _speed;
@@ -224,7 +224,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// When the enemy is hit by the character we reduce the lifePoints and
   /// if the lifePoints are less than or equal to 0 we remove the enemy.
-  void hitted(int damage) {
+  void hitted(double damage) {
     lifePoints -= damage;
     if (lifePoints > 0) {
       add(EnemyHurtEffect());

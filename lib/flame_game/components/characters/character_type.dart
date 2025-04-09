@@ -7,6 +7,15 @@ enum CharacterType {
   berserk,
 }
 
+/// Return the string value of the enum
+String getCharacterTypeString(CharacterType characterType) => switch (characterType) {
+      CharacterType.warrior => 'warrior',
+      CharacterType.archer => 'archer',
+      CharacterType.wizard => 'wizard',
+      CharacterType.assassin => 'assassin',
+      CharacterType.berserk => 'berserk',
+    };
+
 /// Get the label for each character
 String getLabel(CharacterType characterType) => switch (characterType) {
       CharacterType.warrior => 'Guerriero',

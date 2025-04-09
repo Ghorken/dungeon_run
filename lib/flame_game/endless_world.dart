@@ -71,7 +71,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   Character? rightCharacter;
 
   /// The base speed at which every elements move.
-  int speed = 200;
+  double speed = 200.0;
 
   /// The amount of money that the player collected
   int money = 0;
@@ -87,7 +87,11 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       );
       add(leftCharacter!);
       characters[0] = (leftCharacter!);
-      game.overlays.add(GameScreen.leftSpecialAttackKey);
+
+      final int special = upgrades['${getCharacterTypeString(selectedCharacters[0]!)}_special']['current_level'] as int;
+      if (special > 0) {
+        game.overlays.add(GameScreen.leftSpecialAttackKey);
+      }
     }
 
     // If the player selected a frontCharacter initialize id and add id to the screen
@@ -100,7 +104,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       add(frontCharacter!);
       characters[1] = (frontCharacter!);
 
-      final int special = upgrades['warrior_special']['current_level'] as int;
+      final int special = upgrades['${getCharacterTypeString(selectedCharacters[1]!)}_special']['current_level'] as int;
       if (special > 0) {
         game.overlays.add(GameScreen.frontSpecialAttackKey);
       }
@@ -115,7 +119,11 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       );
       add(rightCharacter!);
       characters[2] = (rightCharacter!);
-      game.overlays.add(GameScreen.rightSpecialAttackKey);
+
+      final int special = upgrades['${getCharacterTypeString(selectedCharacters[2]!)}_special']['current_level'] as int;
+      if (special > 0) {
+        game.overlays.add(GameScreen.rightSpecialAttackKey);
+      }
     }
 
     // Spawning random enemies in the world at a fixed interval
@@ -144,7 +152,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       ),
     );
 
-    // Spawning traps in the world at a random interval between fixed values
+    // Spawning [Trap] in the world at a random interval between fixed values
     add(
       SpawnComponent.periodRange(
         factory: (_) {
@@ -165,8 +173,8 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           collectables.add(collectable);
           return collectable;
         },
-        minPeriod: (upgrades['collectable_frequency']['current_level'] as int).toDouble(),
-        maxPeriod: 6.0,
+        minPeriod: 1.0,
+        maxPeriod: (10 - (upgrades['collectable_frequency']['current_level'] as int)).toDouble(),
       ),
     );
   }

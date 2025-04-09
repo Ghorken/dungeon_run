@@ -50,7 +50,7 @@ class LifeBar extends PositionComponent with HasWorldReference<EndlessWorld> {
     super.render(canvas);
 
     // Draw the life bar segments
-    int lifePoints = (parentComponent is Enemy) ? (parentComponent as Enemy).lifePoints : (parentComponent as Character).lifePoints;
+    double lifePoints = (parentComponent is Enemy) ? (parentComponent as Enemy).lifePoints : (parentComponent as Character).lifePoints;
     for (int i = 0; i < lifePoints; i++) {
       final double x = i * (segmentWidth + spacing);
       canvas.drawRect(
@@ -65,7 +65,7 @@ class LifeBar extends PositionComponent with HasWorldReference<EndlessWorld> {
     super.update(dt);
 
     // Update the size of the life bar based on the number of life points
-    int lifePoints = (parentComponent is Enemy) ? (parentComponent as Enemy).lifePoints : (parentComponent as Character).lifePoints;
+    double lifePoints = (parentComponent is Enemy) ? (parentComponent as Enemy).lifePoints : (parentComponent as Character).lifePoints;
     size = Vector2(
       (lifePoints * (segmentWidth + spacing)).toDouble(),
       barHeight.toDouble(),

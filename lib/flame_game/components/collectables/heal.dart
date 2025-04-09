@@ -13,7 +13,7 @@ class Heal extends Collectable {
         );
 
   /// The amount of healing that the [Collectable] does
-  final int healing;
+  final double healing;
 
   @override
   void effect() {
