@@ -67,7 +67,7 @@ class Persistence {
       }
     } else {
       // If no levels are found, return the default levels
-      recoveredLevels = defaultLevels;
+      recoveredLevels = List.from(defaultLevels);
     }
 
     return recoveredLevels;
@@ -114,12 +114,7 @@ class Persistence {
   /// Save the state of the levels
   Future<void> saveLevels(List<Level> value) async {
     final prefs = await instanceFuture;
-    List<String> encodedList = [];
-    // Encode each Level object to a string
-    for (Level level in value) {
-      final String levelString = levelToString(level);
-      encodedList.add(levelString);
-    }
+    List<String> encodedList = value.map((Level level) => levelToString(level)).toList();
 
     await prefs.setStringList('levels', encodedList);
   }

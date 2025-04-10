@@ -80,7 +80,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   int gold = 0;
 
   /// The level of the game
-  final Level level;
+  Level level;
 
   @override
   Future<void> onLoad() async {
@@ -138,8 +138,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         factory: (_) {
           final int enemyGold = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
           final Enemy enemy = Enemy.random(
-            enemyGold: enemyGold,
             enemies: level.enemies,
+            rewards: {
+              "gold": enemyGold,
+            },
           );
           enemies.add(enemy);
           return enemy;
@@ -154,9 +156,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         period: level.bossTimer,
         repeat: false, // Spawn only once
         onTick: () {
-          final Enemy boss = Enemy.fromType(
+          final Enemy boss = Enemy.boss(
             type: level.boss,
-            goldValue: level.rewards['gold'] as int,
+            rewards: level.rewards,
           );
           enemies.add(boss);
           add(boss);
@@ -284,5 +286,32 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     Persistence persistence = Persistence();
     int storedGold = await persistence.getGold();
     persistence.saveGold(gold + storedGold);
+
+    // Save the level completed
+    persistence.getLevels().then((List<Level> levels) {
+      for (int i = 0; i < levels.length; i++) {
+        if (levels[i].name == level.name) {
+          levels[i] = (
+            name: level.name,
+            completed: true,
+            dependency: level.dependency,
+            enemies: level.enemies,
+            enemyFrequency: level.enemyFrequency,
+            boss: level.boss,
+            bossTimer: level.bossTimer,
+            traps: level.traps,
+            trapMinPeriod: level.trapMinPeriod,
+            trapMaxPeriod: level.trapMaxPeriod,
+            collectables: level.collectables,
+            collectableMinPeriod: level.collectableMinPeriod,
+            collectableMaxPeriod: level.collectableMaxPeriod,
+            map: level.map,
+            rewards: level.rewards,
+          );
+          persistence.saveLevels(levels);
+          break;
+        }
+      }
+    });
   }
 }

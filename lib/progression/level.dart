@@ -34,9 +34,11 @@ String levelToString(Level level) {
     "boss": level.boss.toString(),
     "bossTimer": level.bossTimer,
     "traps": level.traps.map((e) => e.toString()).join(','),
-    "trapFrequency": level.trapMinPeriod,
+    "trapMinPeriod": level.trapMinPeriod,
+    "trapMaxPeriod": level.trapMaxPeriod,
     "collectables": level.collectables.map((e) => e.toString()).join(','),
-    "collectableFrequency": level.collectableMinPeriod,
+    "collectableMaxPeriod": level.collectableMaxPeriod,
+    "collectableMinPeriod": level.collectableMinPeriod,
     "map": level.map,
     "rewards": json.encode(level.rewards),
   });
@@ -54,7 +56,7 @@ Level stringToLevel(String levelString) {
     enemyFrequency: jsonMap["enemyFrequency"] as double,
     boss: EnemyType.values.firstWhere((EnemyType type) => type.toString() == jsonMap["boss"]),
     bossTimer: jsonMap["bossTimer"] as double,
-    traps: (jsonMap["traps"] as String).split(',').map((e) => TrapType.values.firstWhere((TrapType type) => type.toString() == e)).toList(),
+    traps: (jsonMap["traps"] as String).isEmpty ? [] : (jsonMap["traps"] as String).split(',').map((e) => TrapType.values.firstWhere((TrapType type) => type.toString() == e)).toList(),
     trapMinPeriod: jsonMap["trapMinPeriod"] as double,
     trapMaxPeriod: jsonMap["trapMaxPeriod"] as double,
     collectables: (jsonMap["collectables"] as String).split(',').map((e) => CollectableType.values.firstWhere((CollectableType type) => type.toString() == e)).toList(),
@@ -62,5 +64,26 @@ Level stringToLevel(String levelString) {
     collectableMaxPeriod: jsonMap["collectableMaxPeriod"] as double,
     map: jsonMap["map"] as String,
     rewards: json.decode(jsonMap["rewards"] as String) as Map<String, dynamic>,
+  );
+}
+
+/// function to set the level as completed
+void setLevelCompleted(Level level) {
+  level = (
+    name: level.name,
+    completed: true,
+    dependency: level.dependency,
+    enemies: level.enemies,
+    enemyFrequency: level.enemyFrequency,
+    boss: level.boss,
+    bossTimer: level.bossTimer,
+    traps: level.traps,
+    trapMinPeriod: level.trapMinPeriod,
+    trapMaxPeriod: level.trapMaxPeriod,
+    collectables: level.collectables,
+    collectableMinPeriod: level.collectableMinPeriod,
+    collectableMaxPeriod: level.collectableMaxPeriod,
+    map: level.map,
+    rewards: level.rewards,
   );
 }

@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, CollisionCallbacks {
   // Constructors for every tipe of enemy
   Enemy.goblin({
-    required this.goldValue,
+    required this.rewards,
   })  : _srcImage = 'enemies/goblin.png',
         _maxLifePoints = 5,
         lifePoints = 5,
@@ -32,7 +32,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.troll({
-    required this.goldValue,
+    required this.rewards,
   })  : _srcImage = 'enemies/troll.png',
         _maxLifePoints = 10,
         lifePoints = 10,
@@ -46,7 +46,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.elementale({
-    required this.goldValue,
+    required this.rewards,
   })  : _srcImage = 'enemies/elementale.png',
         _maxLifePoints = 15,
         lifePoints = 15,
@@ -60,7 +60,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.goblinKing({
-    required this.goldValue,
+    required this.rewards,
   })  : _srcImage = 'enemies/goblin_king.png',
         _maxLifePoints = 30,
         lifePoints = 30,
@@ -76,36 +76,35 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// Factory method to create a random enemy.
   factory Enemy.random({
-    required int enemyGold,
+    required Map<String, dynamic> rewards,
     required List<EnemyType> enemies,
   }) {
     final enemyType = enemies.random();
     switch (enemyType) {
       case EnemyType.goblin:
-        final int goldValue = (enemyGold + 1) * 1;
-        return Enemy.goblin(goldValue: goldValue);
+        rewards["gold"] = ((rewards["gold"] as int) + 1) * 1;
+        return Enemy.goblin(rewards: rewards);
       case EnemyType.troll:
-        final int goldValue = (enemyGold + 1) * 2;
-        return Enemy.troll(goldValue: goldValue);
+        rewards["gold"] = ((rewards["gold"] as int) + 1) * 2;
+        return Enemy.troll(rewards: rewards);
       case EnemyType.elementale:
-        final int goldValue = (enemyGold + 1) * 3;
-        return Enemy.elementale(goldValue: goldValue);
-      case EnemyType.goblinKing:
-        final int goldValue = (enemyGold + 1) * 5;
-        return Enemy.goblin(goldValue: goldValue);
+        rewards["gold"] = ((rewards["gold"] as int) + 1) * 3;
+        return Enemy.elementale(rewards: rewards);
+      default:
+        throw Exception('Unknown enemy type: $enemyType');
     }
   }
 
-  // Factory method to create an enemy based on its type
-  factory Enemy.fromType({
+  // Factory method to create an enemy boss based on its type
+  factory Enemy.boss({
     required EnemyType type,
-    required int goldValue,
+    required Map<String, dynamic> rewards,
   }) {
     switch (type) {
       case EnemyType.goblinKing:
-        return Enemy.goblinKing(goldValue: goldValue);
+        return Enemy.goblinKing(rewards: rewards);
       default:
-        return Enemy.goblin(goldValue: goldValue);
+        throw Exception('Unknown enemy type: $type');
     }
   }
 
@@ -133,8 +132,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   /// The starting x position of the enemy
   double? _xPosition;
 
-  /// The gold value of the enemy
-  final int goldValue;
+  /// The rewards of the enemy
+  final Map<String, dynamic> rewards;
 
   /// The timer for periodic attacks
   TimerComponent? attackTimer;
@@ -263,6 +262,6 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     );
 
     // Add the gold to the total collected
-    world.gold += goldValue;
+    world.gold += (rewards["gold"] as int);
   }
 }
