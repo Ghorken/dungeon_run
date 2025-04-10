@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/strings.dart';
@@ -31,24 +32,29 @@ class _InstructionScreenState extends State<InstructionScreen> {
   /// The unlocked characeters
   List<CharacterType> _unlockedCharacters = [];
 
+  /// The progression of the player
+  List<Level> _levels = [];
+
   @override
   void initState() {
     super.initState();
-    _loadUpgrades();
+    _loadFromMemory();
   }
 
-  /// Recover the buyed upgrades
-  Future<void> _loadUpgrades() async {
+  /// Recover the buyed upgrades and the progression of the player
+  Future<void> _loadFromMemory() async {
     final List<Upgrade> recoveredUpgrades = await _persistence.getUpgrades();
+    final List<Level> recoveredLevels = await _persistence.getLevels();
     setState(() {
       _upgrades = recoveredUpgrades;
+      _levels = recoveredLevels;
     });
     _retrieveUnlockedCharacters();
   }
 
   /// Recover the unlocked Characters
   Future<void> _retrieveUnlockedCharacters() async {
-    _unlockedCharacters = _upgrades.where((Upgrade entry) => entry.name.contains('_unlocked') && entry.currentLevel > 0).map((Upgrade entry) => entry.characterType!).toList();
+    _unlockedCharacters = _upgrades.where((Upgrade entry) => entry.characterType != null && entry.unlocked == true).map((Upgrade entry) => entry.characterType!).toList();
   }
 
   @override
@@ -96,17 +102,31 @@ class _InstructionScreenState extends State<InstructionScreen> {
                   Map<String, dynamic> extra = {
                     'upgrades': _upgrades,
                     'unlockedCharacters': _unlockedCharacters,
+                    'levels': _levels,
                   };
                   GoRouter.of(context).go('/selectCharacters', extra: extra);
                 } else {
-                  // Otherwise prepare the party with only the [Warrior] and go to game screen
+                  // If there are no characters unlocked
                   final List<CharacterType?> selectedCharacters = List<CharacterType?>.filled(3, null);
                   selectedCharacters[1] = CharacterType.warrior;
-                  Map<String, dynamic> extra = {
-                    'upgrades': _upgrades,
-                    'selectedCharacters': selectedCharacters,
-                  };
-                  GoRouter.of(context).go('/play', extra: extra);
+                  if (_levels.first.completed == true) {
+                    // If the first level is completed go to the level selection screen
+                    Map<String, dynamic> extra = {
+                      'upgrades': _upgrades,
+                      'selectedCharacters': selectedCharacters,
+                      'levels': _levels,
+                    };
+                    GoRouter.of(context).go('/selectLevel', extra: extra);
+                  } else {
+                    // If the first level is not completed prepare the party with only the [Warrior] and go to game screen
+
+                    Map<String, dynamic> extra = {
+                      'upgrades': _upgrades,
+                      'selectedCharacters': selectedCharacters,
+                      'level': _levels.first,
+                    };
+                    GoRouter.of(context).go('/play', extra: extra);
+                  }
                 }
               },
               child: Text(Strings.play),

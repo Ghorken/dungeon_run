@@ -2,7 +2,7 @@ import 'package:flame/extensions.dart';
 
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
-import 'package:dungeon_run/flame_game/components/enemy.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:dungeon_run/flame_game/effects/attacks/assassin_attack_effect.dart';
 
 /// The class that handles the attack and the damage of the Assassin

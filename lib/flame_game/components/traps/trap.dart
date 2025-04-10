@@ -46,8 +46,8 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld>, Collisi
         );
 
   /// Generates a random trap.
-  factory Trap.random() {
-    final TrapType trapType = TrapType.values.random();
+  factory Trap.random({required List<TrapType> traps}) {
+    final TrapType trapType = traps.random();
     return switch (trapType) {
       TrapType.spikedRoller => Trap.spikedRoller(),
       TrapType.spikedPit => Trap.spikedPit(),

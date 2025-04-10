@@ -7,6 +7,7 @@ typedef Upgrade = ({
   String name,
   String description,
   int subMenu,
+  bool? unlocked,
   String? dependency,
   CharacterType? characterType,
   int cost,
@@ -23,6 +24,7 @@ String upgradeToString(Upgrade upgrade) {
     "name": upgrade.name,
     "description": upgrade.description,
     "subMenu": upgrade.subMenu,
+    "unlocked": upgrade.unlocked,
     "dependency": upgrade.dependency,
     "characterType": upgrade.characterType?.toString(),
     "cost": upgrade.cost,
@@ -42,6 +44,7 @@ Upgrade stringToUpgrade(String upgradeString) {
     name: jsonMap["name"] as String,
     description: jsonMap["description"] as String,
     subMenu: jsonMap["subMenu"] as int,
+    unlocked: jsonMap["unlocked"] as bool?,
     dependency: jsonMap["dependency"] as String?,
     characterType: jsonMap["characterType"] != null
         ? CharacterType.values.firstWhere(

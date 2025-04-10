@@ -1,5 +1,5 @@
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
-import 'package:dungeon_run/flame_game/components/enemy.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 

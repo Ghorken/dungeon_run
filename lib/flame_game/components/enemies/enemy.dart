@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -12,20 +13,12 @@ import 'package:dungeon_run/flame_game/endless_runner.dart';
 import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:flutter/material.dart';
 
-/// Enums of the type of enemies
-enum EnemyType {
-  goblin,
-  troll,
-  elementale,
-  goblinKing,
-}
-
 /// The [Enemy] component can represent the different types of enemies
 /// that the character can run into.
 class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, CollisionCallbacks {
   // Constructors for every tipe of enemy
   Enemy.goblin({
-    required this.moneyValue,
+    required this.goldValue,
   })  : _srcImage = 'enemies/goblin.png',
         _maxLifePoints = 5,
         lifePoints = 5,
@@ -39,7 +32,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.troll({
-    required this.moneyValue,
+    required this.goldValue,
   })  : _srcImage = 'enemies/troll.png',
         _maxLifePoints = 10,
         lifePoints = 10,
@@ -53,7 +46,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.elementale({
-    required this.moneyValue,
+    required this.goldValue,
   })  : _srcImage = 'enemies/elementale.png',
         _maxLifePoints = 15,
         lifePoints = 15,
@@ -67,7 +60,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         );
 
   Enemy.goblinKing({
-    required this.moneyValue,
+    required this.goldValue,
   })  : _srcImage = 'enemies/goblin_king.png',
         _maxLifePoints = 30,
         lifePoints = 30,
@@ -81,22 +74,38 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
           anchor: Anchor.bottomCenter,
         );
 
-  /// Generates a random enemy.
-  factory Enemy.random({required int value}) {
-    final enemyType = EnemyType.values.random();
+  /// Factory method to create a random enemy.
+  factory Enemy.random({
+    required int enemyGold,
+    required List<EnemyType> enemies,
+  }) {
+    final enemyType = enemies.random();
     switch (enemyType) {
       case EnemyType.goblin:
-        final int moneyValue = (value + 1) * 1;
-        return Enemy.goblin(moneyValue: moneyValue);
+        final int goldValue = (enemyGold + 1) * 1;
+        return Enemy.goblin(goldValue: goldValue);
       case EnemyType.troll:
-        final int moneyValue = (value + 1) * 2;
-        return Enemy.troll(moneyValue: moneyValue);
+        final int goldValue = (enemyGold + 1) * 2;
+        return Enemy.troll(goldValue: goldValue);
       case EnemyType.elementale:
-        final int moneyValue = (value + 1) * 3;
-        return Enemy.elementale(moneyValue: moneyValue);
+        final int goldValue = (enemyGold + 1) * 3;
+        return Enemy.elementale(goldValue: goldValue);
       case EnemyType.goblinKing:
-        final int moneyValue = (value + 1) * 5;
-        return Enemy.goblin(moneyValue: moneyValue);
+        final int goldValue = (enemyGold + 1) * 5;
+        return Enemy.goblin(goldValue: goldValue);
+    }
+  }
+
+  // Factory method to create an enemy based on its type
+  factory Enemy.fromType({
+    required EnemyType type,
+    required int goldValue,
+  }) {
+    switch (type) {
+      case EnemyType.goblinKing:
+        return Enemy.goblinKing(goldValue: goldValue);
+      default:
+        return Enemy.goblin(goldValue: goldValue);
     }
   }
 
@@ -124,8 +133,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   /// The starting x position of the enemy
   double? _xPosition;
 
-  /// The money value of the enemy
-  final int moneyValue;
+  /// The gold value of the enemy
+  final int goldValue;
 
   /// The timer for periodic attacks
   TimerComponent? attackTimer;
@@ -253,7 +262,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       () => removeFromParent(),
     );
 
-    // Add the moneyValue to the total collected
-    world.money += moneyValue;
+    // Add the gold to the total collected
+    world.gold += goldValue;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
-import 'package:dungeon_run/flame_game/components/enemy.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:dungeon_run/flame_game/effects/attacks/warrior_attack_effect.dart';
 import 'package:dungeon_run/flame_game/effects/attacks/warrior_special_attack_effect.dart';
 

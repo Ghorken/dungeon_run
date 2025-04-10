@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dungeon_run/flame_game/components/enemy.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 
 /// The [DeathEffect] is an effect that is composed of multiple different effects
 /// that are added to the [Enemy] when it is killed.

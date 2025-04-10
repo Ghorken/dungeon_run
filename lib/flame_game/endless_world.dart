@@ -1,3 +1,4 @@
+import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -6,7 +7,7 @@ import 'package:flame/game.dart';
 import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/components/traps/trap.dart';
-import 'package:dungeon_run/flame_game/components/enemy.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/collectables/collectable.dart';
 import 'package:dungeon_run/flame_game/game_screen.dart';
@@ -27,6 +28,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   EndlessWorld({
     required this.selectedCharacters,
     required this.upgrades,
+    required this.level,
   });
 
   /// The size of the game screen
@@ -74,8 +76,11 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// The base speed at which every elements move.
   double speed = 200.0;
 
-  /// The amount of money that the player collected
-  int money = 0;
+  /// The amount of gold that the player collected
+  int gold = 0;
+
+  /// The level of the game
+  final Level level;
 
   @override
   Future<void> onLoad() async {
@@ -131,53 +136,68 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent(
         factory: (_) {
-          final int value = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_money').currentLevel;
-          final Enemy enemy = Enemy.random(value: value);
+          final int enemyGold = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
+          final Enemy enemy = Enemy.random(
+            enemyGold: enemyGold,
+            enemies: level.enemies,
+          );
           enemies.add(enemy);
           return enemy;
         },
-        period: 0.5,
+        period: level.enemyFrequency,
       ),
     );
 
     // Schedule the goblinKing to spawn after 5 minutes
     add(
       TimerComponent(
-        period: 300, // 5 minutes in seconds
+        period: level.bossTimer,
         repeat: false, // Spawn only once
         onTick: () {
-          final Enemy goblinKing = Enemy.goblinKing(moneyValue: 5);
-          enemies.add(goblinKing);
-          add(goblinKing);
+          final Enemy boss = Enemy.fromType(
+            type: level.boss,
+            goldValue: level.rewards['gold'] as int,
+          );
+          enemies.add(boss);
+          add(boss);
         },
       ),
     );
 
     // Spawning [Trap] in the world at a random interval between fixed values
-    add(
-      SpawnComponent.periodRange(
-        factory: (_) {
-          final Trap trap = Trap.random();
-          traps.add(trap);
-          return trap;
-        },
-        minPeriod: 5.0,
-        maxPeriod: 7.0,
-      ),
-    );
+    if (level.traps.isNotEmpty) {
+      add(
+        SpawnComponent.periodRange(
+          factory: (_) {
+            final Trap trap = Trap.random(
+              traps: level.traps,
+            );
+            traps.add(trap);
+            return trap;
+          },
+          minPeriod: level.trapMinPeriod,
+          maxPeriod: level.trapMaxPeriod,
+        ),
+      );
+    }
 
     // Spawning [Collectable] in the world at a random interval between fixed values
-    add(
-      SpawnComponent.periodRange(
-        factory: (_) {
-          Collectable collectable = Collectable.random(upgrades: upgrades);
-          collectables.add(collectable);
-          return collectable;
-        },
-        minPeriod: 1.0,
-        maxPeriod: (10 - (upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_frequency').currentLevel).toDouble()),
-      ),
-    );
+    if (level.collectables.isNotEmpty) {
+      add(
+        SpawnComponent.periodRange(
+          factory: (_) {
+            Collectable collectable = Collectable.random(
+              upgrades: upgrades,
+              collectables: level.collectables,
+            );
+            collectables.add(collectable);
+            return collectable;
+          },
+          minPeriod: level.collectableMinPeriod,
+          maxPeriod: (level.collectableMaxPeriod - (upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_frequency').currentLevel).toDouble()),
+        ),
+      );
+    }
   }
 
   @override
@@ -242,10 +262,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     // Show the loose dialog
     game.overlays.add(GameScreen.looseDialogKey);
 
-    // Save the accumulated money
+    // Save the accumulated gold
     Persistence persistence = Persistence();
-    int storedMoney = await persistence.getMoney();
-    persistence.saveMoney(money + storedMoney);
+    int storedGold = await persistence.getGold();
+    persistence.saveGold(gold + storedGold);
   }
 
   /// When the player wins stop the game and shows the relative dialog
@@ -260,9 +280,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     // Show the win dialog
     game.overlays.add(GameScreen.winDialogKey);
 
-    // Save the accumulated money
+    // Save the accumulated gold
     Persistence persistence = Persistence();
-    int storedMoney = await persistence.getMoney();
-    persistence.saveMoney(money + storedMoney);
+    int storedGold = await persistence.getGold();
+    persistence.saveGold(gold + storedGold);
   }
 }

@@ -24,8 +24,11 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
         );
 
   /// Generates a random [Collectable].
-  factory Collectable.random({required List<Upgrade> upgrades}) {
-    final CollectableType collectableType = CollectableType.values.random();
+  factory Collectable.random({
+    required List<Upgrade> upgrades,
+    required List<CollectableType> collectables,
+  }) {
+    final CollectableType collectableType = collectables.random();
 
     switch (collectableType) {
       case CollectableType.heal:

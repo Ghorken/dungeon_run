@@ -1,3 +1,5 @@
+import 'package:dungeon_run/progression/default_levels.dart';
+import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/store/default_upgrades.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,72 +9,118 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Persistence {
   final Future<SharedPreferences> instanceFuture = SharedPreferences.getInstance();
 
+  /// Retrieve the saved state of the audio
   Future<bool> getAudioOn({required bool defaultValue}) async {
     final prefs = await instanceFuture;
     return prefs.getBool('audioOn') ?? defaultValue;
   }
 
+  /// Retrieve the saved state of the music
   Future<bool> getMusicOn({required bool defaultValue}) async {
     final prefs = await instanceFuture;
     return prefs.getBool('musicOn') ?? defaultValue;
   }
 
+  /// Retrieve the saved state of the sounds
   Future<bool> getSoundsOn({required bool defaultValue}) async {
     final prefs = await instanceFuture;
     return prefs.getBool('soundsOn') ?? defaultValue;
   }
 
-  Future<int> getMoney() async {
+  /// Retrieve the saved state of the gold
+  Future<int> getGold() async {
     final prefs = await instanceFuture;
-    return prefs.getInt('money') ?? 0;
+    return prefs.getInt('gold') ?? 0;
   }
 
+  /// Retrieve the saved state of the upgrades
   Future<List<Upgrade>> getUpgrades() async {
     final prefs = await instanceFuture;
 
     List<String>? encodedList = prefs.getStringList('upgrades');
     List<Upgrade> recoveredUpgrades = [];
     if (encodedList != null) {
+      // If the list is not null, decode each string to an Upgrade object
       for (String upgradeString in encodedList) {
         final Upgrade upgrade = stringToUpgrade(upgradeString);
         recoveredUpgrades.add(upgrade);
       }
     } else {
+      // If no upgrades are found, return the default upgrades
       recoveredUpgrades = defaultUpgrades;
     }
 
     return recoveredUpgrades;
   }
 
+  /// Retrieve the saved state of the levels
+  Future<List<Level>> getLevels() async {
+    final prefs = await instanceFuture;
+    List<String>? encodedList = prefs.getStringList('levels');
+    List<Level> recoveredLevels = [];
+
+    if (encodedList != null) {
+      // If the list is not null, decode each string to a Level object
+      for (String levelString in encodedList) {
+        final Level level = stringToLevel(levelString);
+        recoveredLevels.add(level);
+      }
+    } else {
+      // If no levels are found, return the default levels
+      recoveredLevels = defaultLevels;
+    }
+
+    return recoveredLevels;
+  }
+
+  /// Save the state of the audio
   Future<void> saveAudioOn(bool value) async {
     final prefs = await instanceFuture;
     await prefs.setBool('audioOn', value);
   }
 
+  /// Save the state of the music
   Future<void> saveMusicOn(bool value) async {
     final prefs = await instanceFuture;
     await prefs.setBool('musicOn', value);
   }
 
+  /// Save the state of the sounds
   Future<void> saveSoundsOn(bool value) async {
     final prefs = await instanceFuture;
     await prefs.setBool('soundsOn', value);
   }
 
-  Future<void> saveMoney(int value) async {
+  /// Save the state of the gold
+  Future<void> saveGold(int value) async {
     final prefs = await instanceFuture;
 
-    await prefs.setInt('money', value);
+    await prefs.setInt('gold', value);
   }
 
+  /// Save the state of the upgrades
   Future<void> saveUpgrades(List<Upgrade> value) async {
     final prefs = await instanceFuture;
     List<String> encodedList = [];
+    // Encode each Upgrade object to a string
     for (Upgrade upgrade in value) {
       final String upgradeString = upgradeToString(upgrade);
       encodedList.add(upgradeString);
     }
 
     await prefs.setStringList('upgrades', encodedList);
+  }
+
+  /// Save the state of the levels
+  Future<void> saveLevels(List<Level> value) async {
+    final prefs = await instanceFuture;
+    List<String> encodedList = [];
+    // Encode each Level object to a string
+    for (Level level in value) {
+      final String levelString = levelToString(level);
+      encodedList.add(levelString);
+    }
+
+    await prefs.setStringList('levels', encodedList);
   }
 }

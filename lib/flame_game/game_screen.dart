@@ -1,3 +1,4 @@
+import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:flame/game.dart';
@@ -21,6 +22,7 @@ class GameScreen extends StatelessWidget {
   const GameScreen({
     required this.selectedCharacters,
     required this.upgrades,
+    required this.level,
     super.key,
   });
 
@@ -42,6 +44,9 @@ class GameScreen extends StatelessWidget {
   /// The state of the upgrades
   final List<Upgrade> upgrades;
 
+  /// The level of the game
+  final Level level;
+
   @override
   Widget build(BuildContext context) {
     final audioController = context.read<AudioController>();
@@ -52,6 +57,7 @@ class GameScreen extends StatelessWidget {
           audioController: audioController,
           selectedCharacters: selectedCharacters,
           upgrades: upgrades,
+          level: level,
         ),
         overlayBuilderMap: {
           // The button the allows to quit the level

@@ -13,6 +13,7 @@ class SelectCharactersScreen extends StatefulWidget {
   const SelectCharactersScreen({
     required this.unlockedCharacters,
     required this.upgrades,
+    required this.levels,
     super.key,
   });
 
@@ -21,6 +22,9 @@ class SelectCharactersScreen extends StatefulWidget {
 
   /// The state of the upgraded
   final List<Upgrade> upgrades;
+
+  /// The levels of the game
+  final List<dynamic> levels;
 
   @override
   State<SelectCharactersScreen> createState() => _SelectCharactersScreenState();
@@ -176,11 +180,23 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                   return;
                 }
 
-                Map<String, dynamic> extra = {
-                  'upgrades': widget.upgrades,
-                  'selectedCharacters': _selectedCharacters,
-                };
-                GoRouter.of(context).go('/play', extra: extra);
+                if (widget.levels.first.completed == true) {
+                  // If the first level is completed go to the level selection screen
+                  Map<String, dynamic> extra = {
+                    'upgrades': widget.upgrades,
+                    'selectedCharacters': _selectedCharacters,
+                    'levels': widget.levels,
+                  };
+                  GoRouter.of(context).go('/selectLevel', extra: extra);
+                } else {
+                  // If the first level is not completed go to game screen
+                  Map<String, dynamic> extra = {
+                    'upgrades': widget.upgrades,
+                    'selectedCharacters': _selectedCharacters,
+                    'level': widget.levels.first,
+                  };
+                  GoRouter.of(context).go('/play', extra: extra);
+                }
               },
               child: Text(Strings.play),
             ),

@@ -24,8 +24,8 @@ class _StoreScreenState extends State<StoreScreen> {
   /// The container of local saved data
   final Persistence _persistence = Persistence();
 
-  /// The amount of money the player has
-  int _money = 0;
+  /// The amount of gold the player has
+  int _gold = 0;
 
   /// Map that store every purchase made
   List<Upgrade> _upgrades = [];
@@ -39,22 +39,22 @@ class _StoreScreenState extends State<StoreScreen> {
     _loadItemsFromPersistence();
   }
 
-  /// Load the money and the buyed item from persistence
+  /// Load the gold and the buyed item from persistence
   Future<void> _loadItemsFromPersistence() async {
-    final int fetchedMoney = await _persistence.getMoney();
+    final int fetchedGold = await _persistence.getGold();
     final List<Upgrade> fetchedUpgrades = await _persistence.getUpgrades();
     setState(() {
-      _money = fetchedMoney;
+      _gold = fetchedGold;
       _upgrades = fetchedUpgrades;
       _isLoading = false;
     });
   }
 
-  /// Try to buy an item and advice the user if there aren't enough money
+  /// Try to buy an item and advice the user if there aren't enough gold
   void buy(Upgrade item) {
-    if (_money >= item.cost) {
+    if (_gold >= item.cost) {
       setState(() {
-        _money -= item.cost;
+        _gold -= item.cost;
         final int index = _upgrades.indexWhere((Upgrade upgrade) => upgrade.name == item.name);
         final int cost = (pow(item.costFactor, item.currentLevel + 1) * item.cost / 10).round() * 10;
 
@@ -62,6 +62,7 @@ class _StoreScreenState extends State<StoreScreen> {
           name: item.name,
           description: item.description,
           subMenu: item.subMenu,
+          unlocked: item.unlocked,
           dependency: item.dependency,
           characterType: item.characterType,
           cost: cost,
@@ -74,7 +75,7 @@ class _StoreScreenState extends State<StoreScreen> {
       });
     } else {
       Fluttertoast.showToast(
-        msg: Strings.notEnoughMoney,
+        msg: Strings.notEnoughGold,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
@@ -120,7 +121,7 @@ class _StoreScreenState extends State<StoreScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      Strings.money,
+                      Strings.gold,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -130,7 +131,7 @@ class _StoreScreenState extends State<StoreScreen> {
                     ),
                   ),
                   Text(
-                    '$_money',
+                    '$_gold',
                     style: const TextStyle(
                       fontFamily: 'Press Start 2P',
                       fontSize: 15,
@@ -158,12 +159,15 @@ class _StoreScreenState extends State<StoreScreen> {
                   children: [
                     ..._upgrades.map(
                       (Upgrade entry) {
-                        final String? dependency = entry.dependency;
+                        /// An element is not visible if:
+                        /// - it has no dependency (null) and is not unlocked
+                        /// - it has a dependency and the dependency is not unlocked
+                        if ((entry.dependency == null && entry.unlocked == false) || (entry.dependency != null && _upgrades.firstWhere((Upgrade upgrade) => upgrade.name == entry.dependency).unlocked == false)) {
+                          return const SizedBox.shrink();
+                        }
 
-                        /// An element is buyable if:
-                        /// - it has no dependency (null)
-                        /// - or it has a dependency and the dependency is unlocked (current_level > 0)
-                        final bool isBuyable = ((dependency == null) || (_upgrades.firstWhere((Upgrade upgrade) => upgrade.name == dependency)).currentLevel > 0);
+                        /// An element is buyable if the gold is enough to buy it
+                        final bool isBuyable = _gold >= entry.cost;
 
                         return SizedBox(
                           height: 60,
@@ -187,7 +191,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                   ),
                                 ),
                                 // If the item has been buyed at least once show the current level
-                                if (entry.cost > 0 && entry.currentLevel >= 1)
+                                if (entry.currentLevel >= 1)
                                   Padding(
                                     padding: EdgeInsets.only(
                                       right: 10.0,
@@ -245,7 +249,7 @@ class _StoreScreenState extends State<StoreScreen> {
                           WobblyButton(
                             onPressed: () {
                               setState(() {
-                                _money = 0;
+                                _gold = 0;
                                 _upgrades = List.from(defaultUpgrades);
                               });
                             },
@@ -261,7 +265,7 @@ class _StoreScreenState extends State<StoreScreen> {
             _gap,
             WobblyButton(
               onPressed: () {
-                _persistence.saveMoney(_money);
+                _persistence.saveGold(_gold);
                 _persistence.saveUpgrades(_upgrades);
                 GoRouter.of(context).pop();
               },

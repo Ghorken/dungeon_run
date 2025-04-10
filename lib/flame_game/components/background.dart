@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dungeon_run/progression/level.dart';
 import 'package:flame/components.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/painting.dart';
@@ -8,12 +9,17 @@ import 'package:flutter/painting.dart';
 /// images which form a parallax, a way to simulate movement and depth in the
 /// background.
 class Background extends ParallaxComponent {
-  Background();
+  Background({
+    required this.level,
+  });
+
+  /// The level of the game
+  final Level level;
 
   @override
   Future<void> onLoad() async {
     final layers = [
-      ParallaxImageData('scenery/dungeon_corridor.png'),
+      ParallaxImageData('scenery/${level.map}.png'),
     ];
 
     // The base velocity sets the speed of the layer the farthest to the back.

@@ -4,8 +4,8 @@ class Strings {
 
   // Store
   static final String store = 'Negozio';
-  static final String money = 'Monete:';
-  static final String notEnoughMoney = 'Non ci sono abbastanza soldi';
+  static final String gold = 'Oro:';
+  static final String notEnoughGold = 'Non ci sono abbastanza soldi';
   static final String upgrades = 'Potenziamenti';
   static final String unlocked = 'Sbloccato';
   static final String resetExplanation = 'Resetta potenziamenti e soldi';
@@ -19,6 +19,9 @@ class Strings {
   // Instructions
   static final String instructions = 'Istruzioni';
   static final String instructionsText = 'Componi il tuo party con un minimo di uno e un massimo di 3 personaggi e scegli la loro posizione.\n Più personaggi metti più aumenterà la difficoltà.\n Clicca su un personaggio per farlo attaccare.\n Il guerriero fa molti danni ma a corta distanza, l\' arciere fa pochi danni ma a lunga distanza, il mago fa pochi danni a media distanza ma ad area, l\'assassino fa pochi danni ma a qualunque distanza, il berserk fa molti danni a media distanza.\n Clicca sulle trappole per disattivarle prima che ti colpiscano.\n Clicca sulle pozioni prima che scompaiano per attiverne i benefici.\n Riuscirai a raggiungere il re dei goblin e ucciderlo?';
+
+  // Level
+  static final String selectLevel = 'Seleziona il livello';
 
   // Party
   static final String chooseParty = 'Scegli il tuo party';
