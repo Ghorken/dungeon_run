@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:dungeon_run/store/default_upgrades.dart';
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// An implementation of [Persistence] that uses
@@ -28,13 +27,21 @@ class Persistence {
     return prefs.getInt('money') ?? 0;
   }
 
-  Future<Map<String, dynamic>> getUpgrades() async {
+  Future<List<Upgrade>> getUpgrades() async {
     final prefs = await instanceFuture;
 
-    String? encodedMap = prefs.getString('upgrades');
-    Map<String, dynamic> decodedMap = encodedMap != null ? json.decode(encodedMap) as Map<String, dynamic> : Map.of(defaultUpgrades);
+    List<String>? encodedList = prefs.getStringList('upgrades');
+    List<Upgrade> recoveredUpgrades = [];
+    if (encodedList != null) {
+      for (String upgradeString in encodedList) {
+        final Upgrade upgrade = stringToUpgrade(upgradeString);
+        recoveredUpgrades.add(upgrade);
+      }
+    } else {
+      recoveredUpgrades = defaultUpgrades;
+    }
 
-    return decodedMap;
+    return recoveredUpgrades;
   }
 
   Future<void> saveAudioOn(bool value) async {
@@ -58,10 +65,14 @@ class Persistence {
     await prefs.setInt('money', value);
   }
 
-  Future<void> saveUpgrades(Map<String, dynamic> value) async {
+  Future<void> saveUpgrades(List<Upgrade> value) async {
     final prefs = await instanceFuture;
-    String encodedMap = json.encode(value);
+    List<String> encodedList = [];
+    for (Upgrade upgrade in value) {
+      final String upgradeString = upgradeToString(upgrade);
+      encodedList.add(upgradeString);
+    }
 
-    await prefs.setString('upgrades', encodedMap);
+    await prefs.setStringList('upgrades', encodedList);
   }
 }

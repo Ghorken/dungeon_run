@@ -1,3 +1,4 @@
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
@@ -39,7 +40,7 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
   final List<CharacterType?> selectedCharacters;
 
   /// The state of the upgrades
-  final Map<String, dynamic> upgrades;
+  final List<Upgrade> upgrades;
 
   /// In the [onLoad] method you load different type of assets and set things
   /// that only needs to be set once when the level starts up.

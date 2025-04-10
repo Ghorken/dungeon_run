@@ -1,3 +1,4 @@
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -32,7 +33,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   Vector2 get size => (parent as FlameGame).size;
 
   /// The state of the upgrades
-  final Map<String, dynamic> upgrades;
+  final List<Upgrade> upgrades;
 
   /// Define the positions for the three possible characters to show
   // These are late because they need the size of the screen
@@ -88,7 +89,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       add(leftCharacter!);
       characters[0] = (leftCharacter!);
 
-      final int special = upgrades['${getCharacterTypeString(selectedCharacters[0]!)}_special']['current_level'] as int;
+      final int special = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == '${getCharacterTypeString(selectedCharacters[0]!)}_special').currentLevel;
       if (special > 0) {
         game.overlays.add(GameScreen.leftSpecialAttackKey);
       }
@@ -104,7 +105,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       add(frontCharacter!);
       characters[1] = (frontCharacter!);
 
-      final int special = upgrades['${getCharacterTypeString(selectedCharacters[1]!)}_special']['current_level'] as int;
+      final int special = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == '${getCharacterTypeString(selectedCharacters[1]!)}_special').currentLevel;
       if (special > 0) {
         game.overlays.add(GameScreen.frontSpecialAttackKey);
       }
@@ -120,7 +121,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       add(rightCharacter!);
       characters[2] = (rightCharacter!);
 
-      final int special = upgrades['${getCharacterTypeString(selectedCharacters[2]!)}_special']['current_level'] as int;
+      final int special = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == '${getCharacterTypeString(selectedCharacters[2]!)}_special').currentLevel;
       if (special > 0) {
         game.overlays.add(GameScreen.rightSpecialAttackKey);
       }
@@ -130,7 +131,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent(
         factory: (_) {
-          final int value = upgrades['enemy_money']['current_level'] as int;
+          final int value = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_money').currentLevel;
           final Enemy enemy = Enemy.random(value: value);
           enemies.add(enemy);
           return enemy;
@@ -174,7 +175,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           return collectable;
         },
         minPeriod: 1.0,
-        maxPeriod: (10 - (upgrades['collectable_frequency']['current_level'] as int)).toDouble(),
+        maxPeriod: (10 - (upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_frequency').currentLevel).toDouble()),
       ),
     );
   }

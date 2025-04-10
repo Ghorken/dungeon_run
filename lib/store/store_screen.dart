@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/store/default_upgrades.dart';
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
@@ -27,7 +28,10 @@ class _StoreScreenState extends State<StoreScreen> {
   int _money = 0;
 
   /// Map that store every purchase made
-  Map<String, dynamic> _upgrades = {};
+  List<Upgrade> _upgrades = [];
+
+  /// Whether the data is still loading
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -38,19 +42,35 @@ class _StoreScreenState extends State<StoreScreen> {
   /// Load the money and the buyed item from persistence
   Future<void> _loadItemsFromPersistence() async {
     final int fetchedMoney = await _persistence.getMoney();
-    final Map<String, dynamic> fetchedUpgrades = await _persistence.getUpgrades();
+    final List<Upgrade> fetchedUpgrades = await _persistence.getUpgrades();
     setState(() {
       _money = fetchedMoney;
       _upgrades = fetchedUpgrades;
+      _isLoading = false;
     });
   }
 
   /// Try to buy an item and advice the user if there aren't enough money
-  void buy(String item) {
-    if (_money >= (_upgrades[item]!['cost'] as int)) {
+  void buy(Upgrade item) {
+    if (_money >= item.cost) {
       setState(() {
-        _money -= _upgrades[item]!['cost'] as int;
-        _upgrades[item]!['current_level'] += 1;
+        _money -= item.cost;
+        final int index = _upgrades.indexWhere((Upgrade upgrade) => upgrade.name == item.name);
+        final int cost = (pow(item.costFactor, item.currentLevel + 1) * item.cost / 10).round() * 10;
+
+        _upgrades[index] = (
+          name: item.name,
+          description: item.description,
+          subMenu: item.subMenu,
+          dependency: item.dependency,
+          characterType: item.characterType,
+          cost: cost,
+          costFactor: item.costFactor,
+          currentLevel: item.currentLevel + 1,
+          maxLevel: item.maxLevel,
+          baseCooldown: item.baseCooldown,
+          step: item.step,
+        );
       });
     } else {
       Fluttertoast.showToast(
@@ -67,6 +87,16 @@ class _StoreScreenState extends State<StoreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      // Show a loading indicator while data is being fetched
+      return Scaffold(
+        backgroundColor: Palette().backgroundMain.color,
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
       body: Center(
@@ -126,18 +156,14 @@ class _StoreScreenState extends State<StoreScreen> {
                 ),
                 child: ListView(
                   children: [
-                    ..._upgrades.entries.map(
-                      (entry) {
-                        final String key = entry.key;
-                        final Map<String, dynamic> upgrade = entry.value as Map<String, dynamic>;
-                        final String? dependency = upgrade['dependency'] as String?;
+                    ..._upgrades.map(
+                      (Upgrade entry) {
+                        final String? dependency = entry.dependency;
 
                         /// An element is buyable if:
                         /// - it has no dependency (null)
                         /// - or it has a dependency and the dependency is unlocked (current_level > 0)
-                        final bool isBuyable = ((dependency == null) || (_upgrades[dependency]!['current_level'] as int > 0));
-
-                        final int cost = upgrade['cost'] != null ? (pow(upgrade['cost_factor'] as double, upgrade['current_level'] as int) * (upgrade['cost'] as int) / 10).round() * 10 : 0;
+                        final bool isBuyable = ((dependency == null) || (_upgrades.firstWhere((Upgrade upgrade) => upgrade.name == dependency)).currentLevel > 0);
 
                         return SizedBox(
                           height: 60,
@@ -148,9 +174,9 @@ class _StoreScreenState extends State<StoreScreen> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: (upgrade['sub_menu'] as int) * 20.0),
+                                    padding: EdgeInsets.only(left: entry.subMenu * 20.0),
                                     child: Text(
-                                      upgrade['string'] as String,
+                                      entry.description,
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -161,13 +187,13 @@ class _StoreScreenState extends State<StoreScreen> {
                                   ),
                                 ),
                                 // If the item has been buyed at least once show the current level
-                                if (upgrade['cost'] != null && (upgrade['current_level'] as int) >= 1)
+                                if (entry.cost > 0 && entry.currentLevel >= 1)
                                   Padding(
                                     padding: EdgeInsets.only(
                                       right: 10.0,
                                     ),
                                     child: Text(
-                                      (upgrade['current_level'] as int).toString(),
+                                      entry.currentLevel.toString(),
                                       style: TextStyle(
                                         fontFamily: 'Press Start 2P',
                                         fontSize: 15,
@@ -175,9 +201,9 @@ class _StoreScreenState extends State<StoreScreen> {
                                     ),
                                   ),
                                 // If the item has no value it should not be available to buy
-                                if (upgrade['cost'] != null)
+                                if (entry.cost > 0)
                                   // If it has a value show if it's already unlocked or if it's unlockable/upgradable
-                                  ((upgrade['current_level'] as int) >= (upgrade['max_level'] as int))
+                                  (entry.currentLevel >= entry.maxLevel)
                                       ? Text(
                                           Strings.unlocked,
                                           style: TextStyle(
@@ -188,10 +214,10 @@ class _StoreScreenState extends State<StoreScreen> {
                                       : WobblyButton(
                                           onPressed: isBuyable
                                               ? () {
-                                                  buy(key);
+                                                  buy(entry);
                                                 }
                                               : null,
-                                          child: Text('$cost'),
+                                          child: Text('${entry.cost}'),
                                         ),
                               ],
                             ),
@@ -220,7 +246,7 @@ class _StoreScreenState extends State<StoreScreen> {
                             onPressed: () {
                               setState(() {
                                 _money = 0;
-                                _upgrades = Map.from(defaultUpgrades);
+                                _upgrades = List.from(defaultUpgrades);
                               });
                             },
                             child: Text(Strings.reset),

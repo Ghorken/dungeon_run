@@ -1,3 +1,4 @@
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class GameScreen extends StatelessWidget {
   final List<CharacterType?> selectedCharacters;
 
   /// The state of the upgrades
-  final Map<String, dynamic> upgrades;
+  final List<Upgrade> upgrades;
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@
 enum CharacterType {
   warrior,
   archer,
-  wizard,
+  mage,
   assassin,
   berserk,
 }
@@ -11,7 +11,7 @@ enum CharacterType {
 String getCharacterTypeString(CharacterType characterType) => switch (characterType) {
       CharacterType.warrior => 'warrior',
       CharacterType.archer => 'archer',
-      CharacterType.wizard => 'wizard',
+      CharacterType.mage => 'mage',
       CharacterType.assassin => 'assassin',
       CharacterType.berserk => 'berserk',
     };
@@ -20,7 +20,7 @@ String getCharacterTypeString(CharacterType characterType) => switch (characterT
 String getLabel(CharacterType characterType) => switch (characterType) {
       CharacterType.warrior => 'Guerriero',
       CharacterType.archer => 'Arciere',
-      CharacterType.wizard => 'Mago',
+      CharacterType.mage => 'Mago',
       CharacterType.assassin => 'Assassino',
       CharacterType.berserk => 'Berserk',
     };
@@ -32,8 +32,8 @@ CharacterType getCharacterType(String label) {
       return CharacterType.warrior;
     case 'archer':
       return CharacterType.archer;
-    case 'wizard':
-      return CharacterType.wizard;
+    case 'mage':
+      return CharacterType.mage;
     case 'berserk':
       return CharacterType.berserk;
     case 'assassin':

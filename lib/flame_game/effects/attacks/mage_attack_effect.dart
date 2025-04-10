@@ -3,19 +3,19 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
-import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
+import 'package:dungeon_run/flame_game/components/characters/mage.dart';
 
 /// The MagicAttackEffect is an effect that is composed of multiple different effects
 /// that are added to the Wizard when it attacks.
 /// It enlarge the magic while moving to the enemy.
-class WizardAttackEffect extends Component with ParentIsA<Wizard> {
+class MageAttackEffect extends Component with ParentIsA<Mage> {
   /// The duration of the effect
   final effectTime = 0.5;
 
   /// The destination of the movement
   final Vector2 destination;
 
-  WizardAttackEffect({
+  MageAttackEffect({
     required this.destination,
   });
 

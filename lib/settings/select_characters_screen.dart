@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,17 +10,17 @@ import 'package:dungeon_run/style/wobbly_button.dart';
 
 /// The class that handle the compositions of the party
 class SelectCharactersScreen extends StatefulWidget {
-  /// The list of unlocked characters recovered from upgrades
-  final List<CharacterType> unlockedCharacters;
-
-  /// The state of the upgraded
-  final Map<String, dynamic> upgrades;
-
   const SelectCharactersScreen({
     required this.unlockedCharacters,
     required this.upgrades,
     super.key,
   });
+
+  /// The list of unlocked characters recovered from upgrades
+  final List<CharacterType> unlockedCharacters;
+
+  /// The state of the upgraded
+  final List<Upgrade> upgrades;
 
   @override
   State<SelectCharactersScreen> createState() => _SelectCharactersScreenState();

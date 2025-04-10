@@ -1,5 +1,6 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/store/store_screen.dart';
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dungeon_run/settings/instruction_screen.dart';
@@ -24,7 +25,7 @@ final router = GoRouter(
         GoRoute(
           path: 'selectCharacters',
           builder: (context, state) => SelectCharactersScreen(
-            upgrades: (state.extra as Map)['upgrades'] as Map<String, dynamic>,
+            upgrades: (state.extra as Map)['upgrades'] as List<Upgrade>,
             unlockedCharacters: (state.extra as Map)['unlockedCharacters'] as List<CharacterType>,
           ),
         ),
@@ -34,7 +35,7 @@ final router = GoRouter(
               return buildPageTransition<void>(
                 color: Palette().backgroundMain.color,
                 child: GameScreen(
-                  upgrades: (state.extra as Map)['upgrades'] as Map<String, dynamic>,
+                  upgrades: (state.extra as Map)['upgrades'] as List<Upgrade>,
                   selectedCharacters: (state.extra as Map)['selectedCharacters'] as List<CharacterType?>,
                 ),
               );

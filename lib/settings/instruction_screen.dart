@@ -1,5 +1,6 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/settings/persistence.dart';
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +26,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
   final Persistence _persistence = Persistence();
 
   /// The map to store recovered upgrades
-  Map<String, dynamic> _upgrades = {};
+  List<Upgrade> _upgrades = [];
 
   /// The unlocked characeters
   List<CharacterType> _unlockedCharacters = [];
@@ -38,7 +39,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
 
   /// Recover the buyed upgrades
   Future<void> _loadUpgrades() async {
-    final Map<String, dynamic> recoveredUpgrades = await _persistence.getUpgrades();
+    final List<Upgrade> recoveredUpgrades = await _persistence.getUpgrades();
     setState(() {
       _upgrades = recoveredUpgrades;
     });
@@ -47,7 +48,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
 
   /// Recover the unlocked Characters
   Future<void> _retrieveUnlockedCharacters() async {
-    _unlockedCharacters = _upgrades.entries.where((MapEntry<String, dynamic> entry) => entry.key.contains('_unlocked') && (entry.value['current_level'] as int) > 0).map((MapEntry<String, dynamic> entry) => getCharacterType(entry.value['character_type'] as String)).toList();
+    _unlockedCharacters = _upgrades.where((Upgrade entry) => entry.name.contains('_unlocked') && entry.currentLevel > 0).map((Upgrade entry) => entry.characterType!).toList();
   }
 
   @override

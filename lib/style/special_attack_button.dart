@@ -5,7 +5,7 @@ import 'package:dungeon_run/flame_game/components/characters/archer.dart';
 import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
 import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
-import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
+import 'package:dungeon_run/flame_game/components/characters/mage.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 
 /// Class that handles the special attack buttonf of the characters in the game screen
@@ -72,7 +72,7 @@ class _SpecialAttackButtonState extends State<SpecialAttackButton> {
     if (character is Archer) {
       return NesIcons.arrow;
     }
-    if (character is Wizard) {
+    if (character is Mage) {
       return NesIcons.hourglassMiddle;
     }
     if (character is Assassin) {

@@ -3,7 +3,7 @@ import 'package:dungeon_run/flame_game/components/characters/assassin.dart';
 import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
-import 'package:dungeon_run/flame_game/components/characters/wizard.dart';
+import 'package:dungeon_run/flame_game/components/characters/mage.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
@@ -11,6 +11,7 @@ import 'package:dungeon_run/flame_game/effects/invincible_effect.dart';
 import 'package:dungeon_run/flame_game/endless_runner.dart';
 import 'package:dungeon_run/flame_game/endless_world.dart';
 import 'package:dungeon_run/audio/sounds.dart';
+import 'package:dungeon_run/store/upgrade.dart';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -143,16 +144,19 @@ enum CharacterState {
 /// [type] is the type of the character to create
 /// [position] is the position of the character in the screen
 /// [upgrades] is the map of the upgrades that the player has bought
-Character createCharacter(CharacterType type, Vector2 position, Map<String, dynamic> upgrades) {
+Character createCharacter(CharacterType type, Vector2 position, List<Upgrade> upgrades) {
   switch (type) {
     case CharacterType.warrior:
-      final int life = upgrades['warrior_life']['current_level'] as int;
-      final double lifeStep = upgrades['warrior_life']['step'] as double;
-      final int damage = upgrades['warrior_damage']['current_level'] as int;
-      final double damageStep = upgrades['warrior_damage']['step'] as double;
-      final int baseCooldown = upgrades['warrior_special']['base_cooldown'] as int;
-      final int special = upgrades['warrior_special']['current_level'] as int;
-      final double specialStep = upgrades['warrior_special']['step'] as double;
+      Upgrade warriorLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'warrior_life');
+      Upgrade warriorDamage = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'warrior_damage');
+      Upgrade warriorSpecial = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'warrior_special');
+      final int life = warriorLife.currentLevel;
+      final double lifeStep = warriorLife.step!;
+      final int damage = warriorDamage.currentLevel;
+      final double damageStep = warriorDamage.step!;
+      final int baseCooldown = warriorSpecial.baseCooldown!;
+      final int special = warriorSpecial.currentLevel;
+      final double specialStep = warriorSpecial.step!;
 
       return Warrior(
         position: position,
@@ -161,13 +165,16 @@ Character createCharacter(CharacterType type, Vector2 position, Map<String, dyna
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
     case CharacterType.archer:
-      final int life = upgrades['archer_life']['current_level'] as int;
-      final double lifeStep = upgrades['archer_life']['step'] as double;
-      final int damage = upgrades['archer_damage']['current_level'] as int;
-      final double damageStep = upgrades['archer_damage']['step'] as double;
-      final int baseCooldown = upgrades['archer_special']['base_cooldown'] as int;
-      final int special = upgrades['archer_special']['current_level'] as int;
-      final double specialStep = upgrades['archer_special']['step'] as double;
+      Upgrade archerLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'archer_life');
+      Upgrade archerDamage = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'archer_damage');
+      Upgrade archerSpecial = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'archer_special');
+      final int life = archerLife.currentLevel;
+      final double lifeStep = archerLife.step!;
+      final int damage = archerDamage.currentLevel;
+      final double damageStep = archerDamage.step!;
+      final int baseCooldown = archerSpecial.baseCooldown!;
+      final int special = archerSpecial.currentLevel;
+      final double specialStep = archerSpecial.step!;
 
       return Archer(
         position: position,
@@ -175,29 +182,35 @@ Character createCharacter(CharacterType type, Vector2 position, Map<String, dyna
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
-    case CharacterType.wizard:
-      final int life = upgrades['wizard_life']['current_level'] as int;
-      final double lifeStep = upgrades['wizard_life']['step'] as double;
-      final int damage = upgrades['wizard_damage']['current_level'] as int;
-      final double damageStep = upgrades['wizard_damage']['step'] as double;
-      final int baseCooldown = upgrades['wizard_special']['base_cooldown'] as int;
-      final int special = upgrades['wizard_special']['current_level'] as int;
-      final double specialStep = upgrades['wizard_special']['step'] as double;
+    case CharacterType.mage:
+      Upgrade mageLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'mage_life');
+      Upgrade mageDamage = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'mage_damage');
+      Upgrade mageSpecial = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'mage_special');
+      final int life = mageLife.currentLevel;
+      final double lifeStep = mageLife.step!;
+      final int damage = mageDamage.currentLevel;
+      final double damageStep = mageDamage.step!;
+      final int baseCooldown = mageSpecial.baseCooldown!;
+      final int special = mageSpecial.currentLevel;
+      final double specialStep = mageSpecial.step!;
 
-      return Wizard(
+      return Mage(
         position: position,
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
     case CharacterType.assassin:
-      final int life = upgrades['assassin_life']['current_level'] as int;
-      final double lifeStep = upgrades['assassin_life']['step'] as double;
-      final int damage = upgrades['assassin_damage']['current_level'] as int;
-      final double damageStep = upgrades['assassin_damage']['step'] as double;
-      final int baseCooldown = upgrades['assassin_special']['base_cooldown'] as int;
-      final int special = upgrades['assassin_special']['current_level'] as int;
-      final double specialStep = upgrades['assassin_special']['step'] as double;
+      Upgrade assassinLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'assassin_life');
+      Upgrade assassinDamage = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'assassin_damage');
+      Upgrade assassinSpecial = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'assassin_special');
+      final int life = assassinLife.currentLevel;
+      final double lifeStep = assassinLife.step!;
+      final int damage = assassinDamage.currentLevel;
+      final double damageStep = assassinDamage.step!;
+      final int baseCooldown = assassinSpecial.baseCooldown!;
+      final int special = assassinSpecial.currentLevel;
+      final double specialStep = assassinSpecial.step!;
 
       return Assassin(
         position: position,
@@ -206,13 +219,16 @@ Character createCharacter(CharacterType type, Vector2 position, Map<String, dyna
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
       );
     case CharacterType.berserk:
-      final int life = upgrades['berserk_life']['current_level'] as int;
-      final double lifeStep = upgrades['berserk_life']['step'] as double;
-      final int damage = upgrades['berserk_damage']['current_level'] as int;
-      final double damageStep = upgrades['berserk_damage']['step'] as double;
-      final int baseCooldown = upgrades['berserk_special']['base_cooldown'] as int;
-      final int special = upgrades['berserk_special']['current_level'] as int;
-      final double specialStep = upgrades['berserk_special']['step'] as double;
+      Upgrade berserkLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'berserk_life');
+      Upgrade berserkDamage = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'berserk_damage');
+      Upgrade berserkSpecial = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'berserk_special');
+      final int life = berserkLife.currentLevel;
+      final double lifeStep = berserkLife.step!;
+      final int damage = berserkDamage.currentLevel;
+      final double damageStep = berserkDamage.step!;
+      final int baseCooldown = berserkSpecial.baseCooldown!;
+      final int special = berserkSpecial.currentLevel;
+      final double specialStep = berserkSpecial.step!;
 
       return Berserk(
         position: position,

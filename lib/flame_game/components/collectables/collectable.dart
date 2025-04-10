@@ -6,6 +6,7 @@ import 'package:dungeon_run/flame_game/components/collectables/heal.dart';
 import 'package:dungeon_run/flame_game/components/collectables/invincibility.dart';
 import 'package:dungeon_run/flame_game/components/collectables/resurrection.dart';
 import 'package:dungeon_run/flame_game/components/collectables/slow.dart';
+import 'package:dungeon_run/store/upgrade.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -23,46 +24,58 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
         );
 
   /// Generates a random [Collectable].
-  factory Collectable.random({required Map<String, dynamic> upgrades}) {
+  factory Collectable.random({required List<Upgrade> upgrades}) {
     final CollectableType collectableType = CollectableType.values.random();
 
     switch (collectableType) {
       case CollectableType.heal:
-        final int healing = upgrades['collectable_heal']['current_level'] as int;
-        final double healingStep = upgrades['collectable_heal']['step'] as double;
+        Upgrade collectableHeal = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_heal');
+
+        final int healing = collectableHeal.currentLevel;
+        final double healingStep = collectableHeal.step!;
 
         return Heal(
           healing: (healing + 1) * healingStep,
         );
       case CollectableType.damage:
-        final double duration = (upgrades['collectable_damage_duration']['current_level'] as int).toDouble();
-        final double durationStep = upgrades['collectable_damage_duration']['step'] as double;
-        final int damage = upgrades['collectable_damage']['current_level'] as int;
-        final double damageStep = upgrades['collectable_damage']['step'] as double;
+        Upgrade collectableDamageDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_damage_duration');
+        Upgrade collectableDamage = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_damage');
+
+        final double duration = collectableDamageDuration.currentLevel.toDouble();
+        final double durationStep = collectableDamageDuration.step!;
+        final int damage = collectableDamage.currentLevel;
+        final double damageStep = collectableDamage.step!;
 
         return Damage(
           duration: (duration + 1) * durationStep,
           damage: (damage + 1) * damageStep,
         );
       case CollectableType.slow:
-        final double duration = (upgrades['collectable_slow_duration']['current_level'] as int).toDouble();
-        final double durationStep = upgrades['collectable_slow_duration']['step'] as double;
-        final int slow = upgrades['collectable_slow']['current_level'] as int;
-        final double slowStep = upgrades['collectable_slow']['step'] as double;
+        Upgrade collectableSlowDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_slow_duration');
+        Upgrade collectableSlow = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_slow');
+
+        final double duration = collectableSlowDuration.currentLevel.toDouble();
+        final double durationStep = collectableSlowDuration.step!;
+        final int slow = collectableSlow.currentLevel;
+        final double slowStep = collectableSlow.step!;
 
         return Slow(
           duration: (duration + 1) * durationStep,
           velocity: (slow + 1) * slowStep,
         );
       case CollectableType.invincibility:
-        final double duration = (upgrades['collectable_invincibility_duration']['current_level'] as int).toDouble();
-        final double durationStep = upgrades['collectable_invincibility_duration']['step'] as double;
+        Upgrade collectableInvincibilityDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_invincibility_duration');
+
+        final double duration = collectableInvincibilityDuration.currentLevel.toDouble();
+        final double durationStep = collectableInvincibilityDuration.step!;
 
         return Invincibility(
           duration: (duration + 1) * durationStep,
         );
       case CollectableType.resurrection:
-        final bool fullHealt = (upgrades['collectable_resurrection_full']['current_level'] as int) > 0;
+        Upgrade collectableResurrectionFull = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_resurrection_full');
+
+        final bool fullHealt = collectableResurrectionFull.currentLevel > 0;
 
         return Resurrection(
           fullHealt: fullHealt,

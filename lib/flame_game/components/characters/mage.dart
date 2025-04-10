@@ -1,13 +1,13 @@
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/enemy.dart';
-import 'package:dungeon_run/flame_game/effects/attacks/wizard_attack_effect.dart';
+import 'package:dungeon_run/flame_game/effects/attacks/mage_attack_effect.dart';
 
 /// The class that handles the attack and the damage of the Wizard
 /// The Wizard attacks a random enemy in the middle area of the screen
 /// and damages near enemies
-class Wizard extends Character {
-  Wizard({
+class Mage extends Character {
+  Mage({
     super.position,
     required super.maxLifePoints,
     required super.damage,
@@ -35,7 +35,7 @@ class Wizard extends Character {
 
     // If there is one attack it
     if (closestEnemy != null) {
-      add(WizardAttackEffect(destination: closestEnemy.position));
+      add(MageAttackEffect(destination: closestEnemy.position));
       closestEnemy.hitted(damage);
 
       // Cycle through the enemies in the screen to find the ones that are near the target
@@ -62,7 +62,7 @@ class Wizard extends Character {
       // Attack them
       for (final Enemy enemy in enemiesToAttack) {
         enemy.hitted(damage);
-        add(WizardAttackEffect(destination: enemy.position));
+        add(MageAttackEffect(destination: enemy.position));
 
         // Cycle through the enemies in the screen to find the ones that are near the target
         final List<Enemy> nearbyEnemies = world.enemies
