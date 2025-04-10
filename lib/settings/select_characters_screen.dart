@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -46,8 +47,8 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                 child: ListView(
                   children: [
                     _gap,
-                    const Text(
-                      'Scegli il tuo party',
+                    Text(
+                      Strings.chooseParty,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Press Start 2P',
@@ -67,12 +68,12 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                       },
                       children: [
                         // Header row
-                        const TableRow(
+                        TableRow(
                           children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                'Posizione',
+                                Strings.position,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Press Start 2P',
@@ -83,7 +84,7 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                'Sinistra',
+                                Strings.left,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Press Start 2P',
@@ -94,7 +95,7 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                'Centro',
+                                Strings.front,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Press Start 2P',
@@ -105,7 +106,7 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                'Destra',
+                                Strings.right,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Press Start 2P',
@@ -162,7 +163,7 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                 // Send the selected character types to the game and alert the player otherwise
                 if (_selectedCharacters.every((element) => element == null)) {
                   Fluttertoast.showToast(
-                    msg: 'Seleziona almeno un personaggio',
+                    msg: Strings.selectOneCharacter,
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
@@ -180,14 +181,14 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                 };
                 GoRouter.of(context).go('/play', extra: extra);
               },
-              child: const Text('Gioca'),
+              child: Text(Strings.play),
             ),
             _gap,
             WobblyButton(
               onPressed: () {
                 GoRouter.of(context).pop();
               },
-              child: const Text('Indietro'),
+              child: Text(Strings.back),
             ),
             _gap,
           ],

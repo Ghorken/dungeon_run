@@ -1,3 +1,4 @@
+import 'package:dungeon_run/strings.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
@@ -41,7 +42,7 @@ class DungeonRun extends StatelessWidget {
         child: Builder(
           builder: (context) {
             return MaterialApp.router(
-              title: 'Dungeon Run',
+              title: Strings.appName,
               theme: flutterNesTheme().copyWith(
                 colorScheme: ColorScheme.dark(),
               ),

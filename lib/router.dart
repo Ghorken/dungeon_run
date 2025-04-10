@@ -26,7 +26,6 @@ final router = GoRouter(
           builder: (context, state) => SelectCharactersScreen(
             upgrades: (state.extra as Map)['upgrades'] as Map<String, dynamic>,
             unlockedCharacters: (state.extra as Map)['unlockedCharacters'] as List<CharacterType>,
-            // unlockedCharacters: state.extra as List<CharacterType>,
           ),
         ),
         GoRoute(

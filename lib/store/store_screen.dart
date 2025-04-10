@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/store/default_upgrades.dart';
+import 'package:dungeon_run/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class _StoreScreenState extends State<StoreScreen> {
       });
     } else {
       Fluttertoast.showToast(
-        msg: 'Non ci sono abbastanza soldi',
+        msg: Strings.notEnoughMoney,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
@@ -72,8 +73,8 @@ class _StoreScreenState extends State<StoreScreen> {
         child: Column(
           children: [
             _gap,
-            const Text(
-              'Negozio',
+            Text(
+              Strings.store,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Press Start 2P',
@@ -87,9 +88,9 @@ class _StoreScreenState extends State<StoreScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Monete:',
+                      Strings.money,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -109,8 +110,8 @@ class _StoreScreenState extends State<StoreScreen> {
               ),
             ),
             _gap,
-            const Text(
-              'Potenziamenti',
+            Text(
+              Strings.upgrades,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Press Start 2P',
@@ -177,8 +178,8 @@ class _StoreScreenState extends State<StoreScreen> {
                                 if (upgrade['cost'] != null)
                                   // If it has a value show if it's already unlocked or if it's unlockable/upgradable
                                   ((upgrade['current_level'] as int) >= (upgrade['max_level'] as int))
-                                      ? const Text(
-                                          'Sbloccato',
+                                      ? Text(
+                                          Strings.unlocked,
                                           style: TextStyle(
                                             fontFamily: 'Press Start 2P',
                                             fontSize: 15,
@@ -204,9 +205,9 @@ class _StoreScreenState extends State<StoreScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
-                              'Resetta potenziamenti e soldi',
+                              Strings.resetExplanation,
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -222,7 +223,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                 _upgrades = Map.from(defaultUpgrades);
                               });
                             },
-                            child: Text('Resetta'),
+                            child: Text(Strings.reset),
                           ),
                         ],
                       ),
@@ -238,7 +239,7 @@ class _StoreScreenState extends State<StoreScreen> {
                 _persistence.saveUpgrades(_upgrades);
                 GoRouter.of(context).pop();
               },
-              child: const Text('Indietro'),
+              child: Text(Strings.back),
             ),
             _gap,
           ],

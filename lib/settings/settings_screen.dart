@@ -1,3 +1,4 @@
+import 'package:dungeon_run/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +31,8 @@ class SettingsScreen extends StatelessWidget {
                 child: ListView(
                   children: [
                     _gap,
-                    const Text(
-                      'Impostazioni',
+                    Text(
+                      Strings.settings,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Press Start 2P',
@@ -44,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
                     ValueListenableBuilder<bool>(
                       valueListenable: settings.soundsOn,
                       builder: (context, soundsOn, child) => _SettingsLine(
-                        'Effetti sonori',
+                        Strings.sounds,
                         Icon(soundsOn ? Icons.graphic_eq : Icons.volume_off),
                         onSelected: () => settings.toggleSoundsOn(),
                       ),
@@ -53,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
                     ValueListenableBuilder<bool>(
                       valueListenable: settings.musicOn,
                       builder: (context, musicOn, child) => _SettingsLine(
-                        'Musica',
+                        Strings.music,
                         Icon(musicOn ? Icons.music_note : Icons.music_off),
                         onSelected: () => settings.toggleMusicOn(),
                       ),
@@ -67,7 +68,7 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () {
                 GoRouter.of(context).pop();
               },
-              child: const Text('Indietro'),
+              child: Text(Strings.back),
             ),
             _gap,
           ],

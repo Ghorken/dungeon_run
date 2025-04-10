@@ -1,3 +1,4 @@
+import 'package:dungeon_run/strings.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -111,7 +112,7 @@ class GameScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Bravo! Hai sconfitto il re goblin!',
+                      Strings.bravo,
                       style: Theme.of(context).textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -120,7 +121,7 @@ class GameScreen extends StatelessWidget {
                         GoRouter.of(context).go('/');
                       },
                       type: NesButtonType.normal,
-                      child: const Text('Ok'),
+                      child: Text(Strings.ok),
                     ),
                   ],
                 ),
@@ -137,7 +138,7 @@ class GameScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Peccato, sei stato sconfitto!',
+                      Strings.sorry,
                       style: Theme.of(context).textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -146,7 +147,7 @@ class GameScreen extends StatelessWidget {
                         GoRouter.of(context).go('/');
                       },
                       type: NesButtonType.normal,
-                      child: const Text('Ok'),
+                      child: Text(Strings.ok),
                     ),
                   ],
                 ),

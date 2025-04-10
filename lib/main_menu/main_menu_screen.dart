@@ -1,3 +1,4 @@
+import 'package:dungeon_run/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +40,8 @@ class MainMenuScreen extends StatelessWidget {
                 angle: -0.1,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 500),
-                  child: const Text(
-                    'Dungeon run',
+                  child: Text(
+                    Strings.appName,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Press Start 2P',
@@ -61,7 +62,7 @@ class MainMenuScreen extends StatelessWidget {
                 audioController.playSfx(SfxType.buttonTap);
                 GoRouter.of(context).go('/instructions');
               },
-              child: const Text('Gioca'),
+              child: Text(Strings.play),
             ),
             _gap,
             WobblyButton(
@@ -69,12 +70,12 @@ class MainMenuScreen extends StatelessWidget {
                 audioController.playSfx(SfxType.buttonTap);
                 GoRouter.of(context).go('/store');
               },
-              child: const Text('Negozio'),
+              child: Text(Strings.store),
             ),
             _gap,
             WobblyButton(
               onPressed: () => GoRouter.of(context).push('/settings'),
-              child: const Text('Impostazioni'),
+              child: Text(Strings.settings),
             ),
             _gap,
             Padding(
