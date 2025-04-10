@@ -7,7 +7,7 @@ import 'package:dungeon_run/progression/level.dart';
 const List<Level> defaultLevels = [
   (
     name: "Esterno",
-    completed: true,
+    completed: false,
     dependency: null,
     enemies: [
       EnemyType.goblin,
