@@ -26,6 +26,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _actualSpeed = 2,
         damage = 1,
         _enemyType = EnemyType.goblin,
+        _bossType = null,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -40,6 +41,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _actualSpeed = 2,
         damage = 1,
         _enemyType = EnemyType.troll,
+        _bossType = null,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -54,6 +56,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _actualSpeed = 4,
         damage = 2,
         _enemyType = EnemyType.elementale,
+        _bossType = null,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -67,7 +70,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _speed = 2,
         _actualSpeed = 2,
         damage = 5,
-        _enemyType = EnemyType.goblinKing,
+        _enemyType = null,
+        _bossType = BossType.goblinKing,
         _xPosition = 0.0,
         super(
           size: Vector2.all(250),
@@ -79,7 +83,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     required Map<String, dynamic> rewards,
     required List<EnemyType> enemies,
   }) {
-    final enemyType = enemies.random();
+    final EnemyType enemyType = enemies.random();
     switch (enemyType) {
       case EnemyType.goblin:
         rewards["gold"] = ((rewards["gold"] as int) + 1) * 1;
@@ -90,21 +94,17 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       case EnemyType.elementale:
         rewards["gold"] = ((rewards["gold"] as int) + 1) * 3;
         return Enemy.elementale(rewards: rewards);
-      default:
-        throw Exception('Unknown enemy type: $enemyType');
     }
   }
 
   // Factory method to create an enemy boss based on its type
   factory Enemy.boss({
-    required EnemyType type,
+    required BossType type,
     required Map<String, dynamic> rewards,
   }) {
     switch (type) {
-      case EnemyType.goblinKing:
+      case BossType.goblinKing:
         return Enemy.goblinKing(rewards: rewards);
-      default:
-        throw Exception('Unknown enemy type: $type');
     }
   }
 
@@ -127,7 +127,10 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   final int damage;
 
   /// The type of the enemy
-  final EnemyType _enemyType;
+  final EnemyType? _enemyType;
+
+  /// The type of the boss
+  final BossType? _bossType;
 
   /// The starting x position of the enemy
   double? _xPosition;
@@ -238,8 +241,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       add(EnemyHurtEffect());
     } else {
       die();
-      // When the goblinKing is defeated the player wins
-      if (_enemyType == EnemyType.goblinKing) {
+      // When the boss is defeated the player wins
+      if (_bossType != null) {
         world.win();
       }
     }

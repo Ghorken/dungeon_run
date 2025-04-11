@@ -82,6 +82,9 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   /// The level of the game
   Level level;
 
+  /// Control if the enemy should be spawned or not
+  bool spawnEnemies = true;
+
   @override
   Future<void> onLoad() async {
     // If the player selected a leftCharacter initialize id and add id to the screen
@@ -136,6 +139,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent(
         factory: (_) {
+          // If the player has reached the, stop spawning random enemies
+          if (!spawnEnemies) {
+            return PositionComponent();
+          }
           final int enemyGold = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
           final Enemy enemy = Enemy.random(
             enemies: level.enemies,
@@ -150,12 +157,15 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
       ),
     );
 
-    // Schedule the goblinKing to spawn after 5 minutes
+    // Schedule the boss to spawn after 5 minutes
     add(
       TimerComponent(
         period: level.bossTimer,
         repeat: false, // Spawn only once
         onTick: () {
+          // Stop spawning enemies
+          spawnEnemies = false;
+
           final Enemy boss = Enemy.boss(
             type: level.boss,
             rewards: level.rewards,

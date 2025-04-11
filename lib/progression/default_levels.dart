@@ -12,8 +12,8 @@ const List<Level> defaultLevels = [
       EnemyType.goblin,
     ],
     enemyFrequency: 0.5,
-    boss: EnemyType.goblinKing,
-    bossTimer: 300.0,
+    boss: BossType.goblinKing,
+    bossTimer: 10.0,
     traps: [],
     trapMinPeriod: 5.0,
     trapMaxPeriod: 10.0,
@@ -34,7 +34,7 @@ const List<Level> defaultLevels = [
       EnemyType.elementale,
     ],
     enemyFrequency: 0.5,
-    boss: EnemyType.goblinKing,
+    boss: BossType.goblinKing,
     bossTimer: 300.0,
     traps: [
       TrapType.spikedPit,
@@ -59,7 +59,7 @@ const List<Level> defaultLevels = [
       EnemyType.elementale,
     ],
     enemyFrequency: 0.5,
-    boss: EnemyType.goblinKing,
+    boss: BossType.goblinKing,
     bossTimer: 300.0,
     traps: [
       TrapType.spikedPit,
@@ -84,7 +84,7 @@ const List<Level> defaultLevels = [
       EnemyType.elementale,
     ],
     enemyFrequency: 0.5,
-    boss: EnemyType.goblinKing,
+    boss: BossType.goblinKing,
     bossTimer: 300.0,
     traps: [
       TrapType.spikedPit,
@@ -110,7 +110,7 @@ const List<Level> defaultLevels = [
       EnemyType.troll,
     ],
     enemyFrequency: 0.5,
-    boss: EnemyType.goblinKing,
+    boss: BossType.goblinKing,
     bossTimer: 300.0,
     traps: [
       TrapType.spikedPit,
