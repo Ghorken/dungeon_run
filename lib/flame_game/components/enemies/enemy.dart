@@ -25,8 +25,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _speed = 2,
         _actualSpeed = 2,
         damage = 1,
-        _enemyType = EnemyType.goblin,
-        _bossType = null,
+        _isBoss = false,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -40,8 +39,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _speed = 2,
         _actualSpeed = 2,
         damage = 1,
-        _enemyType = EnemyType.troll,
-        _bossType = null,
+        _isBoss = false,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -55,8 +53,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _speed = 4,
         _actualSpeed = 4,
         damage = 2,
-        _enemyType = EnemyType.elementale,
-        _bossType = null,
+        _isBoss = false,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -70,8 +67,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _speed = 2,
         _actualSpeed = 2,
         damage = 5,
-        _enemyType = null,
-        _bossType = BossType.goblinKing,
+        _isBoss = true,
         _xPosition = 0.0,
         super(
           size: Vector2.all(250),
@@ -126,11 +122,8 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   /// The damage that the enemy deal
   final int damage;
 
-  /// The type of the enemy
-  final EnemyType? _enemyType;
-
-  /// The type of the boss
-  final BossType? _bossType;
+  /// Determine if the enemy is a boss or not
+  final bool _isBoss;
 
   /// The starting x position of the enemy
   double? _xPosition;
@@ -242,7 +235,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     } else {
       die();
       // When the boss is defeated the player wins
-      if (_bossType != null) {
+      if (_isBoss) {
         world.win();
       }
     }
