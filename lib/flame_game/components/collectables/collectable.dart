@@ -32,53 +32,53 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
 
     switch (collectableType) {
       case CollectableType.heal:
-        Upgrade collectableHeal = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_heal');
+        Upgrade augmentHeal = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'augment_heal');
 
-        final int healing = collectableHeal.currentLevel;
-        final double healingStep = collectableHeal.step!;
+        final int healing = augmentHeal.currentLevel;
+        final double healingStep = augmentHeal.step!;
 
         return Heal(
           healing: (healing + 1) * healingStep,
         );
       case CollectableType.damage:
-        Upgrade collectableDamageDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_damage_duration');
-        Upgrade collectableDamage = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_damage');
+        Upgrade augmentDamageDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'augment_damage_duration');
+        Upgrade augmentDamage = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'augment_damage');
 
-        final double duration = collectableDamageDuration.currentLevel.toDouble();
-        final double durationStep = collectableDamageDuration.step!;
-        final int damage = collectableDamage.currentLevel;
-        final double damageStep = collectableDamage.step!;
+        final double duration = augmentDamageDuration.currentLevel.toDouble();
+        final double durationStep = augmentDamageDuration.step!;
+        final int damage = augmentDamage.currentLevel;
+        final double damageStep = augmentDamage.step!;
 
         return Damage(
           duration: (duration + 1) * durationStep,
           damage: (damage + 1) * damageStep,
         );
       case CollectableType.slow:
-        Upgrade collectableSlowDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_slow_duration');
-        Upgrade collectableSlow = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_slow');
+        Upgrade augmentSlowDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'augment_slow_duration');
+        Upgrade augmentSlow = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'augment_slow');
 
-        final double duration = collectableSlowDuration.currentLevel.toDouble();
-        final double durationStep = collectableSlowDuration.step!;
-        final int slow = collectableSlow.currentLevel;
-        final double slowStep = collectableSlow.step!;
+        final double duration = augmentSlowDuration.currentLevel.toDouble();
+        final double durationStep = augmentSlowDuration.step!;
+        final int slow = augmentSlow.currentLevel;
+        final double slowStep = augmentSlow.step!;
 
         return Slow(
           duration: (duration + 1) * durationStep,
           velocity: (slow + 1) * slowStep,
         );
       case CollectableType.invincibility:
-        Upgrade collectableInvincibilityDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_invincibility_duration');
+        Upgrade augmentInvincibilityDuration = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'augment_invincibility_duration');
 
-        final double duration = collectableInvincibilityDuration.currentLevel.toDouble();
-        final double durationStep = collectableInvincibilityDuration.step!;
+        final double duration = augmentInvincibilityDuration.currentLevel.toDouble();
+        final double durationStep = augmentInvincibilityDuration.step!;
 
         return Invincibility(
           duration: (duration + 1) * durationStep,
         );
       case CollectableType.resurrection:
-        Upgrade collectableResurrectionFull = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_resurrection_full');
+        Upgrade augmentResurrection = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'augment_resurrection');
 
-        final bool fullHealt = collectableResurrectionFull.currentLevel > 0;
+        final bool fullHealt = augmentResurrection.currentLevel > 0;
 
         return Resurrection(
           fullHealt: fullHealt,

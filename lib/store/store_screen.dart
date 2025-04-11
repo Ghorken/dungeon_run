@@ -65,6 +65,7 @@ class _StoreScreenState extends State<StoreScreen> {
           unlocked: item.unlocked,
           dependency: item.dependency,
           characterType: item.characterType,
+          collectableType: item.collectableType,
           cost: cost,
           costFactor: item.costFactor,
           currentLevel: item.currentLevel + 1,

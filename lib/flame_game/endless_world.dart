@@ -184,22 +184,20 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     }
 
     // Spawning [Collectable] in the world at a random interval between fixed values
-    if (level.collectables.isNotEmpty) {
-      add(
-        SpawnComponent.periodRange(
-          factory: (_) {
-            Collectable collectable = Collectable.random(
-              upgrades: upgrades,
-              collectables: level.collectables,
-            );
-            collectables.add(collectable);
-            return collectable;
-          },
-          minPeriod: level.collectableMinPeriod,
-          maxPeriod: (level.collectableMaxPeriod - (upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_frequency').currentLevel).toDouble()),
-        ),
-      );
-    }
+    add(
+      SpawnComponent.periodRange(
+        factory: (_) {
+          Collectable collectable = Collectable.random(
+            upgrades: upgrades,
+            collectables: upgrades.where((Upgrade upgrade) => upgrade.collectableType != null && upgrade.unlocked == true).map((Upgrade upgrade) => upgrade.collectableType!).toList(),
+          );
+          collectables.add(collectable);
+          return collectable;
+        },
+        minPeriod: level.collectableMinPeriod,
+        maxPeriod: (level.collectableMaxPeriod - (upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'collectable_frequency').currentLevel).toDouble()),
+      ),
+    );
   }
 
   @override
@@ -302,7 +300,6 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
             traps: level.traps,
             trapMinPeriod: level.trapMinPeriod,
             trapMaxPeriod: level.trapMaxPeriod,
-            collectables: level.collectables,
             collectableMinPeriod: level.collectableMinPeriod,
             collectableMaxPeriod: level.collectableMaxPeriod,
             map: level.map,

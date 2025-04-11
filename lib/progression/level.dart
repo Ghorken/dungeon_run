@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dungeon_run/flame_game/components/collectables/collectable_type.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
 import 'package:dungeon_run/flame_game/components/traps/trap_type.dart';
 
@@ -16,7 +15,6 @@ typedef Level = ({
   List<TrapType> traps,
   double trapMinPeriod,
   double trapMaxPeriod,
-  List<CollectableType> collectables,
   double collectableMinPeriod,
   double collectableMaxPeriod,
   String map,
@@ -36,7 +34,6 @@ String levelToString(Level level) {
     "traps": level.traps.map((e) => e.toString()).join(','),
     "trapMinPeriod": level.trapMinPeriod,
     "trapMaxPeriod": level.trapMaxPeriod,
-    "collectables": level.collectables.map((e) => e.toString()).join(','),
     "collectableMaxPeriod": level.collectableMaxPeriod,
     "collectableMinPeriod": level.collectableMinPeriod,
     "map": level.map,
@@ -59,7 +56,6 @@ Level stringToLevel(String levelString) {
     traps: (jsonMap["traps"] as String).isEmpty ? [] : (jsonMap["traps"] as String).split(',').map((e) => TrapType.values.firstWhere((TrapType type) => type.toString() == e)).toList(),
     trapMinPeriod: jsonMap["trapMinPeriod"] as double,
     trapMaxPeriod: jsonMap["trapMaxPeriod"] as double,
-    collectables: (jsonMap["collectables"] as String).split(',').map((e) => CollectableType.values.firstWhere((CollectableType type) => type.toString() == e)).toList(),
     collectableMinPeriod: jsonMap["collectableMinPeriod"] as double,
     collectableMaxPeriod: jsonMap["collectableMaxPeriod"] as double,
     map: jsonMap["map"] as String,
@@ -80,7 +76,6 @@ void setLevelCompleted(Level level) {
     traps: level.traps,
     trapMinPeriod: level.trapMinPeriod,
     trapMaxPeriod: level.trapMaxPeriod,
-    collectables: level.collectables,
     collectableMinPeriod: level.collectableMinPeriod,
     collectableMaxPeriod: level.collectableMaxPeriod,
     map: level.map,

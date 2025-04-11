@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/flame_game/components/collectables/collectable_type.dart';
 
 /// Definition of the Upgrade type
 typedef Upgrade = ({
@@ -10,6 +11,7 @@ typedef Upgrade = ({
   bool? unlocked,
   String? dependency,
   CharacterType? characterType,
+  CollectableType? collectableType,
   int cost,
   double costFactor,
   int currentLevel,
@@ -27,6 +29,7 @@ String upgradeToString(Upgrade upgrade) {
     "unlocked": upgrade.unlocked,
     "dependency": upgrade.dependency,
     "characterType": upgrade.characterType?.toString(),
+    "collectableType": upgrade.collectableType?.toString(),
     "cost": upgrade.cost,
     "costFactor": upgrade.costFactor,
     "currentLevel": upgrade.currentLevel,
@@ -49,6 +52,11 @@ Upgrade stringToUpgrade(String upgradeString) {
     characterType: jsonMap["characterType"] != null
         ? CharacterType.values.firstWhere(
             (CharacterType type) => type.toString() == jsonMap["characterType"],
+          )
+        : null,
+    collectableType: jsonMap["collectableType"] != null
+        ? CollectableType.values.firstWhere(
+            (CollectableType type) => type.toString() == jsonMap["collectableType"],
           )
         : null,
     cost: jsonMap["cost"] as int,

@@ -1,4 +1,3 @@
-import 'package:dungeon_run/flame_game/components/collectables/collectable_type.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
 import 'package:dungeon_run/flame_game/components/traps/trap_type.dart';
 import 'package:dungeon_run/progression/level.dart';
@@ -18,9 +17,6 @@ const List<Level> defaultLevels = [
     traps: [],
     trapMinPeriod: 5.0,
     trapMaxPeriod: 10.0,
-    collectables: [
-      CollectableType.heal,
-    ],
     collectableMinPeriod: 1.0,
     collectableMaxPeriod: 10.0,
     map: "dungeon_corridor",
@@ -45,9 +41,6 @@ const List<Level> defaultLevels = [
     ],
     trapMinPeriod: 5.0,
     trapMaxPeriod: 10.0,
-    collectables: [
-      CollectableType.damage,
-    ],
     collectableMinPeriod: 1.0,
     collectableMaxPeriod: 10.0,
     map: "dungeon_corridor",
@@ -73,9 +66,6 @@ const List<Level> defaultLevels = [
     ],
     trapMinPeriod: 5.0,
     trapMaxPeriod: 10.0,
-    collectables: [
-      CollectableType.heal,
-    ],
     collectableMinPeriod: 1.0,
     collectableMaxPeriod: 10.0,
     map: "dungeon_corridor",
@@ -101,9 +91,6 @@ const List<Level> defaultLevels = [
     ],
     trapMinPeriod: 5.0,
     trapMaxPeriod: 10.0,
-    collectables: [
-      CollectableType.heal,
-    ],
     collectableMinPeriod: 1.0,
     collectableMaxPeriod: 10.0,
     map: "dungeon_corridor",
@@ -130,9 +117,6 @@ const List<Level> defaultLevels = [
     ],
     trapMinPeriod: 5.0,
     trapMaxPeriod: 10.0,
-    collectables: [
-      CollectableType.heal,
-    ],
     collectableMinPeriod: 1.0,
     collectableMaxPeriod: 10.0,
     map: "dungeon_corridor",
