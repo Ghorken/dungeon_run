@@ -44,6 +44,12 @@ String levelToString(Level level) {
 /// Function to convert a string to a Level
 Level stringToLevel(String levelString) {
   final Map<String, dynamic> jsonMap = json.decode(levelString) as Map<String, dynamic>;
+  final rewards = json.decode(jsonMap["rewards"] as String) as Map<String, dynamic>;
+
+  // Make sure the rewards are in the correct format
+  if (rewards["upgrades"] != null) {
+    rewards["upgrades"] = (rewards["upgrades"] as List<dynamic>).cast<String>();
+  }
 
   return (
     name: jsonMap["name"] as String,
@@ -59,7 +65,7 @@ Level stringToLevel(String levelString) {
     collectableMinPeriod: jsonMap["collectableMinPeriod"] as double,
     collectableMaxPeriod: jsonMap["collectableMaxPeriod"] as double,
     map: jsonMap["map"] as String,
-    rewards: json.decode(jsonMap["rewards"] as String) as Map<String, dynamic>,
+    rewards: rewards,
   );
 }
 

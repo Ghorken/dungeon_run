@@ -26,6 +26,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _actualSpeed = 2,
         damage = 1,
         _isBoss = false,
+        _goldFactor = 1,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -40,6 +41,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _actualSpeed = 2,
         damage = 1,
         _isBoss = false,
+        _goldFactor = 2,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -54,6 +56,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _actualSpeed = 4,
         damage = 2,
         _isBoss = false,
+        _goldFactor = 3,
         super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -68,6 +71,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
         _actualSpeed = 2,
         damage = 5,
         _isBoss = true,
+        _goldFactor = 1,
         _xPosition = 0.0,
         super(
           size: Vector2.all(250),
@@ -82,13 +86,10 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     final EnemyType enemyType = enemies.random();
     switch (enemyType) {
       case EnemyType.goblin:
-        rewards["gold"] = ((rewards["gold"] as int) + 1) * 1;
         return Enemy.goblin(rewards: rewards);
       case EnemyType.troll:
-        rewards["gold"] = ((rewards["gold"] as int) + 1) * 2;
         return Enemy.troll(rewards: rewards);
       case EnemyType.elementale:
-        rewards["gold"] = ((rewards["gold"] as int) + 1) * 3;
         return Enemy.elementale(rewards: rewards);
     }
   }
@@ -133,6 +134,9 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// The timer for periodic attacks
   TimerComponent? attackTimer;
+
+  /// The factor to multiply the gold reward
+  final int _goldFactor;
 
   @override
   Future<void> onLoad() async {
@@ -236,7 +240,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       die();
       // When the boss is defeated the player wins
       if (_isBoss) {
-        world.win();
+        world.win(rewards["upgrades"] as List<String>?);
       }
     }
   }
@@ -258,6 +262,6 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     );
 
     // Add the gold to the total collected
-    world.gold += (rewards["gold"] as int);
+    world.gold += ((rewards["gold"] as int) + 1) * _goldFactor;
   }
 }

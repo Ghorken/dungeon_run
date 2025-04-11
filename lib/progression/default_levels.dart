@@ -22,6 +22,10 @@ const List<Level> defaultLevels = [
     map: "dungeon_corridor",
     rewards: {
       "gold": 100,
+      "upgrades": [
+        "archer",
+        "collectable_damage",
+      ],
     },
   ),
   (

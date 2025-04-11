@@ -139,7 +139,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     add(
       SpawnComponent(
         factory: (_) {
-          // If the player has reached the, stop spawning random enemies
+          // If the player has reached the boss stop spawning random enemies
           if (!spawnEnemies) {
             return PositionComponent();
           }
@@ -279,7 +279,7 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
   }
 
   /// When the player wins stop the game and shows the relative dialog
-  Future<void> win() async {
+  Future<void> win(List<String>? upgrades) async {
     // Stop the game and remove the back button
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
@@ -320,5 +320,38 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
         }
       }
     });
+
+    // Unlock the upgrades
+    if (upgrades != null) {
+      persistence.getUpgrades().then((List<Upgrade> worldUpgrades) {
+        for (String unlockedUpgrade in upgrades) {
+          final int index = worldUpgrades.indexWhere((Upgrade upgrade) => upgrade.name == unlockedUpgrade);
+
+          // If the upgrade is already unlocked, skip it
+          if (worldUpgrades[index].unlocked == true) {
+            continue;
+          }
+
+          final Upgrade oldUpgrade = worldUpgrades[index];
+
+          worldUpgrades[index] = (
+            name: oldUpgrade.name,
+            description: oldUpgrade.description,
+            subMenu: oldUpgrade.subMenu,
+            unlocked: true,
+            dependency: oldUpgrade.dependency,
+            characterType: oldUpgrade.characterType,
+            collectableType: oldUpgrade.collectableType,
+            cost: oldUpgrade.cost,
+            costFactor: oldUpgrade.costFactor,
+            currentLevel: oldUpgrade.currentLevel,
+            maxLevel: oldUpgrade.maxLevel,
+            baseCooldown: oldUpgrade.baseCooldown,
+            step: oldUpgrade.step,
+          );
+        }
+        persistence.saveUpgrades(worldUpgrades);
+      });
+    }
   }
 }
