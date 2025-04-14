@@ -115,14 +115,18 @@ class GameScreen extends StatelessWidget {
             return Center(
               child: NesContainer(
                 width: 320,
-                height: 300,
+                height: 400,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      Strings.bravo,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                      textAlign: TextAlign.center,
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Text(
+                          level.message,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                     NesButton(
                       onPressed: () {
@@ -147,7 +151,7 @@ class GameScreen extends StatelessWidget {
                   children: [
                     Text(
                       Strings.sorry,
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
                     NesButton(

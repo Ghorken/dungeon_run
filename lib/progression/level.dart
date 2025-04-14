@@ -19,6 +19,7 @@ typedef Level = ({
   double collectableMaxPeriod,
   String map,
   Map<String, dynamic> rewards,
+  String message,
 });
 
 /// Function to convert a Level to a string
@@ -38,6 +39,7 @@ String levelToString(Level level) {
     "collectableMinPeriod": level.collectableMinPeriod,
     "map": level.map,
     "rewards": json.encode(level.rewards),
+    "message": level.message,
   });
 }
 
@@ -66,5 +68,6 @@ Level stringToLevel(String levelString) {
     collectableMaxPeriod: jsonMap["collectableMaxPeriod"] as double,
     map: jsonMap["map"] as String,
     rewards: rewards,
+    message: jsonMap["message"] as String,
   );
 }

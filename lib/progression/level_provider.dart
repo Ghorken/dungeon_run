@@ -44,6 +44,7 @@ class LevelProvider extends ChangeNotifier {
         collectableMaxPeriod: level.collectableMaxPeriod,
         map: level.map,
         rewards: level.rewards,
+        message: level.message,
       );
       notifyListeners();
     }
