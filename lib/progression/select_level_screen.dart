@@ -1,27 +1,20 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/progression/level.dart';
-import 'package:dungeon_run/store/upgrade.dart';
+import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 /// The class that handle the selection of the level
 class SelectLevelScreen extends StatelessWidget {
   /// The list of unlocked characters recovered from upgrades
   final List<CharacterType?> selectedCharacters;
 
-  /// The state of the upgraded
-  final List<Upgrade> upgrades;
-
-  /// The levels of the game
-  final List<Level> levels;
-
   SelectLevelScreen({
     required this.selectedCharacters,
-    required this.upgrades,
-    required this.levels,
     super.key,
   });
 
@@ -30,6 +23,8 @@ class SelectLevelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Level> levels = Provider.of<LevelProvider>(context).levels;
+
     /// The list of the available levels
     /// Retrieve for every level the dependency and check if at least one is completed
     /// If the level has no dependency, it is available
@@ -81,7 +76,6 @@ class SelectLevelScreen extends StatelessWidget {
                         return WobblyButton(
                           onPressed: () {
                             Map<String, dynamic> extra = {
-                              'upgrades': upgrades,
                               'selectedCharacters': selectedCharacters,
                               'level': level,
                             };

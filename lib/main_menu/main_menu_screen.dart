@@ -1,3 +1,8 @@
+import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/progression/level.dart';
+import 'package:dungeon_run/progression/level_provider.dart';
+import 'package:dungeon_run/store/upgrade.dart';
+import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,16 +16,33 @@ import 'package:dungeon_run/style/responsive_screen.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
 
 /// The class that defines the main page of the game
-class MainMenuScreen extends StatelessWidget {
-  const MainMenuScreen({super.key});
+class MainMenuScreen extends StatefulWidget {
+  const MainMenuScreen({
+    super.key,
+  });
 
+  @override
+  State<MainMenuScreen> createState() => _MainMenuScreenState();
+}
+
+class _MainMenuScreenState extends State<MainMenuScreen> {
   /// The gap between elements
   static const _gap = SizedBox(height: 10);
 
   @override
+  void initState() {
+    super.initState();
+    // Call loadFromMemory when the screen is initialized
+    Provider.of<UpgradeProvider>(context, listen: false).loadFromMemory();
+    Provider.of<LevelProvider>(context, listen: false).loadFromMemory();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final settingsController = context.watch<SettingsController>();
-    final audioController = context.watch<AudioController>();
+    final List<Upgrade> upgrades = Provider.of<UpgradeProvider>(context).upgrades;
+    final List<Level> levels = Provider.of<LevelProvider>(context).levels;
+    final SettingsController settingsController = context.watch<SettingsController>();
+    final AudioController audioController = context.watch<AudioController>();
 
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
@@ -59,19 +81,42 @@ class MainMenuScreen extends StatelessWidget {
           children: [
             WobblyButton(
               onPressed: () {
-                audioController.playSfx(SfxType.buttonTap);
-                GoRouter.of(context).go('/instructions');
+                int unlockedCharacters = upgrades.where((Upgrade entry) => entry.characterType != null && entry.unlocked == true).length;
+
+                // If there are more than one characters unlocked go to the selection screen
+                if (unlockedCharacters > 1) {
+                  GoRouter.of(context).go('/selectCharacters');
+                } else {
+                  // If there are no characters unlocked prepare the party with only the [Warrior]
+                  final List<CharacterType?> selectedCharacters = List<CharacterType?>.filled(3, null);
+                  selectedCharacters[1] = CharacterType.warrior;
+                  if (levels.first.completed == true) {
+                    // If the first level is completed go to the level selection screen
+                    Map<String, dynamic> extra = {
+                      'selectedCharacters': selectedCharacters,
+                    };
+                    GoRouter.of(context).go('/selectLevel', extra: extra);
+                  } else {
+                    // If the first level is not completed go to game screen
+                    Map<String, dynamic> extra = {
+                      'selectedCharacters': selectedCharacters,
+                      'level': levels.first,
+                    };
+                    GoRouter.of(context).go('/play', extra: extra);
+                  }
+                }
               },
               child: Text(Strings.play),
             ),
             _gap,
-            WobblyButton(
-              onPressed: () {
-                audioController.playSfx(SfxType.buttonTap);
-                GoRouter.of(context).go('/store');
-              },
-              child: Text(Strings.store),
-            ),
+            if (levels.isNotEmpty && levels.first.completed == true)
+              WobblyButton(
+                onPressed: () {
+                  audioController.playSfx(SfxType.buttonTap);
+                  GoRouter.of(context).go('/store');
+                },
+                child: Text(Strings.store),
+              ),
             _gap,
             WobblyButton(
               onPressed: () => GoRouter.of(context).push('/settings'),

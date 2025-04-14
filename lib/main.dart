@@ -1,3 +1,5 @@
+import 'package:dungeon_run/progression/level_provider.dart';
+import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +40,8 @@ class DungeonRun extends StatelessWidget {
             },
             dispose: (context, audio) => audio.dispose(),
           ),
+          ChangeNotifierProvider(create: (_) => UpgradeProvider()),
+          ChangeNotifierProvider(create: (_) => LevelProvider()),
         ],
         child: Builder(
           builder: (context) {

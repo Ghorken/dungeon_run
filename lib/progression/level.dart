@@ -68,23 +68,3 @@ Level stringToLevel(String levelString) {
     rewards: rewards,
   );
 }
-
-/// function to set the level as completed
-void setLevelCompleted(Level level) {
-  level = (
-    name: level.name,
-    completed: true,
-    dependency: level.dependency,
-    enemies: level.enemies,
-    enemyFrequency: level.enemyFrequency,
-    boss: level.boss,
-    bossTimer: level.bossTimer,
-    traps: level.traps,
-    trapMinPeriod: level.trapMinPeriod,
-    trapMaxPeriod: level.trapMaxPeriod,
-    collectableMinPeriod: level.collectableMinPeriod,
-    collectableMaxPeriod: level.collectableMaxPeriod,
-    map: level.map,
-    rewards: level.rewards,
-  );
-}

@@ -1,5 +1,6 @@
 import 'package:dungeon_run/progression/level.dart';
-import 'package:dungeon_run/store/upgrade.dart';
+import 'package:dungeon_run/progression/level_provider.dart';
+import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
@@ -25,13 +26,15 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
   EndlessRunner({
     required this.audioController,
     required this.selectedCharacters,
-    required this.upgrades,
     required this.level,
+    required this.upgradeProvider,
+    required this.levelProvider,
   }) : super(
           world: EndlessWorld(
             selectedCharacters: selectedCharacters,
-            upgrades: upgrades,
             level: level,
+            upgradeProvider: upgradeProvider,
+            levelProvider: levelProvider,
           ),
           camera: CameraComponent.withFixedResolution(width: 720, height: 1600),
         );
@@ -43,7 +46,10 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
   final List<CharacterType?> selectedCharacters;
 
   /// The state of the upgrades
-  final List<Upgrade> upgrades;
+  final UpgradeProvider upgradeProvider;
+
+  /// The state of the levels
+  final LevelProvider levelProvider;
 
   /// The level of the game
   final Level level;

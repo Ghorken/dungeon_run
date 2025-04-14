@@ -1,5 +1,6 @@
 import 'package:dungeon_run/progression/level.dart';
-import 'package:dungeon_run/store/upgrade.dart';
+import 'package:dungeon_run/progression/level_provider.dart';
+import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ import 'package:dungeon_run/flame_game/endless_runner.dart';
 class GameScreen extends StatelessWidget {
   const GameScreen({
     required this.selectedCharacters,
-    required this.upgrades,
     required this.level,
     super.key,
   });
@@ -41,23 +41,24 @@ class GameScreen extends StatelessWidget {
   /// The selected characters to show
   final List<CharacterType?> selectedCharacters;
 
-  /// The state of the upgrades
-  final List<Upgrade> upgrades;
-
   /// The level of the game
   final Level level;
 
   @override
   Widget build(BuildContext context) {
-    final audioController = context.read<AudioController>();
+    final AudioController audioController = context.read<AudioController>();
+    final UpgradeProvider upgradeProvider = context.read<UpgradeProvider>();
+    final LevelProvider levelProvider = context.read<LevelProvider>();
+
     return Scaffold(
       body: GameWidget<EndlessRunner>(
         key: const Key('play session'),
         game: EndlessRunner(
           audioController: audioController,
           selectedCharacters: selectedCharacters,
-          upgrades: upgrades,
           level: level,
+          upgradeProvider: upgradeProvider,
+          levelProvider: levelProvider,
         ),
         overlayBuilderMap: {
           // The button the allows to quit the level

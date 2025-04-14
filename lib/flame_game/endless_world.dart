@@ -1,10 +1,11 @@
 import 'package:dungeon_run/progression/level.dart';
+import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade.dart';
+import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/components/traps/trap.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
@@ -27,15 +28,19 @@ import 'package:dungeon_run/flame_game/game_screen.dart';
 class EndlessWorld extends World with TapCallbacks, HasGameReference {
   EndlessWorld({
     required this.selectedCharacters,
-    required this.upgrades,
     required this.level,
+    required this.upgradeProvider,
+    required this.levelProvider,
   });
 
   /// The size of the game screen
   Vector2 get size => (parent as FlameGame).size;
 
   /// The state of the upgrades
-  final List<Upgrade> upgrades;
+  final UpgradeProvider upgradeProvider;
+
+  /// The state of the levels
+  final LevelProvider levelProvider;
 
   /// Define the positions for the three possible characters to show
   // These are late because they need the size of the screen
@@ -87,6 +92,8 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
 
   @override
   Future<void> onLoad() async {
+    final List<Upgrade> upgrades = upgradeProvider.upgrades;
+
     // If the player selected a leftCharacter initialize id and add id to the screen
     if (selectedCharacters[0] != null) {
       leftCharacter = createCharacter(
@@ -273,13 +280,12 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     game.overlays.add(GameScreen.looseDialogKey);
 
     // Save the accumulated gold
-    Persistence persistence = Persistence();
-    int storedGold = await persistence.getGold();
-    persistence.saveGold(gold + storedGold);
+    upgradeProvider.setGold = gold + upgradeProvider.gold;
+    upgradeProvider.saveToMemory();
   }
 
   /// When the player wins stop the game and shows the relative dialog
-  Future<void> win(List<String>? upgrades) async {
+  Future<void> win() async {
     // Stop the game and remove the back button
     game.pauseEngine();
     game.overlays.remove(GameScreen.backButtonKey);
@@ -290,68 +296,19 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     // Show the win dialog
     game.overlays.add(GameScreen.winDialogKey);
 
+    // Set the level as completed
+    levelProvider.setLevelCompleted(level.name);
+    levelProvider.saveToMemory();
+
     // Save the accumulated gold
-    Persistence persistence = Persistence();
-    int storedGold = await persistence.getGold();
-    persistence.saveGold(gold + storedGold);
+    upgradeProvider.setGold = gold + upgradeProvider.gold;
 
-    // Save the level completed
-    persistence.getLevels().then((List<Level> levels) {
-      for (int i = 0; i < levels.length; i++) {
-        if (levels[i].name == level.name) {
-          levels[i] = (
-            name: level.name,
-            completed: true,
-            dependency: level.dependency,
-            enemies: level.enemies,
-            enemyFrequency: level.enemyFrequency,
-            boss: level.boss,
-            bossTimer: level.bossTimer,
-            traps: level.traps,
-            trapMinPeriod: level.trapMinPeriod,
-            trapMaxPeriod: level.trapMaxPeriod,
-            collectableMinPeriod: level.collectableMinPeriod,
-            collectableMaxPeriod: level.collectableMaxPeriod,
-            map: level.map,
-            rewards: level.rewards,
-          );
-          persistence.saveLevels(levels);
-          break;
-        }
+    // Unlock the upgrades and save the state of the upgrades
+    if (level.rewards["upgrades"] != null) {
+      for (String unlockedUpgrade in level.rewards["upgrades"] as List<String>) {
+        upgradeProvider.unlockUpgrade(unlockedUpgrade);
       }
-    });
-
-    // Unlock the upgrades
-    if (upgrades != null) {
-      persistence.getUpgrades().then((List<Upgrade> worldUpgrades) {
-        for (String unlockedUpgrade in upgrades) {
-          final int index = worldUpgrades.indexWhere((Upgrade upgrade) => upgrade.name == unlockedUpgrade);
-
-          // If the upgrade is already unlocked, skip it
-          if (worldUpgrades[index].unlocked == true) {
-            continue;
-          }
-
-          final Upgrade oldUpgrade = worldUpgrades[index];
-
-          worldUpgrades[index] = (
-            name: oldUpgrade.name,
-            description: oldUpgrade.description,
-            subMenu: oldUpgrade.subMenu,
-            unlocked: true,
-            dependency: oldUpgrade.dependency,
-            characterType: oldUpgrade.characterType,
-            collectableType: oldUpgrade.collectableType,
-            cost: oldUpgrade.cost,
-            costFactor: oldUpgrade.costFactor,
-            currentLevel: oldUpgrade.currentLevel,
-            maxLevel: oldUpgrade.maxLevel,
-            baseCooldown: oldUpgrade.baseCooldown,
-            step: oldUpgrade.step,
-          );
-        }
-        persistence.saveUpgrades(worldUpgrades);
-      });
+      upgradeProvider.saveToMemory();
     }
   }
 }

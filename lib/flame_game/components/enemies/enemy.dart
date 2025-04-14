@@ -240,7 +240,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
       die();
       // When the boss is defeated the player wins
       if (_isBoss) {
-        world.win(rewards["upgrades"] as List<String>?);
+        world.win();
       }
     }
   }

@@ -1,5 +1,6 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/store/upgrade.dart';
+import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,24 +8,13 @@ import 'package:go_router/go_router.dart';
 
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/style/wobbly_button.dart';
+import 'package:provider/provider.dart';
 
 /// The class that handle the compositions of the party
 class SelectCharactersScreen extends StatefulWidget {
   const SelectCharactersScreen({
-    required this.unlockedCharacters,
-    required this.upgrades,
-    required this.levels,
     super.key,
   });
-
-  /// The list of unlocked characters recovered from upgrades
-  final List<CharacterType> unlockedCharacters;
-
-  /// The state of the upgraded
-  final List<Upgrade> upgrades;
-
-  /// The levels of the game
-  final List<dynamic> levels;
 
   @override
   State<SelectCharactersScreen> createState() => _SelectCharactersScreenState();
@@ -39,6 +29,9 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Upgrade> upgrades = Provider.of<UpgradeProvider>(context).upgrades;
+    final List<CharacterType> unlockedCharacters = upgrades.where((Upgrade entry) => entry.characterType != null && entry.unlocked == true).map((Upgrade entry) => entry.characterType!).toList();
+
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
       body: Center(
@@ -122,7 +115,7 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                           ],
                         ),
                         // Data rows
-                        for (CharacterType characterType in widget.unlockedCharacters)
+                        for (CharacterType characterType in unlockedCharacters)
                           TableRow(
                             children: [
                               Padding(
@@ -180,23 +173,11 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                   return;
                 }
 
-                if (widget.levels.first.completed == true) {
-                  // If the first level is completed go to the level selection screen
-                  Map<String, dynamic> extra = {
-                    'upgrades': widget.upgrades,
-                    'selectedCharacters': _selectedCharacters,
-                    'levels': widget.levels,
-                  };
-                  GoRouter.of(context).go('/selectLevel', extra: extra);
-                } else {
-                  // If the first level is not completed go to game screen
-                  Map<String, dynamic> extra = {
-                    'upgrades': widget.upgrades,
-                    'selectedCharacters': _selectedCharacters,
-                    'level': widget.levels.first,
-                  };
-                  GoRouter.of(context).go('/play', extra: extra);
-                }
+                // If the first level is completed go to the level selection screen
+                Map<String, dynamic> extra = {
+                  'selectedCharacters': _selectedCharacters,
+                };
+                GoRouter.of(context).go('/selectLevel', extra: extra);
               },
               child: Text(Strings.play),
             ),

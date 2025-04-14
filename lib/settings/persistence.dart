@@ -99,23 +99,16 @@ class Persistence {
   }
 
   /// Save the state of the upgrades
-  Future<void> saveUpgrades(List<Upgrade> value) async {
+  Future<void> saveUpgrades(List<String> value) async {
     final prefs = await instanceFuture;
-    List<String> encodedList = [];
-    // Encode each Upgrade object to a string
-    for (Upgrade upgrade in value) {
-      final String upgradeString = upgradeToString(upgrade);
-      encodedList.add(upgradeString);
-    }
 
-    await prefs.setStringList('upgrades', encodedList);
+    await prefs.setStringList('upgrades', value);
   }
 
   /// Save the state of the levels
-  Future<void> saveLevels(List<Level> value) async {
+  Future<void> saveLevels(List<String> value) async {
     final prefs = await instanceFuture;
-    List<String> encodedList = value.map((Level level) => levelToString(level)).toList();
 
-    await prefs.setStringList('levels', encodedList);
+    await prefs.setStringList('levels', value);
   }
 }
