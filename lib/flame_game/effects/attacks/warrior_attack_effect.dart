@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ class WarriorAttackEffect extends Component with ParentIsA<Warrior> {
   Future<void> onLoad() async {
     await super.onLoad();
 
+    parent.current = CharacterState.attacking;
+
     // Load the sprite
     final sprite = await Sprite.load(
       'attacks/sword.png',
@@ -25,7 +28,7 @@ class WarriorAttackEffect extends Component with ParentIsA<Warrior> {
     // Instantiate the sword component, rotated by 90°
     final sword = SpriteComponent(
       sprite: sprite,
-      size: Vector2(166, 180),
+      size: Vector2(1, 1),
       anchor: Anchor.bottomCenter,
       angle: -pi / 2,
     );
@@ -45,7 +48,10 @@ class WarriorAttackEffect extends Component with ParentIsA<Warrior> {
           duration: effectTime,
           curve: Curves.easeInOut,
         ),
-        onComplete: () => sword.removeFromParent(),
+        onComplete: () {
+          sword.removeFromParent();
+          parent.current = CharacterState.running;
+        },
       ),
     );
   }

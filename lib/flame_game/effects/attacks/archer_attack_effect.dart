@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
@@ -23,7 +25,7 @@ class ArcherAttackEffect extends Component with ParentIsA<Archer> {
 
     // Load the sprite
     final sprite = await Sprite.load(
-      'attacks/arrow.png',
+      'attacks/arrow2.png',
     );
 
     // Instantiate the arrow
@@ -31,6 +33,7 @@ class ArcherAttackEffect extends Component with ParentIsA<Archer> {
       sprite: sprite,
       size: Vector2(40, 45),
       anchor: Anchor.center,
+      angle: -pi / 2,
     );
 
     // The arrow should start from the character

@@ -4,7 +4,6 @@ import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
 import 'package:dungeon_run/flame_game/components/characters/mage.dart';
-import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
 import 'package:dungeon_run/flame_game/effects/invincible_effect.dart';
@@ -15,13 +14,11 @@ import 'package:dungeon_run/store/upgrade.dart';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 
 /// The [Character] is the component that the player controls by tapping on it to make it attack
 /// It's abstract so that could not be instantiated and the single characters can extends it
 abstract class Character extends SpriteAnimationGroupComponent<CharacterState> with CollisionCallbacks, HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner> {
   Character({
-    required this.srcImage,
     required this.damage,
     required this.maxLifePoints,
     required this.lifePoints,
@@ -32,9 +29,6 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
           anchor: Anchor.center,
           priority: 1,
         );
-
-  /// The image to show
-  final String srcImage;
 
   /// The max lifePoints of the character
   final double maxLifePoints;
@@ -52,36 +46,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   int cooldownTimer;
 
   @override
-  Future<void> onLoad() async {
-    // This defines the different animation states that the character can be in.
-    animations = {
-      CharacterState.running: await game.loadSpriteAnimation(
-        srcImage,
-        SpriteAnimationData.sequenced(
-          amount: 1,
-          textureSize: Vector2(250, 346),
-          stepTime: 0.15,
-        ),
-      ),
-    };
-
-    /// The starting state will be that the character is running.
-    current = CharacterState.running;
-
-    // When adding a CircleHitbox without any arguments it automatically
-    // fills up the size of the component as much as it can without overflowing it.
-    add(CircleHitbox());
-
-    // The player lifebar to the screen
-    // The dimension of every segment depends from the screen and how many max lifepoint the player has
-    add(
-      LifeBar(
-        segmentWidth: size.x / maxLifePoints,
-        color: Colors.green,
-        parentComponent: this,
-      ),
-    );
-  }
+  Future<void> onLoad();
 
   /// Handles the character being hitted
   /// [damage] is the amount of damage that the character should take
@@ -138,6 +103,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
 /// The possible states of the character
 enum CharacterState {
   running,
+  attacking,
 }
 
 /// Create a character based on its type and on the upgrades that the player has bought
