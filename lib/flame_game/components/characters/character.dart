@@ -14,10 +14,11 @@ import 'package:dungeon_run/store/upgrade.dart';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 
 /// The [Character] is the component that the player controls by tapping on it to make it attack
 /// It's abstract so that could not be instantiated and the single characters can extends it
-abstract class Character extends SpriteAnimationGroupComponent<CharacterState> with CollisionCallbacks, HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner> {
+abstract class Character extends SpriteAnimationGroupComponent<CharacterState> with CollisionCallbacks, HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, TapCallbacks {
   Character({
     required this.damage,
     required this.maxLifePoints,
@@ -97,6 +98,12 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
 
   /// The abstract special attack function that every character should implement
   void specialAttack();
+
+  // If the player taps on a character, we make it attack.
+  @override
+  void onTapDown(TapDownEvent event) {
+    attack();
+  }
 }
 
 /// The possible states of the character

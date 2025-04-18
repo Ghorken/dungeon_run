@@ -3,7 +3,6 @@ import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
@@ -20,12 +19,10 @@ import 'package:dungeon_run/navigation/game_screen.dart';
 /// are removed, since the character can't interact with those anymore.
 ///
 /// The [EndlessWorld] has two mixins added to it:
-///  - The [TapCallbacks] that makes it possible to react to taps (or mouse
-///  clicks) on the world.
 ///  - The [HasGameReference] that gives the world access to a variable called
 ///  `game`, which is a reference to the game class that the world is attached
 ///  to.
-class EndlessWorld extends World with TapCallbacks, HasGameReference {
+class EndlessWorld extends World with HasGameReference {
   EndlessWorld({
     required this.selectedCharacters,
     required this.level,
@@ -230,40 +227,6 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
     game.overlays.remove(GameScreen.leftSpecialAttackKey);
     game.overlays.remove(GameScreen.frontSpecialAttackKey);
     game.overlays.remove(GameScreen.rightSpecialAttackKey);
-  }
-
-  /// [onTapDown] is called when the character taps the screen
-  @override
-  void onTapDown(TapDownEvent event) {
-    // If the player taps on a character, we make it attack.
-    if (frontCharacter != null && characters.contains(frontCharacter) && frontCharacter!.toRect().contains(event.localPosition.toOffset())) {
-      frontCharacter!.attack();
-      return;
-    } else if (leftCharacter != null && characters.contains(leftCharacter) && leftCharacter!.toRect().contains(event.localPosition.toOffset())) {
-      leftCharacter!.attack();
-      return;
-    } else if (rightCharacter != null && characters.contains(rightCharacter) && rightCharacter!.toRect().contains(event.localPosition.toOffset())) {
-      rightCharacter!.attack();
-      return;
-    }
-
-    // If the player taps on a [Collectable], we apply its effect and remove it from the world
-    for (final collectable in collectables) {
-      if (collectable.toRect().contains(event.localPosition.toOffset())) {
-        collectable.effect();
-        collectable.opacity = 0.0;
-        collectables.remove(collectable);
-        break;
-      }
-    }
-
-    // If the player taps on a trap, we remove it from the world
-    for (final Trap trap in traps) {
-      if (trap.toRect().contains(event.localPosition.toOffset())) {
-        trap.disable();
-        break;
-      }
-    }
   }
 
   /// When the player loose stop the game and shows the relative dialog

@@ -27,16 +27,16 @@ class GoblinKing extends Enemy {
       EnemyState.running: await game.loadSpriteAnimation(
         'enemies/goblin_king.png',
         SpriteAnimationData.sequenced(
-          amount: 2,
-          textureSize: Vector2(192, 192),
+          amount: 1,
+          textureSize: Vector2(250, 495),
           stepTime: 0.15,
         ),
       ),
       EnemyState.attacking: await game.loadSpriteAnimation(
         'enemies/goblin_king.png',
         SpriteAnimationData.sequenced(
-          amount: 4,
-          textureSize: Vector2(192, 192),
+          amount: 1,
+          textureSize: Vector2(250, 495),
           stepTime: 0.15,
         ),
       ),

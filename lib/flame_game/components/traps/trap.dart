@@ -5,6 +5,7 @@ import 'package:dungeon_run/utils/commons.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
@@ -13,7 +14,7 @@ import 'package:dungeon_run/navigation/endless_world.dart';
 
 /// The [Trap] component can represent three different types of obstacles
 /// that the character can run into.
-class Trap extends SpriteComponent with HasWorldReference<EndlessWorld>, CollisionCallbacks {
+class Trap extends SpriteComponent with HasWorldReference<EndlessWorld>, CollisionCallbacks, TapCallbacks {
   // Constructor for every type of trap
   Trap.spikedRoller()
       : _srcImage = 'traps/spiked_roller.png',
@@ -146,5 +147,11 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld>, Collisi
       ),
       () => removeFromParent(),
     );
+  }
+
+  /// When the [Trap] is tapped, stop it and remove it.
+  @override
+  void onTapDown(TapDownEvent event) {
+    disable();
   }
 }

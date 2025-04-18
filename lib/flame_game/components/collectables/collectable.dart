@@ -8,12 +8,13 @@ import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/utils/commons.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 
 import 'package:dungeon_run/navigation/endless_world.dart';
 
 /// The [Collectable] components are the components that the Player could collect to obtain various effects.
-abstract class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld> {
+abstract class Collectable extends SpriteComponent with HasWorldReference<EndlessWorld>, TapCallbacks {
   Collectable({
     required this.srcImage,
     required super.size,
@@ -124,4 +125,12 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
 
   /// The effect that the [Collectable] should apply
   void effect();
+
+  // If the player taps on a [Collectable], we apply its effect and remove it from the world
+  @override
+  void onTapDown(TapDownEvent event) {
+    effect();
+    opacity = 0.0;
+    world.collectables.remove(this);
+  }
 }
