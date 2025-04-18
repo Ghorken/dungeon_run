@@ -1,14 +1,14 @@
 import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
-import 'package:dungeon_run/strings.dart';
+import 'package:dungeon_run/utils/strings.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:provider/provider.dart';
 
-import 'package:dungeon_run/app_lifecycle/app_lifecycle.dart';
+import 'package:dungeon_run/navigation/app_lifecycle.dart';
 import 'package:dungeon_run/audio/audio_controller.dart';
-import 'package:dungeon_run/router.dart';
+import 'package:dungeon_run/navigation/router.dart';
 import 'package:dungeon_run/settings/settings_controller.dart';
 
 void main() async {

@@ -1,6 +1,6 @@
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/collectables/collectable.dart';
-import 'package:dungeon_run/flame_game/endless_world.dart';
+import 'package:dungeon_run/navigation/endless_world.dart';
 import 'package:flame/components.dart';
 
 /// The class that handles the invincibility effect of the [Collectable]

@@ -3,7 +3,7 @@ import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dungeon_run/flame_game/endless_world.dart';
+import 'package:dungeon_run/navigation/endless_world.dart';
 
 /// The class that handles the lifebar of the player and of the enemies
 class LifeBar extends PositionComponent with HasWorldReference<EndlessWorld> {

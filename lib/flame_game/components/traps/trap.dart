@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dungeon_run/flame_game/components/traps/trap_type.dart';
+import 'package:dungeon_run/utils/commons.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -8,7 +9,7 @@ import 'package:flame/extensions.dart';
 
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/effects/disable_effect.dart';
-import 'package:dungeon_run/flame_game/endless_world.dart';
+import 'package:dungeon_run/navigation/endless_world.dart';
 
 /// The [Trap] component can represent three different types of obstacles
 /// that the character can run into.
@@ -79,7 +80,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld>, Collisi
 
     // Position the trap in a random spot at the top of the screen
     // or in a specific spot if specified
-    position = Vector2(_randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), _yPosition ?? -world.size.y / 2);
+    position = Vector2(randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), _yPosition ?? -world.size.y / 2);
 
     // When adding a RectangleHitbox without any arguments it automatically
     // fills up the size of the component.
@@ -127,12 +128,6 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld>, Collisi
     if (character is Character && world.characters.contains(character)) {
       character.hit(damage);
     }
-  }
-
-  /// Determine a random number between the min and max
-  double _randomInRange(int min, int max) {
-    final random = Random();
-    return (min + random.nextInt(max - min + 1)).toDouble();
   }
 
   /// When the [Trap] is hit by the player stop it and remove it.

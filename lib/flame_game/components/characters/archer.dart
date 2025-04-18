@@ -2,7 +2,6 @@ import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
-import 'package:dungeon_run/flame_game/effects/attacks/archer_attack_effect.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -33,14 +32,20 @@ class Archer extends Character {
       ),
     };
 
-    size = Vector2.all(250);
+    size = Vector2.all(200);
 
     /// The starting state will be that the character is running.
     current = CharacterState.running;
 
-    // When adding a CircleHitbox without any arguments it automatically
-    // fills up the size of the component as much as it can without overflowing it.
-    add(CircleHitbox());
+    // Add the hitbox to the character
+    add(
+      CircleHitbox(
+        isSolid: true,
+        radius: 50,
+        anchor: Anchor.center,
+        position: Vector2(size.x / 2, size.y / 2),
+      ),
+    );
 
     // The player lifebar to the screen
     // The dimension of every segment depends from the screen and how many max lifepoint the player has
@@ -71,9 +76,19 @@ class Archer extends Character {
 
     // If there is one attack it
     if (closestEnemy != null) {
-      add(ArcherAttackEffect(destination: closestEnemy.position));
+      // Change the state to attacking
+      current = CharacterState.attacking;
+
+      // Apply damage to the closest enemy
       closestEnemy.hitted(damage);
+
+      // Play the attack sound effect
       game.audioController.playSfx(SfxType.score);
+
+      // Revert the state back to running after 0.5 seconds
+      Future.delayed(const Duration(milliseconds: 500), () {
+        current = CharacterState.running;
+      });
     }
   }
 
@@ -85,7 +100,7 @@ class Archer extends Character {
       // Attack them
       for (final Enemy enemy in enemiesToAttack) {
         enemy.hitted(damage);
-        add(ArcherAttackEffect(destination: enemy.position));
+        // add(ArcherAttackEffect(destination: enemy.position));
       }
 
       game.audioController.playSfx(SfxType.score);

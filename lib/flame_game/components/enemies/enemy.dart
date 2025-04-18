@@ -1,169 +1,87 @@
-import 'dart:math';
-
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
+import 'package:dungeon_run/flame_game/components/enemies/elemental.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
-import 'package:dungeon_run/flame_game/components/lifebar.dart';
+import 'package:dungeon_run/flame_game/components/enemies/goblin.dart';
+import 'package:dungeon_run/flame_game/components/enemies/goblin_king.dart';
+import 'package:dungeon_run/flame_game/components/enemies/troll.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
-import 'package:dungeon_run/flame_game/endless_runner.dart';
-import 'package:dungeon_run/flame_game/endless_world.dart';
-import 'package:flutter/material.dart';
+import 'package:dungeon_run/navigation/endless_runner.dart';
+import 'package:dungeon_run/navigation/endless_world.dart';
 
 /// The [Enemy] component can represent the different types of enemies
 /// that the character can run into.
-class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, CollisionCallbacks {
+abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, CollisionCallbacks {
   // Constructors for every tipe of enemy
-  Enemy.goblin({
-    required this.rewards,
-  })  : _srcImage = 'enemies/goblin.png',
-        _maxLifePoints = 5,
-        lifePoints = 5,
-        _speed = 2,
-        _actualSpeed = 2,
-        damage = 1,
-        _isBoss = false,
-        _goldFactor = 1,
-        super(
+  Enemy({
+    required this.enemyGold,
+    required this.isBoss,
+    required this.damage,
+    required this.actualSpeed,
+    required this.speed,
+    required this.lifePoints,
+    required this.goldUpgradeLevel,
+  }) : super(
           size: Vector2.all(150),
-          anchor: Anchor.bottomCenter,
-        );
-
-  Enemy.troll({
-    required this.rewards,
-  })  : _srcImage = 'enemies/troll.png',
-        _maxLifePoints = 10,
-        lifePoints = 10,
-        _speed = 2,
-        _actualSpeed = 2,
-        damage = 1,
-        _isBoss = false,
-        _goldFactor = 2,
-        super(
-          size: Vector2.all(150),
-          anchor: Anchor.bottomCenter,
-        );
-
-  Enemy.elementale({
-    required this.rewards,
-  })  : _srcImage = 'enemies/elementale.png',
-        _maxLifePoints = 15,
-        lifePoints = 15,
-        _speed = 4,
-        _actualSpeed = 4,
-        damage = 2,
-        _isBoss = false,
-        _goldFactor = 3,
-        super(
-          size: Vector2.all(150),
-          anchor: Anchor.bottomCenter,
-        );
-
-  Enemy.goblinKing({
-    required this.rewards,
-  })  : _srcImage = 'enemies/goblin_king.png',
-        _maxLifePoints = 30,
-        lifePoints = 30,
-        _speed = 2,
-        _actualSpeed = 2,
-        damage = 5,
-        _isBoss = true,
-        _goldFactor = 1,
-        _xPosition = 0.0,
-        super(
-          size: Vector2.all(250),
           anchor: Anchor.bottomCenter,
         );
 
   /// Factory method to create a random enemy.
   factory Enemy.random({
-    required Map<String, dynamic> rewards,
+    required int goldUpgradeLevel,
     required List<EnemyType> enemies,
   }) {
     final EnemyType enemyType = enemies.random();
     switch (enemyType) {
       case EnemyType.goblin:
-        return Enemy.goblin(rewards: rewards);
+        return Goblin(goldUpgradeLevel: goldUpgradeLevel);
       case EnemyType.troll:
-        return Enemy.troll(rewards: rewards);
-      case EnemyType.elementale:
-        return Enemy.elementale(rewards: rewards);
+        return Troll(goldUpgradeLevel: goldUpgradeLevel);
+      case EnemyType.elemental:
+        return Elemental(goldUpgradeLevel: goldUpgradeLevel);
     }
   }
 
   // Factory method to create an enemy boss based on its type
   factory Enemy.boss({
+    required int goldUpgradeLevel,
     required BossType type,
-    required Map<String, dynamic> rewards,
   }) {
     switch (type) {
       case BossType.goblinKing:
-        return Enemy.goblinKing(rewards: rewards);
+        return GoblinKing(goldUpgradeLevel: goldUpgradeLevel);
     }
   }
-
-  /// The path of the image to load
-  final String _srcImage;
-
-  /// The max lifePoints of the enemy
-  final int _maxLifePoints;
 
   /// The current lifePoints of the enemy
   double lifePoints;
 
   /// The speed of the enemy
-  int _speed;
+  int speed;
 
   /// The actual speed of the enemy
-  int _actualSpeed;
+  int actualSpeed;
 
   /// The damage that the enemy deal
   final int damage;
 
   /// Determine if the enemy is a boss or not
-  final bool _isBoss;
-
-  /// The starting x position of the enemy
-  double? _xPosition;
-
-  /// The rewards of the enemy
-  final Map<String, dynamic> rewards;
+  final bool isBoss;
 
   /// The timer for periodic attacks
   TimerComponent? attackTimer;
 
   /// The factor to multiply the gold reward
-  final int _goldFactor;
+  final int enemyGold;
+
+  final int goldUpgradeLevel;
 
   @override
-  Future<void> onLoad() async {
-    // Load the sprite of the enemy
-    sprite = await Sprite.load(
-      _srcImage,
-    );
-
-    // Position the enemy in a random spot at the top of the screen
-    // or in a specific spot at the top of the screen if specified
-    position = Vector2(_xPosition ?? _randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), -world.size.y / 2);
-
-    // When adding a RectangleHitbox without any arguments it automatically
-    // fills up the size of the component.
-    add(
-      RectangleHitbox(),
-    );
-
-    // Add the lifebar to display the lifepoints
-    add(
-      LifeBar(
-        segmentWidth: size.x / _maxLifePoints,
-        color: Colors.red,
-        parentComponent: this,
-      ),
-    );
-  }
+  Future<void> onLoad();
 
   @override
   void update(double dt) {
@@ -175,7 +93,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     // last update ran. We need to multiply the speed by `dt` to make sure that
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
-    position.y += (world.speed * _actualSpeed) * dt;
+    position.y += (world.speed * actualSpeed) * dt;
 
     // When the component is no longer visible on the screen anymore, remove it.
     if (position.y - size.y > world.size.y / 2) {
@@ -195,8 +113,9 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     // The [Enemy] should stop and the [Character] should receive periodic damage.
     if (character is Character && world.characters.contains(character)) {
       // Set the speed of the enemy to 0 to stop it
-      _actualSpeed = 0;
+      actualSpeed = 0;
 
+      current = EnemyState.attacking;
       // Start a timer to attack the character every second
       attackTimer = TimerComponent(
         period: 1.0, // Attack every second
@@ -219,15 +138,11 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
   ) {
     super.onCollisionEnd(character);
 
+    current = EnemyState.running;
+
     // When the [Enemy] is not colliding with the [Character] because the [Character] died
     // The enemy should start move again
-    _actualSpeed = _speed;
-  }
-
-  /// Determine a random number between the min and max
-  double _randomInRange(int min, int max) {
-    final random = Random();
-    return (min + random.nextInt(max - min + 1)).toDouble();
+    actualSpeed = speed;
   }
 
   /// When the enemy is hit by the character we reduce the lifePoints and
@@ -239,7 +154,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     } else {
       die();
       // When the boss is defeated the player wins
-      if (_isBoss) {
+      if (isBoss) {
         world.win();
       }
     }
@@ -247,7 +162,7 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
 
   /// When the enemy is killed by the character we remove the enemy.
   void die() {
-    _actualSpeed = 0;
+    actualSpeed = 0;
     // We remove the enemy from the list so that it is no longer hittable even if still present on the screen.
     world.enemies.remove(this);
     DeathEffect deathEffect = DeathEffect();
@@ -262,6 +177,12 @@ class Enemy extends SpriteComponent with HasWorldReference<EndlessWorld>, HasGam
     );
 
     // Add the gold to the total collected
-    world.gold += ((rewards["gold"] as int) + 1) * _goldFactor;
+    world.gold += (goldUpgradeLevel + 1) * enemyGold;
   }
+}
+
+/// The possible states of the character
+enum EnemyState {
+  running,
+  attacking,
 }

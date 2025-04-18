@@ -2,7 +2,7 @@
 enum EnemyType {
   goblin,
   troll,
-  elementale,
+  elemental,
 }
 
 /// Enums of the type of bosses

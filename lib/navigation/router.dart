@@ -1,15 +1,15 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/progression/level.dart';
-import 'package:dungeon_run/progression/select_level_screen.dart';
-import 'package:dungeon_run/store/store_screen.dart';
+import 'package:dungeon_run/navigation/select_level_screen.dart';
+import 'package:dungeon_run/navigation/store_screen.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:dungeon_run/settings/select_characters_screen.dart';
+import 'package:dungeon_run/navigation/select_characters_screen.dart';
 import 'package:dungeon_run/style/palette.dart';
-import 'package:dungeon_run/flame_game/game_screen.dart';
-import 'package:dungeon_run/main_menu/main_menu_screen.dart';
-import 'package:dungeon_run/settings/settings_screen.dart';
-import 'package:dungeon_run/style/page_transition.dart';
+import 'package:dungeon_run/navigation/game_screen.dart';
+import 'package:dungeon_run/navigation/main_menu_screen.dart';
+import 'package:dungeon_run/navigation/settings_screen.dart';
+import 'package:dungeon_run/navigation/page_transition.dart';
 
 /// The router describes the game's navigational hierarchy
 final router = GoRouter(

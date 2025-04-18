@@ -1,5 +1,5 @@
 import 'package:dungeon_run/flame_game/components/collectables/collectable.dart';
-import 'package:dungeon_run/flame_game/endless_world.dart';
+import 'package:dungeon_run/navigation/endless_world.dart';
 import 'package:flame/components.dart';
 
 /// The class that handles the skow effect of the [Collectable]

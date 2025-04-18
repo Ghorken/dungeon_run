@@ -1,13 +1,13 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
-import 'package:dungeon_run/strings.dart';
+import 'package:dungeon_run/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dungeon_run/style/palette.dart';
-import 'package:dungeon_run/style/wobbly_button.dart';
+import 'package:dungeon_run/utils/wobbly_button.dart';
 import 'package:provider/provider.dart';
 
 /// The class that handle the compositions of the party

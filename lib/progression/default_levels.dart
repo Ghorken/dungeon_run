@@ -19,7 +19,7 @@ const List<Level> defaultLevels = [
     trapMaxPeriod: 10.0,
     collectableMinPeriod: 1.0,
     collectableMaxPeriod: 10.0,
-    map: "dungeon_corridor",
+    map: "map",
     rewards: {
       "gold": 100,
       "upgrades": [
@@ -35,7 +35,7 @@ const List<Level> defaultLevels = [
       "Esterno",
     ],
     enemies: [
-      EnemyType.elementale,
+      EnemyType.elemental,
     ],
     enemyFrequency: 0.5,
     boss: BossType.goblinKing,
@@ -64,7 +64,7 @@ const List<Level> defaultLevels = [
     ],
     enemies: [
       EnemyType.goblin,
-      EnemyType.elementale,
+      EnemyType.elemental,
     ],
     enemyFrequency: 0.5,
     boss: BossType.goblinKing,
@@ -90,7 +90,7 @@ const List<Level> defaultLevels = [
     ],
     enemies: [
       EnemyType.troll,
-      EnemyType.elementale,
+      EnemyType.elemental,
     ],
     enemyFrequency: 0.5,
     boss: BossType.goblinKing,
@@ -116,7 +116,7 @@ const List<Level> defaultLevels = [
     ],
     enemies: [
       EnemyType.goblin,
-      EnemyType.elementale,
+      EnemyType.elemental,
     ],
     enemyFrequency: 0.5,
     boss: BossType.goblinKing,

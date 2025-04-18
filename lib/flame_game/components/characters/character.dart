@@ -7,8 +7,8 @@ import 'package:dungeon_run/flame_game/components/characters/mage.dart';
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
 import 'package:dungeon_run/flame_game/effects/invincible_effect.dart';
-import 'package:dungeon_run/flame_game/endless_runner.dart';
-import 'package:dungeon_run/flame_game/endless_world.dart';
+import 'package:dungeon_run/navigation/endless_runner.dart';
+import 'package:dungeon_run/navigation/endless_world.dart';
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 
@@ -27,7 +27,6 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   }) : super(
           size: Vector2.all(150),
           anchor: Anchor.center,
-          priority: 1,
         );
 
   /// The max lifePoints of the character

@@ -11,7 +11,7 @@ import 'package:dungeon_run/flame_game/components/traps/trap.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/collectables/collectable.dart';
-import 'package:dungeon_run/flame_game/game_screen.dart';
+import 'package:dungeon_run/navigation/game_screen.dart';
 
 /// The world is where you place all the components that should live inside of
 /// the game, like the character, enemies, obstacles and points for example.
@@ -150,12 +150,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           if (!spawnEnemies) {
             return PositionComponent();
           }
-          final int enemyGold = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
+          final int goldUpgradeLevel = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
           final Enemy enemy = Enemy.random(
             enemies: level.enemies,
-            rewards: {
-              "gold": enemyGold,
-            },
+            goldUpgradeLevel: goldUpgradeLevel,
           );
           enemies.add(enemy);
           return enemy;
@@ -173,9 +171,10 @@ class EndlessWorld extends World with TapCallbacks, HasGameReference {
           // Stop spawning enemies
           spawnEnemies = false;
 
+          final int goldUpgradeLevel = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
           final Enemy boss = Enemy.boss(
+            goldUpgradeLevel: goldUpgradeLevel,
             type: level.boss,
-            rewards: level.rewards,
           );
           enemies.add(boss);
           add(boss);

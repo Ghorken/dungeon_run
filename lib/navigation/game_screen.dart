@@ -1,7 +1,7 @@
 import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
-import 'package:dungeon_run/strings.dart';
+import 'package:dungeon_run/utils/strings.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,10 +9,10 @@ import 'package:nes_ui/nes_ui.dart';
 import 'package:provider/provider.dart';
 
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
-import 'package:dungeon_run/style/special_attack_button.dart';
+import 'package:dungeon_run/utils/special_attack_button.dart';
 import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
-import 'package:dungeon_run/flame_game/endless_runner.dart';
+import 'package:dungeon_run/navigation/endless_runner.dart';
 
 /// This widget defines the properties of the game screen.
 ///

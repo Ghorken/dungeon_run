@@ -6,8 +6,8 @@ import 'package:flame/game.dart';
 
 import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
-import 'package:dungeon_run/flame_game/components/background.dart';
-import 'package:dungeon_run/flame_game/endless_world.dart';
+import 'package:dungeon_run/style/background.dart';
+import 'package:dungeon_run/navigation/endless_world.dart';
 
 /// This is the base of the game which is added to the [GameWidget].
 ///

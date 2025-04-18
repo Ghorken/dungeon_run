@@ -3,7 +3,7 @@ import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
-import 'package:dungeon_run/strings.dart';
+import 'package:dungeon_run/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +12,8 @@ import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/audio/sounds.dart';
 import 'package:dungeon_run/settings/settings_controller.dart';
 import 'package:dungeon_run/style/palette.dart';
-import 'package:dungeon_run/style/responsive_screen.dart';
-import 'package:dungeon_run/style/wobbly_button.dart';
+import 'package:dungeon_run/navigation/responsive_screen.dart';
+import 'package:dungeon_run/utils/wobbly_button.dart';
 
 /// The class that defines the main page of the game
 class MainMenuScreen extends StatefulWidget {
