@@ -1,6 +1,7 @@
 import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
+import 'package:dungeon_run/trophies/trophy_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ class GameScreen extends StatelessWidget {
     final AudioController audioController = context.read<AudioController>();
     final UpgradeProvider upgradeProvider = context.read<UpgradeProvider>();
     final LevelProvider levelProvider = context.read<LevelProvider>();
+    final TrophyProvider trophyProvider = context.read<TrophyProvider>();
 
     return Scaffold(
       body: GameWidget<EndlessRunner>(
@@ -59,6 +61,7 @@ class GameScreen extends StatelessWidget {
           level: level,
           upgradeProvider: upgradeProvider,
           levelProvider: levelProvider,
+          trophyProvider: trophyProvider,
         ),
         overlayBuilderMap: {
           // The button the allows to quit the level

@@ -168,6 +168,9 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     DeathEffect deathEffect = DeathEffect();
     add(deathEffect);
 
+    // Increment the amount of enemies killed
+    world.trophyProvider.incrementsEnemiesKilled();
+
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(
       Duration(

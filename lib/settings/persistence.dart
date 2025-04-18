@@ -1,7 +1,9 @@
 import 'package:dungeon_run/progression/default_levels.dart';
 import 'package:dungeon_run/progression/level.dart';
+import 'package:dungeon_run/settings/default_trophies.dart';
 import 'package:dungeon_run/store/default_upgrades.dart';
 import 'package:dungeon_run/store/upgrade.dart';
+import 'package:dungeon_run/trophies/trophy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// An implementation of [Persistence] that uses
@@ -73,6 +75,25 @@ class Persistence {
     return recoveredLevels;
   }
 
+  /// Retrieve the saved state of the trophies
+  Future<List<Trophy>> getTrophies() async {
+    final prefs = await instanceFuture;
+    List<String>? encodedList = prefs.getStringList('trophies');
+    List<Trophy> recoveredTrophies = [];
+
+    if (encodedList != null) {
+      // If the list is not null, decode each string to a Trophy object
+      for (String trophyString in encodedList) {
+        final Trophy trophy = stringToTrophy(trophyString);
+        recoveredTrophies.add(trophy);
+      }
+    } else {
+      // If no trophies are found, return an empty list
+      recoveredTrophies = defaultTrophies;
+    }
+    return recoveredTrophies;
+  }
+
   /// Save the state of the audio
   Future<void> saveAudioOn(bool value) async {
     final prefs = await instanceFuture;
@@ -110,5 +131,12 @@ class Persistence {
     final prefs = await instanceFuture;
 
     await prefs.setStringList('levels', value);
+  }
+
+  /// Save the state of the trophies
+  Future<void> saveTrophies(List<String> value) async {
+    final prefs = await instanceFuture;
+
+    await prefs.setStringList('trophies', value);
   }
 }

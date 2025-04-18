@@ -2,6 +2,7 @@ import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
+import 'package:dungeon_run/trophies/trophy_provider.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
@@ -28,6 +29,7 @@ class EndlessWorld extends World with HasGameReference {
     required this.level,
     required this.upgradeProvider,
     required this.levelProvider,
+    required this.trophyProvider,
   });
 
   /// The size of the game screen
@@ -38,6 +40,9 @@ class EndlessWorld extends World with HasGameReference {
 
   /// The state of the levels
   final LevelProvider levelProvider;
+
+  /// The state of the trophies
+  final TrophyProvider trophyProvider;
 
   /// Define the positions for the three possible characters to show
   // These are late because they need the size of the screen
@@ -244,6 +249,9 @@ class EndlessWorld extends World with HasGameReference {
     // Save the accumulated gold
     upgradeProvider.setGold = gold + upgradeProvider.gold;
     upgradeProvider.saveToMemory();
+
+    // Save the trophies
+    trophyProvider.saveToMemory();
   }
 
   /// When the player wins stop the game and shows the relative dialog
@@ -272,5 +280,8 @@ class EndlessWorld extends World with HasGameReference {
       }
       upgradeProvider.saveToMemory();
     }
+
+    // Save the trophies
+    trophyProvider.saveToMemory();
   }
 }

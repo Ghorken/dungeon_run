@@ -3,6 +3,7 @@ import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
+import 'package:dungeon_run/trophies/trophy_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +36,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     // Call loadFromMemory when the screen is initialized
     Provider.of<UpgradeProvider>(context, listen: false).loadFromMemory();
     Provider.of<LevelProvider>(context, listen: false).loadFromMemory();
+    Provider.of<TrophyProvider>(context, listen: false).loadFromMemory();
   }
 
   @override
@@ -117,6 +119,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 },
                 child: Text(Strings.store),
               ),
+            _gap,
+            WobblyButton(
+              onPressed: () {
+                audioController.playSfx(SfxType.buttonTap);
+                GoRouter.of(context).go('/trophies');
+              },
+              child: Text(Strings.trophiesRoom),
+            ),
             _gap,
             WobblyButton(
               onPressed: () => GoRouter.of(context).push('/settings'),

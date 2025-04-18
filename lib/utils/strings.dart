@@ -8,6 +8,10 @@ class Strings {
   static final String upgrades = 'Potenziamenti';
   static final String completed = 'Massimo';
 
+  // Trophies
+  static final String trophiesRoom = 'Stanza dei trofei';
+  static final String trophies = 'Trofei';
+
   // Settings
   static final String settings = 'Impostazioni';
   static final String sounds = 'Effetti sonori';
