@@ -19,9 +19,8 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
     required this.srcImage,
     required super.size,
     required super.anchor,
-  }) : super(
-          priority: 1,
-        );
+    required this.type,
+  });
 
   /// Generates a random [Collectable].
   factory Collectable.random({
@@ -92,6 +91,9 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
   /// The path of the image to load
   final String srcImage;
 
+  /// The type of the [Collectable]
+  final CollectableType type;
+
   @override
   Future<void> onLoad() async {
     // Start the timer
@@ -129,6 +131,7 @@ abstract class Collectable extends SpriteComponent with HasWorldReference<Endles
   // If the player taps on a [Collectable], we apply its effect and remove it from the world
   @override
   void onTapDown(TapDownEvent event) {
+    world.trophyProvider.incrementCollectables(type);
     effect();
     opacity = 0.0;
     world.collectables.remove(this);

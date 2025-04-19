@@ -1,5 +1,6 @@
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
+import 'package:dungeon_run/trophies/trophy_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/utils/wobbly_button.dart';
@@ -143,6 +144,7 @@ class _StoreScreenState extends State<StoreScreen> {
                                       : WobblyButton(
                                           onPressed: isBuyable
                                               ? () {
+                                                  Provider.of<TrophyProvider>(context, listen: false).incrementUpgrades();
                                                   Provider.of<UpgradeProvider>(context, listen: false).buyUpgrade(entry.name);
                                                   Provider.of<UpgradeProvider>(context, listen: false).setGold = gold - entry.cost;
                                                   Provider.of<UpgradeProvider>(context, listen: false).saveToMemory();

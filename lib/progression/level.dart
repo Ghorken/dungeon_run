@@ -5,6 +5,7 @@ import 'package:dungeon_run/flame_game/components/traps/trap_type.dart';
 
 /// Definition of the Level type
 typedef Level = ({
+  String id,
   String name,
   bool completed,
   List<String>? dependency,
@@ -25,6 +26,7 @@ typedef Level = ({
 /// Function to convert a Level to a string
 String levelToString(Level level) {
   return json.encode({
+    "id": level.id,
     "name": level.name,
     "completed": level.completed,
     "dependency": level.dependency?.join(','),
@@ -54,6 +56,7 @@ Level stringToLevel(String levelString) {
   }
 
   return (
+    id: jsonMap["id"] as String,
     name: jsonMap["name"] as String,
     completed: jsonMap["completed"] as bool,
     dependency: (jsonMap["dependency"] as String?)?.split(','),

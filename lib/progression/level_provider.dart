@@ -30,6 +30,7 @@ class LevelProvider extends ChangeNotifier {
     if (index != -1) {
       final Level level = _levels[index];
       _levels[index] = (
+        id: level.id,
         name: level.name,
         completed: true, // Mark as completed
         dependency: level.dependency,

@@ -1,5 +1,6 @@
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/collectables/collectable.dart';
+import 'package:dungeon_run/flame_game/components/collectables/collectable_type.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
@@ -11,6 +12,7 @@ class Resurrection extends Collectable {
           srcImage: 'collectables/resurrection.png',
           size: Vector2.all(150),
           anchor: Anchor.center,
+          type: CollectableType.resurrection,
         );
 
   /// If the resurrected character should be at full health or half health
@@ -28,6 +30,7 @@ class Resurrection extends Collectable {
       world.characters[resurrectedCharacterIndex] = resurrectedCharacter;
 
       world.add(resurrectedCharacter);
+      world.trophyProvider.incrementResurrections();
     }
 
     removeFromParent();

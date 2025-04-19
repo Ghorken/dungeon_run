@@ -152,6 +152,7 @@ class Trap extends SpriteComponent with HasWorldReference<EndlessWorld>, Collisi
   /// When the [Trap] is tapped, stop it and remove it.
   @override
   void onTapDown(TapDownEvent event) {
+    world.trophyProvider.incrementTraps(_trapType);
     disable();
   }
 }

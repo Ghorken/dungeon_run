@@ -2,6 +2,7 @@ import 'dart:convert';
 
 /// Definition of the Trophy type
 typedef Trophy = ({
+  String id,
   String name,
   String description,
   String iconPath,
@@ -11,6 +12,7 @@ typedef Trophy = ({
 /// Function to convert a Trophy to a string
 String trophiesToString(Trophy trophy) {
   return json.encode({
+    "id": trophy.id,
     "name": trophy.name,
     "description": trophy.description,
     "iconPath": trophy.iconPath,
@@ -23,6 +25,7 @@ Trophy stringToTrophy(String trophyString) {
   final Map<String, dynamic> jsonMap = json.decode(trophyString) as Map<String, dynamic>;
 
   return (
+    id: jsonMap["id"] as String,
     name: jsonMap["name"] as String,
     description: jsonMap["description"] as String,
     iconPath: jsonMap["iconPath"] as String,

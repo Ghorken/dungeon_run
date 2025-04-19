@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:dungeon_run/utils/commons.dart';
 import 'package:flame/collisions.dart';
@@ -16,6 +17,7 @@ class Elemental extends Enemy {
           actualSpeed: 4,
           speed: 4,
           lifePoints: 15,
+          enemyType: EnemyType.elemental,
         );
 
   /// The max lifePoints of the enemy

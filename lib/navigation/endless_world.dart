@@ -252,6 +252,9 @@ class EndlessWorld extends World with HasGameReference {
 
     // Save the trophies
     trophyProvider.saveToMemory();
+
+    // Count the number of deaths
+    trophyProvider.incrementDeaths();
   }
 
   /// When the player wins stop the game and shows the relative dialog
@@ -280,6 +283,14 @@ class EndlessWorld extends World with HasGameReference {
       }
       upgradeProvider.saveToMemory();
     }
+
+    // Unlock the trophies for the characters unlocked
+    if (upgradeProvider.upgrades.where((Upgrade upgrade) => upgrade.characterType != null && upgrade.unlocked == true).length == 3) {
+      trophyProvider.unlockTrophy("allies-1");
+    }
+
+    // Unlock the trophies for the level completed
+    trophyProvider.unlockLevelsTrophy(level);
 
     // Save the trophies
     trophyProvider.saveToMemory();

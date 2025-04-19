@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -15,6 +16,7 @@ class GoblinKing extends Enemy {
           actualSpeed: 2,
           speed: 2,
           lifePoints: 30,
+          bossType: BossType.goblinKing,
         );
 
   /// The max lifePoints of the enemy

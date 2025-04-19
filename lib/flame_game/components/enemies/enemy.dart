@@ -25,6 +25,8 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     required this.speed,
     required this.lifePoints,
     required this.goldUpgradeLevel,
+    this.enemyType,
+    this.bossType,
   }) : super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -75,10 +77,17 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
   /// The timer for periodic attacks
   TimerComponent? attackTimer;
 
-  /// The factor to multiply the gold reward
+  /// The factor to multiply the gold reward based on the enemy
   final int enemyGold;
 
+  /// The level of the gold upgrade
   final int goldUpgradeLevel;
+
+  /// The type of the enemy
+  final EnemyType? enemyType;
+
+  /// The type of the boss
+  final BossType? bossType;
 
   @override
   Future<void> onLoad();
@@ -156,6 +165,12 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
       // When the boss is defeated the player wins
       if (isBoss) {
         world.win();
+
+        // Increment the amount of enemies killed
+        world.trophyProvider.incrementBossesKilled();
+      } else {
+        // We need to increment the number of enemies killed
+        world.trophyProvider.incrementEnemiesKilled(enemyType!);
       }
     }
   }
@@ -167,9 +182,6 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     world.enemies.remove(this);
     DeathEffect deathEffect = DeathEffect();
     add(deathEffect);
-
-    // Increment the amount of enemies killed
-    world.trophyProvider.incrementsEnemiesKilled();
 
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(

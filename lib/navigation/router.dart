@@ -2,7 +2,7 @@ import 'package:dungeon_run/flame_game/components/characters/character_type.dart
 import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/navigation/select_level_screen.dart';
 import 'package:dungeon_run/navigation/store_screen.dart';
-import 'package:dungeon_run/trophies/trophies_screen.dart';
+import 'package:dungeon_run/navigation/trophies_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dungeon_run/navigation/select_characters_screen.dart';

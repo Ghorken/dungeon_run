@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
+import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:dungeon_run/utils/commons.dart';
 import 'package:flame/collisions.dart';
@@ -16,6 +17,7 @@ class Troll extends Enemy {
           actualSpeed: 2,
           speed: 2,
           lifePoints: 10,
+          enemyType: EnemyType.troll,
         );
 
   /// The max lifePoints of the enemy

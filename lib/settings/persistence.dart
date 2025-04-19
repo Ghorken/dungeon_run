@@ -1,6 +1,6 @@
 import 'package:dungeon_run/progression/default_levels.dart';
 import 'package:dungeon_run/progression/level.dart';
-import 'package:dungeon_run/settings/default_trophies.dart';
+import 'package:dungeon_run/trophies/default_trophies.dart';
 import 'package:dungeon_run/store/default_upgrades.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/trophies/trophy.dart';

@@ -5,6 +5,7 @@ import 'package:dungeon_run/progression/level.dart';
 /// Default levels for the game
 const List<Level> defaultLevels = [
   (
+    id: "external-1",
     name: "Esterno",
     completed: false,
     dependency: null,
@@ -29,6 +30,7 @@ const List<Level> defaultLevels = [
     message: "I dintorni del castello erano pien i di goblin, ma sei riuscito a farti strada tra i nemici e raggiungere l'entrata.\nUn profondo fossato circonda il castello e l'unico passaggio sembra essere il ponte levatotoio abbassato.",
   ),
   (
+    id: "external-2",
     name: "Fossato",
     completed: false,
     dependency: [
@@ -57,6 +59,7 @@ const List<Level> defaultLevels = [
     message: "Superato il fossato hai trovato una sorpresa, un arciere, ultimo rimasto di un gruppo che ha tentato l'ingresso prima di ha deciso di darti una mano e insieme siete riusciti a entrare nel castello.\nAlla vostra sinistra dei nitriti vi fanno presupporre la presenza delle stalle, alla vostra destra riuscite a vedere il corpo di guardia per fortuna deserto mentre dritto davanti a voi si apre la coorte del castello."
   ),
   (
+    id: "servants-1",
     name: "Stalle",
     completed: false,
     dependency: [
@@ -83,6 +86,7 @@ const List<Level> defaultLevels = [
     message: "Nelle stalle hai trovato svariati goblin intenti a mangiare fieno.\nNonostante il fetore del letame sei riuscito ad attraversarle e a raggiungere la posteria",
   ),
   (
+    id: "firstFloor-1",
     name: "Corte",
     completed: false,
     dependency: [
@@ -109,6 +113,7 @@ const List<Level> defaultLevels = [
     message: "La corte del castello sembrava silenziosa, ma tu eri pronto e non ti sei fatto soprendere dall'imboscata. È strano, è come se sapessero che saresti arrivato...",
   ),
   (
+    id: "guards-1",
     name: "Corpo di guardia",
     completed: false,
     dependency: [
