@@ -45,6 +45,8 @@ class Goblin extends Enemy {
       ),
     };
 
+    size = Vector2.all(150);
+
     // Position the enemy in a random spot at the top of the screen
     position = Vector2(randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), -world.size.y / 2);
 

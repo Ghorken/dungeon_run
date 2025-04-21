@@ -32,6 +32,14 @@ class Assassin extends Character {
           stepTime: 0.15,
         ),
       ),
+      CharacterState.attacking: await game.loadSpriteAnimation(
+        'characters/assassin.png',
+        SpriteAnimationData.sequenced(
+          amount: 1,
+          textureSize: Vector2(250, 394),
+          stepTime: 0.15,
+        ),
+      ),
     };
 
     size = Vector2.all(200);

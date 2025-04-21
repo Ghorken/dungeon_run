@@ -17,7 +17,7 @@ class Imp extends Enemy {
           actualSpeed: 2,
           speed: 2,
           lifePoints: 5,
-          enemyType: EnemyType.goblin,
+          enemyType: EnemyType.imp,
         );
 
   /// The max lifePoints of the enemy
@@ -31,7 +31,7 @@ class Imp extends Enemy {
         'enemies/imp.png',
         SpriteAnimationData.sequenced(
           amount: 1,
-          textureSize: Vector2(192, 192),
+          textureSize: Vector2(250, 277),
           stepTime: 0.15,
         ),
       ),
@@ -39,11 +39,13 @@ class Imp extends Enemy {
         'enemies/imp.png',
         SpriteAnimationData.sequenced(
           amount: 1,
-          textureSize: Vector2(192, 192),
+          textureSize: Vector2(250, 277),
           stepTime: 0.15,
         ),
       ),
     };
+
+    size = Vector2.all(150);
 
     // Position the enemy in a random spot at the top of the screen
     position = Vector2(randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), -world.size.y / 2);

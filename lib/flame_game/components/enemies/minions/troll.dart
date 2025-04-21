@@ -31,7 +31,7 @@ class Troll extends Enemy {
         'enemies/troll.png',
         SpriteAnimationData.sequenced(
           amount: 1,
-          textureSize: Vector2(192, 192),
+          textureSize: Vector2(250, 309),
           stepTime: 0.15,
         ),
       ),
@@ -39,11 +39,13 @@ class Troll extends Enemy {
         'enemies/troll.png',
         SpriteAnimationData.sequenced(
           amount: 1,
-          textureSize: Vector2(192, 192),
+          textureSize: Vector2(250, 309),
           stepTime: 0.15,
         ),
       ),
     };
+
+    size = Vector2.all(150);
 
     // Position the enemy in a random spot at the top of the screen
     position = Vector2(randomInRange((-world.size.x / 2 + size.x / 2).toInt(), (world.size.x / 2 - size.x / 2).toInt()), -world.size.y / 2);

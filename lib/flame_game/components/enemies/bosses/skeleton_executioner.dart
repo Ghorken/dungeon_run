@@ -16,7 +16,7 @@ class SkeletonExecutioner extends Enemy {
           actualSpeed: 2,
           speed: 2,
           lifePoints: 30,
-          bossType: BossType.goblinKing,
+          bossType: BossType.skeletonExecutioner,
         );
 
   /// The max lifePoints of the enemy
@@ -30,7 +30,7 @@ class SkeletonExecutioner extends Enemy {
         'enemies/skeleton_executioner.png',
         SpriteAnimationData.sequenced(
           amount: 1,
-          textureSize: Vector2(250, 495),
+          textureSize: Vector2(250, 482),
           stepTime: 0.15,
         ),
       ),
@@ -38,11 +38,13 @@ class SkeletonExecutioner extends Enemy {
         'enemies/skeleton_executioner.png',
         SpriteAnimationData.sequenced(
           amount: 1,
-          textureSize: Vector2(250, 495),
+          textureSize: Vector2(250, 482),
           stepTime: 0.15,
         ),
       ),
     };
+
+    size = Vector2.all(250);
 
     // Position the enemy at the middlet of the top of the screen
     position = Vector2(0.0, -world.size.y / 2);
