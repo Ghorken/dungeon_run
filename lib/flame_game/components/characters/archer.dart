@@ -30,6 +30,14 @@ class Archer extends Character {
           stepTime: 0.15,
         ),
       ),
+      CharacterState.attacking: await game.loadSpriteAnimation(
+        'characters/archer2.png',
+        SpriteAnimationData.sequenced(
+          amount: 8,
+          textureSize: Vector2(192, 192),
+          stepTime: 0.15,
+        ),
+      ),
     };
 
     size = Vector2.all(200);

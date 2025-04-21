@@ -21,9 +21,6 @@ class Warrior extends Character {
 
   @override
   Future<void> onLoad() async {
-    debugMode = true;
-    debugColor = Colors.blue;
-
     // This defines the different animation states that the character can be in.
     animations = {
       CharacterState.running: await game.loadSpriteAnimation(

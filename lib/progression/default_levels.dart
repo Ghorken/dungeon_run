@@ -27,7 +27,7 @@ const List<Level> defaultLevels = [
         "collectable_damage",
       ],
     },
-    message: "I dintorni del castello erano pien i di goblin, ma sei riuscito a farti strada tra i nemici e raggiungere l'entrata.\nUn profondo fossato circonda il castello e l'unico passaggio sembra essere il ponte levatotoio abbassato.",
+    message: "I dintorni del castello erano pieni di goblin, ma sei riuscito a farti strada tra i nemici e raggiungere l'entrata.\nUn profondo fossato circonda il castello e l'unico passaggio sembra essere il ponte levatotoio abbassato.",
   ),
   (
     id: "external-2",
@@ -37,10 +37,10 @@ const List<Level> defaultLevels = [
       "Esterno",
     ],
     enemies: [
-      EnemyType.elemental,
+      EnemyType.animatedArmour,
     ],
     enemyFrequency: 0.5,
-    boss: BossType.goblinKing,
+    boss: BossType.bridgeGuardian,
     bossTimer: 20.0,
     traps: [
       TrapType.spikedPit,
@@ -56,21 +56,21 @@ const List<Level> defaultLevels = [
         "archer",
       ],
     },
-    message: "Superato il fossato hai trovato una sorpresa, un arciere, ultimo rimasto di un gruppo che ha tentato l'ingresso prima di ha deciso di darti una mano e insieme siete riusciti a entrare nel castello.\nAlla vostra sinistra dei nitriti vi fanno presupporre la presenza delle stalle, alla vostra destra riuscite a vedere il corpo di guardia per fortuna deserto mentre dritto davanti a voi si apre la coorte del castello."
+    message: "Superato il fossato hai trovato una sorpresa, un arciere, ultimo rimasto di un gruppo che ha tentato l'ingresso prima di te. Ha deciso di darti una mano e insieme siete entrati nel castello.\nAlla vostra sinistra vedete l'accesso alle cucine, alla vostra destra riuscite a vedere il corpo di guardia che appare deserto mentre dritto davanti a voi la torre del mago, sulla cui cima brilla un turbinio di energia magica."
   ),
   (
     id: "servants-1",
-    name: "Stalle",
+    name: "Cucine",
     completed: false,
     dependency: [
       "Fossato",
     ],
     enemies: [
-      EnemyType.goblin,
-      EnemyType.elemental,
+      EnemyType.zombie,
+      EnemyType.zombieDog,
     ],
     enemyFrequency: 0.5,
-    boss: BossType.goblinKing,
+    boss: BossType.zombieChef,
     bossTimer: 20.0,
     traps: [
       TrapType.spikedPit,
@@ -82,22 +82,25 @@ const List<Level> defaultLevels = [
     map: "dungeon_corridor",
     rewards: {
       "gold": 100,
+      "upgrades": [
+        "collectable_resurrection",
+      ],
     },
-    message: "Nelle stalle hai trovato svariati goblin intenti a mangiare fieno.\nNonostante il fetore del letame sei riuscito ad attraversarle e a raggiungere la posteria",
+    message: "Le cucine erano piene di zombie, la servitù rimasta fedele al castello.\nNonostante la pizza di marcio sei riuscito ad attraversarle e a raggiungere la posteria",
   ),
   (
     id: "firstFloor-1",
-    name: "Corte",
+    name: "Torre del mago",
     completed: false,
     dependency: [
       "Fossato",
     ],
     enemies: [
-      EnemyType.troll,
+      EnemyType.imp,
       EnemyType.elemental,
     ],
     enemyFrequency: 0.5,
-    boss: BossType.goblinKing,
+    boss: BossType.balor,
     bossTimer: 20.0,
     traps: [
       TrapType.spikedPit,
@@ -109,8 +112,11 @@ const List<Level> defaultLevels = [
     map: "dungeon_corridor",
     rewards: {
       "gold": 100,
+      "upgrades": [
+        "wizard",
+      ],
     },
-    message: "La corte del castello sembrava silenziosa, ma tu eri pronto e non ti sei fatto soprendere dall'imboscata. È strano, è come se sapessero che saresti arrivato...",
+    message: "Qualcosa deve essere andato storto con l'ultimo incantesimo del mago di corte e si è aperto un portale da cui è fuoriuscita un'orda di demoni.\nIl mago ha cercato di fermarli ma senza il tuo aiuto non ce l'avrebbe fatta e per questo ti è riconoscente.",
   ),
   (
     id: "guards-1",
@@ -120,11 +126,10 @@ const List<Level> defaultLevels = [
       "Fossato",
     ],
     enemies: [
-      EnemyType.goblin,
-      EnemyType.elemental,
+      EnemyType.skeleton,
     ],
     enemyFrequency: 0.5,
-    boss: BossType.goblinKing,
+    boss: BossType.skeletonExecutioner,
     bossTimer: 20.0,
     traps: [
       TrapType.spikedPit,
@@ -140,6 +145,6 @@ const List<Level> defaultLevels = [
         "berserk",
       ],
     },
-    message: "Il corpo di guardia è stato facile da superare, ma hai trovato un tesoro inaspettato: in una delle celle era rinchiuso un nano che ha deciso di affiancarti nella tua avventura.",
+    message: "Il corpo di guardia è stato facile da superare, gli scheletri cadevano come una torre del jenga, ma hai trovato un tesoro inaspettato: in una delle celle era rinchiuso un nano che ha deciso di affiancarti nella tua avventura.",
   ),
 ];

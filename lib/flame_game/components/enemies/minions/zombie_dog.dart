@@ -6,18 +6,18 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-class Troll extends Enemy {
-  Troll({
+class ZombieDog extends Enemy {
+  ZombieDog({
     required super.goldUpgradeLevel,
-  })  : maxLifePoints = 10,
+  })  : maxLifePoints = 5,
         super(
-          enemyGold: 2,
+          enemyGold: 1,
           isBoss: false,
           damage: 1,
           actualSpeed: 2,
           speed: 2,
-          lifePoints: 10,
-          enemyType: EnemyType.troll,
+          lifePoints: 5,
+          enemyType: EnemyType.goblin,
         );
 
   /// The max lifePoints of the enemy
@@ -28,17 +28,17 @@ class Troll extends Enemy {
     // Load the sprite of the enemy
     animations = {
       EnemyState.running: await game.loadSpriteAnimation(
-        'enemies/troll.png',
+        'enemies/zombie_dog.png',
         SpriteAnimationData.sequenced(
-          amount: 2,
+          amount: 1,
           textureSize: Vector2(192, 192),
           stepTime: 0.15,
         ),
       ),
       EnemyState.attacking: await game.loadSpriteAnimation(
-        'enemies/troll.png',
+        'enemies/zombie_dog.png',
         SpriteAnimationData.sequenced(
-          amount: 4,
+          amount: 1,
           textureSize: Vector2(192, 192),
           stepTime: 0.15,
         ),

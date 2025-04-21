@@ -120,13 +120,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 child: Text(Strings.store),
               ),
             _gap,
-            WobblyButton(
-              onPressed: () {
-                audioController.playSfx(SfxType.buttonTap);
-                GoRouter.of(context).go('/trophies');
-              },
-              child: Text(Strings.trophiesRoom),
-            ),
+            if (levels.isNotEmpty && levels.first.completed == true)
+              WobblyButton(
+                onPressed: () {
+                  audioController.playSfx(SfxType.buttonTap);
+                  GoRouter.of(context).go('/trophies');
+                },
+                child: Text(Strings.trophiesRoom),
+              ),
             _gap,
             WobblyButton(
               onPressed: () => GoRouter.of(context).push('/settings'),

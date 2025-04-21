@@ -274,6 +274,9 @@ class EndlessWorld extends World with HasGameReference {
     levelProvider.saveToMemory();
 
     // Save the accumulated gold
+    if (level.rewards["gold"] != null) {
+      gold += level.rewards["gold"] as int;
+    }
     upgradeProvider.setGold = gold + upgradeProvider.gold;
 
     // Unlock the upgrades and save the state of the upgrades
@@ -281,8 +284,8 @@ class EndlessWorld extends World with HasGameReference {
       for (String unlockedUpgrade in level.rewards["upgrades"] as List<String>) {
         upgradeProvider.unlockUpgrade(unlockedUpgrade);
       }
-      upgradeProvider.saveToMemory();
     }
+    upgradeProvider.saveToMemory();
 
     // Unlock the trophies for the characters unlocked
     if (upgradeProvider.upgrades.where((Upgrade upgrade) => upgrade.characterType != null && upgrade.unlocked == true).length == 3) {

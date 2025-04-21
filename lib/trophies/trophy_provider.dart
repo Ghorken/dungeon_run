@@ -233,7 +233,7 @@ class TrophyProvider extends ChangeNotifier {
                 ),
                 Flexible(
                   child: Text(
-                    "Trophy unlocked: ${trophy.name}",
+                    trophy.name,
                     style: const TextStyle(color: Colors.white),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,

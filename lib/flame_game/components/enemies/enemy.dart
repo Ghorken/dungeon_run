@@ -1,9 +1,18 @@
 import 'package:dungeon_run/flame_game/components/characters/character.dart';
-import 'package:dungeon_run/flame_game/components/enemies/elemental.dart';
+import 'package:dungeon_run/flame_game/components/enemies/minions/animated_armour.dart';
+import 'package:dungeon_run/flame_game/components/enemies/bosses/balor.dart';
+import 'package:dungeon_run/flame_game/components/enemies/bosses/bridge_guardian.dart';
+import 'package:dungeon_run/flame_game/components/enemies/minions/elemental.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
-import 'package:dungeon_run/flame_game/components/enemies/goblin.dart';
-import 'package:dungeon_run/flame_game/components/enemies/goblin_king.dart';
-import 'package:dungeon_run/flame_game/components/enemies/troll.dart';
+import 'package:dungeon_run/flame_game/components/enemies/minions/goblin.dart';
+import 'package:dungeon_run/flame_game/components/enemies/bosses/goblin_king.dart';
+import 'package:dungeon_run/flame_game/components/enemies/minions/imp.dart';
+import 'package:dungeon_run/flame_game/components/enemies/minions/skeleton.dart';
+import 'package:dungeon_run/flame_game/components/enemies/bosses/skeleton_executioner.dart';
+import 'package:dungeon_run/flame_game/components/enemies/minions/troll.dart';
+import 'package:dungeon_run/flame_game/components/enemies/minions/zombie.dart';
+import 'package:dungeon_run/flame_game/components/enemies/bosses/zombie_chef.dart';
+import 'package:dungeon_run/flame_game/components/enemies/minions/zombie_dog.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -45,6 +54,16 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
         return Troll(goldUpgradeLevel: goldUpgradeLevel);
       case EnemyType.elemental:
         return Elemental(goldUpgradeLevel: goldUpgradeLevel);
+      case EnemyType.animatedArmour:
+        return AnimatedArmour(goldUpgradeLevel: goldUpgradeLevel);
+      case EnemyType.imp:
+        return Imp(goldUpgradeLevel: goldUpgradeLevel);
+      case EnemyType.zombie:
+        return Zombie(goldUpgradeLevel: goldUpgradeLevel);
+      case EnemyType.zombieDog:
+        return ZombieDog(goldUpgradeLevel: goldUpgradeLevel);
+      case EnemyType.skeleton:
+        return Skeleton(goldUpgradeLevel: goldUpgradeLevel);
     }
   }
 
@@ -56,6 +75,14 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     switch (type) {
       case BossType.goblinKing:
         return GoblinKing(goldUpgradeLevel: goldUpgradeLevel);
+      case BossType.bridgeGuardian:
+        return BridgeGuardian(goldUpgradeLevel: goldUpgradeLevel);
+      case BossType.balor:
+        return Balor(goldUpgradeLevel: goldUpgradeLevel);
+      case BossType.zombieChef:
+        return ZombieChef(goldUpgradeLevel: goldUpgradeLevel);
+      case BossType.skeletonExecutioner:
+        return SkeletonExecutioner(goldUpgradeLevel: goldUpgradeLevel);
     }
   }
 

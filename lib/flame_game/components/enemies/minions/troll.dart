@@ -6,18 +6,18 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-class Elemental extends Enemy {
-  Elemental({
+class Troll extends Enemy {
+  Troll({
     required super.goldUpgradeLevel,
-  })  : maxLifePoints = 15,
+  })  : maxLifePoints = 10,
         super(
-          enemyGold: 3,
+          enemyGold: 2,
           isBoss: false,
-          damage: 2,
-          actualSpeed: 4,
-          speed: 4,
-          lifePoints: 15,
-          enemyType: EnemyType.elemental,
+          damage: 1,
+          actualSpeed: 2,
+          speed: 2,
+          lifePoints: 10,
+          enemyType: EnemyType.troll,
         );
 
   /// The max lifePoints of the enemy
@@ -28,17 +28,17 @@ class Elemental extends Enemy {
     // Load the sprite of the enemy
     animations = {
       EnemyState.running: await game.loadSpriteAnimation(
-        'enemies/elemental.png',
+        'enemies/troll.png',
         SpriteAnimationData.sequenced(
-          amount: 2,
+          amount: 1,
           textureSize: Vector2(192, 192),
           stepTime: 0.15,
         ),
       ),
       EnemyState.attacking: await game.loadSpriteAnimation(
-        'enemies/elemental.png',
+        'enemies/troll.png',
         SpriteAnimationData.sequenced(
-          amount: 4,
+          amount: 1,
           textureSize: Vector2(192, 192),
           stepTime: 0.15,
         ),
