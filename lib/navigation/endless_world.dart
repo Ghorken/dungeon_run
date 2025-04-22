@@ -50,6 +50,10 @@ class EndlessWorld extends World with HasGameReference {
   late Vector2 leftCharacterPosition = Vector2(-(size.x / 2) + (size.x / 5), (size.y / 2) - (size.y / 20));
   late Vector2 rightCharacterPosition = Vector2((size.x / 2) - (size.x / 5), (size.y / 2) - (size.y / 20));
 
+  /// Define the boundaries for the three areas
+  late final double topAreaEnd = -size.y / 3;
+  late final double bottomAreaStart = size.y / 3;
+
   /// This is used to measure the duration of the effects
   late final DateTime timeStarted;
 

@@ -73,14 +73,14 @@ class Warrior extends Character {
     Enemy? closestEnemy;
     double closestDistance = double.infinity;
 
-    // Cycle through the enemies in the screen to find the nearest one in range
-    for (final Enemy enemy in world.enemies) {
+    // Cycle through the enemies at the bottom of the screen to find the nearest one in range
+    // (I'm not looking only at the distance from the character to avoid to not been able to attack enemies that
+    // are in the bottom area but to distant from the character)
+    for (final Enemy enemy in world.enemies.where((Enemy enemy) => enemy.position.y > world.bottomAreaStart)) {
       final double distance = enemy.distance(this);
-      if (enemy.distance(this) < 100) {
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestEnemy = enemy;
-        }
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestEnemy = enemy;
       }
     }
 

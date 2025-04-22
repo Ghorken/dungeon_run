@@ -73,7 +73,7 @@ class Archer extends Character {
 
     // Cycle through the enemies in the screen to find the nearest one in range
     for (final Enemy enemy in world.enemies) {
-      if (enemy.position.y < -200) {
+      if (enemy.position.y < world.topAreaEnd) {
         final double distance = enemy.position.y;
         if (distance < closestDistance) {
           closestDistance = distance;
