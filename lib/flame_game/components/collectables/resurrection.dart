@@ -22,9 +22,10 @@ class Resurrection extends Collectable {
   void effect() {
     // Retrieve one of the dead and remove from the list
     if (world.deadCharacters.nonNulls.isNotEmpty) {
-      int resurrectedCharacterIndex = world.deadCharacters.indexOf((world.deadCharacters.nonNulls as List<Character>).random());
+      int resurrectedCharacterIndex = world.deadCharacters.indexOf((world.deadCharacters.nonNulls.toList()).random());
       Character resurrectedCharacter = world.deadCharacters[resurrectedCharacterIndex]!;
       world.deadCharacters[resurrectedCharacterIndex] = null;
+
       // Add it to the alive list with half life points or full life points
       resurrectedCharacter.lifePoints = fullHealt ? resurrectedCharacter.maxLifePoints : resurrectedCharacter.maxLifePoints / 2;
       world.characters[resurrectedCharacterIndex] = resurrectedCharacter;

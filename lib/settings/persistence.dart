@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dungeon_run/progression/default_levels.dart';
 import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/trophies/default_trophies.dart';
@@ -94,6 +96,19 @@ class Persistence {
     return recoveredTrophies;
   }
 
+  /// Retrieve the trophies stats
+  Future<Map<String, dynamic>> getTrophiesStats() async {
+    final prefs = await instanceFuture;
+    String? encodedString = prefs.getString('trophiesStats');
+    Map<String, dynamic> recoveredTrophiesStats = {};
+
+    if (encodedString != null) {
+      // If the string is not null, decode it to a Map object
+      recoveredTrophiesStats = jsonDecode(encodedString) as Map<String, dynamic>;
+    }
+    return recoveredTrophiesStats;
+  }
+
   /// Save the state of the audio
   Future<void> saveAudioOn(bool value) async {
     final prefs = await instanceFuture;
@@ -138,5 +153,12 @@ class Persistence {
     final prefs = await instanceFuture;
 
     await prefs.setStringList('trophies', value);
+  }
+
+  /// Save the trophies stats
+  Future<void> saveTrophiesStats(Map<String, dynamic> value) async {
+    final prefs = await instanceFuture;
+
+    await prefs.setString('trophiesStats', jsonEncode(value));
   }
 }

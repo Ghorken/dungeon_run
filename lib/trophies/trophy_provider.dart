@@ -20,7 +20,7 @@ class TrophyProvider extends ChangeNotifier {
   int _totalEnemiesKilled = 0;
 
   /// List of enemies killed
-  final Set<EnemyType> _typeOfEnemiesKilled = {};
+  Set<EnemyType> _typeOfEnemiesKilled = {};
 
   /// Amount of bosses killed
   int _totalBossesKilled = 0;
@@ -35,13 +35,13 @@ class TrophyProvider extends ChangeNotifier {
   int _totalCollectables = 0;
 
   /// List of collectables
-  final Set<CollectableType> _typeOfCollectablesRetrieved = {};
+  Set<CollectableType> _typeOfCollectablesRetrieved = {};
 
   /// Number of traps
   int _totalTraps = 0;
 
   /// List of traps
-  final Set<TrapType> _typeOfTrapsDisabled = {};
+  Set<TrapType> _typeOfTrapsDisabled = {};
 
   /// Number of upgrades
   int _totalUpgrades = 0;
@@ -52,13 +52,53 @@ class TrophyProvider extends ChangeNotifier {
   /// Recover the unlocked trophies
   Future<void> loadFromMemory() async {
     _trophies = await _persistence.getTrophies();
+
+    Map<String, dynamic> trophiesStats = await _persistence.getTrophiesStats();
+    if (trophiesStats.isEmpty) {
+      _totalEnemiesKilled = 0;
+      _typeOfEnemiesKilled = {};
+      _totalBossesKilled = 0;
+      _totalDeaths = 0;
+      _totalResurrections = 0;
+      _totalCollectables = 0;
+      _typeOfCollectablesRetrieved = {};
+      _totalTraps = 0;
+      _typeOfTrapsDisabled = {};
+      _totalUpgrades = 0;
+    } else {
+      _totalEnemiesKilled = int.parse(trophiesStats["totalEnemiesKilled"] as String);
+      _typeOfEnemiesKilled = (trophiesStats["typeOfEnemiesKilled"] as List<dynamic>).map((dynamic enemyType) => EnemyType.values.byName(enemyType as String)).toSet();
+      _totalBossesKilled = int.parse(trophiesStats["totalBossesKilled"] as String);
+      _totalDeaths = int.parse(trophiesStats["totalDeaths"] as String);
+      _totalResurrections = int.parse(trophiesStats["totalResurrections"] as String);
+      _totalCollectables = int.parse(trophiesStats["totalCollectables"] as String);
+      _typeOfCollectablesRetrieved = (trophiesStats["typeOfCollectablesRetrieved"] as List<dynamic>).map((dynamic collectableType) => CollectableType.values.byName(collectableType as String)).toSet();
+      _totalTraps = int.parse(trophiesStats["totalTraps"] as String);
+      _typeOfTrapsDisabled = (trophiesStats["typeOfTrapsDisabled"] as List<dynamic>).map((dynamic trapType) => TrapType.values.byName(trapType as String)).toSet();
+      _totalUpgrades = int.parse(trophiesStats["totalUpgrades"] as String);
+    }
+
     notifyListeners();
   }
 
   /// Save the trophies to memory
   Future<void> saveToMemory() async {
-    final List<String> encodedList = _trophies.map((Trophy trophy) => trophiesToString(trophy)).toList();
-    await _persistence.saveTrophies(encodedList);
+    final List<String> encodedTrophies = _trophies.map((Trophy trophy) => trophiesToString(trophy)).toList();
+    await _persistence.saveTrophies(encodedTrophies);
+
+    final Map<String, dynamic> encodedTrophiesStats = {
+      "totalEnemiesKilled": _totalEnemiesKilled.toString(),
+      "typeOfEnemiesKilled": _typeOfEnemiesKilled.map((EnemyType enemyType) => enemyType.name).toList(),
+      "totalBossesKilled": _totalBossesKilled.toString(),
+      "totalDeaths": _totalDeaths.toString(),
+      "totalResurrections": _totalResurrections.toString(),
+      "totalCollectables": _totalCollectables.toString(),
+      "typeOfCollectablesRetrieved": _typeOfCollectablesRetrieved.map((CollectableType collectableType) => collectableType.name).toList(),
+      "totalTraps": _totalTraps.toString(),
+      "typeOfTrapsDisabled": _typeOfTrapsDisabled.map((TrapType trapType) => trapType.name).toList(),
+      "totalUpgrades": _totalUpgrades.toString(),
+    };
+    await _persistence.saveTrophiesStats(encodedTrophiesStats);
   }
 
   /// Increment the amount of enemies killed and add the enemy to the set of enemies killed

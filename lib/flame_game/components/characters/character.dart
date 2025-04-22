@@ -4,7 +4,6 @@ import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
 import 'package:dungeon_run/flame_game/components/characters/mage.dart';
-import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
 import 'package:dungeon_run/flame_game/effects/invincible_effect.dart';
 import 'package:dungeon_run/navigation/endless_runner.dart';
@@ -71,8 +70,6 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
 
   /// Apply the death effect and then remove the character from the screen
   void die() {
-    DeathEffect deathEffect = DeathEffect();
-    add(deathEffect);
     // Remove the character from the list and add it to the new list
     final int index = world.characters.indexOf(this);
     if (index != -1) {
@@ -83,7 +80,7 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(
       Duration(
-        milliseconds: (deathEffect.effectTime * 1000).toInt(),
+        milliseconds: 500,
       ),
       () => removeFromParent(),
     );
