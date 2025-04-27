@@ -3,6 +3,7 @@ import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
 class SkeletonExecutioner extends Enemy {
@@ -70,5 +71,8 @@ class SkeletonExecutioner extends Enemy {
         parentComponent: this,
       ),
     );
+
+    // Set the index of the character to attack
+    targetCharacterIndex = world.characters.asMap().entries.where((entry) => entry.value != null).map((entry) => entry.key).toList().random();
   }
 }

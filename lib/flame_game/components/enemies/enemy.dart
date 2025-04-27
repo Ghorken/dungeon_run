@@ -36,6 +36,7 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     required this.goldUpgradeLevel,
     this.enemyType,
     this.bossType,
+    this.targetCharacterIndex,
   }) : super(
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
@@ -116,6 +117,9 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
   /// The type of the boss
   final BossType? bossType;
 
+  /// The current target of the boss
+  int? targetCharacterIndex;
+
   @override
   Future<void> onLoad();
 
@@ -123,13 +127,28 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
   void update(double dt) {
     super.update(dt);
 
-    // We need to move the component to the bottom together with the speed that we
-    // have set for the world.
+    // If the enemy is a boss, we need to move towards the target character
+    // If the enemy is not a boss, we need to move down
+
+    // For the movement we need to calculate the speed based on the speed of the world
     // `dt` here stands for delta time and it is the time, in seconds, since the
     // last update ran. We need to multiply the speed by `dt` to make sure that
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
-    position.y += (world.speed * actualSpeed) * dt;
+    if (isBoss) {
+      if (world.characters[targetCharacterIndex!] != null) {
+        // If the enemy is a boss and has a target character, move towards it
+        final Vector2 targetPosition = world.characters[targetCharacterIndex!]!.position;
+        final Vector2 direction = (targetPosition - position).normalized();
+        position += direction * (world.speed * actualSpeed) * dt;
+      } else {
+        // If the target character is null, we need to find a new target
+        targetCharacterIndex = world.characters.asMap().entries.where((entry) => entry.value != null).map((entry) => entry.key).toList().random();
+      }
+    } else {
+      // We need to move the enemy to the bottom
+      position.y += (world.speed * actualSpeed) * dt;
+    }
 
     // When the component is no longer visible on the screen anymore, remove it.
     if (position.y - size.y > world.size.y / 2) {
