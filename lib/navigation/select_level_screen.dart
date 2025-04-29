@@ -25,68 +25,44 @@ class SelectLevelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Level> levels = Provider.of<LevelProvider>(context).levels;
 
-    /// The list of the available levels
-    /// Retrieve for every level the dependency and check if at least one is completed
-    /// If the level has no dependency, it is available
-    final List<Level> availableLevels = levels.where((Level level) {
-      final List<String>? dependencyLevels = level.dependency;
-
-      if (dependencyLevels != null) {
-        for (String dependency in dependencyLevels) {
-          if (levels.any((Level level) => level.name == dependency && level.completed)) {
-            return true;
-          }
-        }
-        return false;
-      } else {
-        return true;
-      }
-    }).toList();
-
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
       body: Center(
         child: Column(
           children: [
             Expanded(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 600,
-                ),
-                child: Column(
-                  children: [
-                    _gap,
-                    Text(
-                      Strings.selectLevel,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Press Start 2P',
-                        fontSize: 30,
-                        height: 1,
+              child: Column(
+                children: [
+                  _gap,
+                  Text(
+                    Strings.selectLevel,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Press Start 2P',
+                      fontSize: 30,
+                      height: 1,
+                    ),
+                  ),
+                  _gap,
+                  Expanded(
+                    child: InteractiveViewer(
+                      minScale: 0.5,
+                      maxScale: 2.0,
+                      child: Stack(
+                        children: [
+                          // Background image
+                          Positioned.fill(
+                            child: Image.asset(
+                              'assets/images/dungeon_door.png',
+                            ),
+                          ),
+                          // Buttons for levels
+                          for (int index = 0; index < levels.length; index++) _buildLevelButton(context, levels[index], index),
+                        ],
                       ),
                     ),
-                    _gap,
-                    // The list of the available levels
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: availableLevels.length,
-                      itemBuilder: (context, index) {
-                        final Level level = availableLevels[index];
-                        return WobblyButton(
-                          onPressed: () {
-                            Map<String, dynamic> extra = {
-                              'selectedCharacters': selectedCharacters,
-                              'level': level,
-                            };
-                            GoRouter.of(context).go('/play', extra: extra);
-                          },
-                          child: Text(level.name),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             _gap,
@@ -101,5 +77,65 @@ class SelectLevelScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Helper method to build a button for each level
+  Widget _buildLevelButton(BuildContext context, Level level, int index) {
+    // Define specific positions for each button
+    final List<Offset> buttonPositions = [
+      Offset(MediaQuery.of(context).size.width / 2, 500),
+      Offset(MediaQuery.of(context).size.width / 2, 400),
+      Offset(MediaQuery.of(context).size.width / 5, 300),
+      Offset(MediaQuery.of(context).size.width / 2, 100),
+      Offset(MediaQuery.of(context).size.width / 5 * 4, 200),
+    ];
+
+    // Button dimensions
+    const double buttonWidth = 150;
+    const double buttonHeight = 50;
+
+    // Check if the level is available
+    final List<String>? dependencyLevels = level.dependency;
+    bool isAvailable = false;
+
+    if (dependencyLevels != null) {
+      for (String dependency in dependencyLevels) {
+        if (Provider.of<LevelProvider>(context, listen: false).levels.any((Level l) => l.name == dependency && l.completed)) {
+          isAvailable = true;
+          break;
+        }
+      }
+    } else {
+      isAvailable = true;
+    }
+
+    return isAvailable
+        ? Positioned(
+            left: buttonPositions[index].dx - (buttonWidth / 2),
+            top: buttonPositions[index].dy - (buttonHeight / 2),
+            width: buttonWidth,
+            child: ElevatedButton(
+              onPressed: isAvailable
+                  ? () {
+                      Map<String, dynamic> extra = {
+                        'selectedCharacters': selectedCharacters,
+                        'level': level,
+                      };
+                      GoRouter.of(context).go('/play', extra: extra);
+                    }
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isAvailable ? Colors.blue : Colors.grey,
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+              ),
+              child: Text(
+                level.name,
+                textAlign: TextAlign.center,
+                softWrap: true,
+                maxLines: 2,
+              ),
+            ),
+          )
+        : Container();
   }
 }
