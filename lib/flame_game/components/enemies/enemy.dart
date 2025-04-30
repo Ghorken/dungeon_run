@@ -15,12 +15,14 @@ import 'package:dungeon_run/flame_game/components/enemies/bosses/zombie_chef.dar
 import 'package:dungeon_run/flame_game/components/enemies/minions/zombie_dog.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
 import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
 import 'package:dungeon_run/navigation/endless_runner.dart';
 import 'package:dungeon_run/navigation/endless_world.dart';
+import 'package:flutter/material.dart';
 
 /// The [Enemy] component can represent the different types of enemies
 /// that the character can run into.
@@ -204,6 +206,36 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
   /// if the lifePoints are less than or equal to 0 we remove the enemy.
   void hitted(double damage) {
     lifePoints -= damage;
+
+    // Define the floating damage number
+    final TextComponent damageText = TextComponent(
+      text: '$damage',
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      position: Vector2(size.x / 2, size.y / 2),
+      anchor: Anchor.center,
+    );
+
+    // Add an effect to make the text float upwards and fade out
+    damageText.add(
+      MoveEffect.by(
+        Vector2(0, -20), // Move upwards by 20 pixels
+        EffectController(duration: 0.5),
+        onComplete: () {
+          // Remove the text after the effect is complete
+          damageText.removeFromParent();
+        },
+      ),
+    );
+
+    // Add the damageText to the Enemy
+    add(damageText);
+
     if (lifePoints > 0) {
       add(EnemyHurtEffect());
     } else {

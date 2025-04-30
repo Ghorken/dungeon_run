@@ -14,19 +14,18 @@ class EnemyHurtEffect extends Component with ParentIsA<Enemy> {
   @override
   void onMount() {
     super.onMount();
-    parent.addAll(
-      [
-        // Make the enemy blinks in red
-        ColorEffect(
-          Colors.red,
-          EffectController(
-            duration: effectTime / 8,
-            alternate: true,
-            repeatCount: 2,
-          ),
-          opacityTo: 0.9,
+
+    // Make the enemy blink in red
+    parent.add(
+      ColorEffect(
+        Colors.red,
+        EffectController(
+          duration: effectTime / 8,
+          alternate: true,
+          repeatCount: 2,
         ),
-      ],
+        opacityTo: 0.9,
+      ),
     );
   }
 }

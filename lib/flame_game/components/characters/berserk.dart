@@ -61,7 +61,6 @@ class Berserk extends Character {
       LifeBar(
         segmentWidth: size.x / maxLifePoints,
         color: Colors.green,
-        parentComponent: this,
       ),
     );
   }

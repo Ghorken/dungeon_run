@@ -28,7 +28,7 @@ class Damage extends Collectable {
     final EndlessWorld currentWorld = world;
 
     for (Character character in currentWorld.characters.nonNulls) {
-      character.damage *= damage;
+      character.damage += damage;
     }
 
     // Schedule the reversal of the effect after the duration
@@ -39,7 +39,7 @@ class Damage extends Collectable {
         onTick: () {
           // Revert the damage boost
           for (Character character in currentWorld.characters.nonNulls) {
-            character.damage = character.damage / damage;
+            character.damage = character.damage - damage;
           }
 
           removeFromParent();

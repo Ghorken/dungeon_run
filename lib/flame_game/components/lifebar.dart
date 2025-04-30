@@ -19,21 +19,16 @@ class LifeBar extends PositionComponent with HasWorldReference<EndlessWorld> {
   /// The color of the bar
   final Color color;
 
-  /// The component whose lifebar should be attached to
-  /// Should be an Enemy or a Character
-  final dynamic parentComponent;
-
   LifeBar({
     required this.segmentWidth,
     required this.color,
-    required this.parentComponent,
     this.barHeight = 10.0,
   });
 
   @override
   void onLoad() {
     // Determine the position in different way if it's the enemy's or the player's
-    if (parentComponent is Enemy) {
+    if (parent is Enemy) {
       // Position the life bar slightly over the position of the enemy
       position = Vector2(position.x, position.y - 10);
     } else {
@@ -50,7 +45,7 @@ class LifeBar extends PositionComponent with HasWorldReference<EndlessWorld> {
     super.render(canvas);
 
     // Draw the life bar segments
-    double lifePoints = (parentComponent is Enemy) ? (parentComponent as Enemy).lifePoints : (parentComponent as Character).lifePoints;
+    double lifePoints = (parent is Enemy) ? (parent as Enemy).lifePoints : (parent as Character).lifePoints;
     for (int i = 0; i < lifePoints; i++) {
       final double x = i * (segmentWidth + spacing);
       canvas.drawRect(
@@ -65,7 +60,7 @@ class LifeBar extends PositionComponent with HasWorldReference<EndlessWorld> {
     super.update(dt);
 
     // Update the size of the life bar based on the number of life points
-    double lifePoints = (parentComponent is Enemy) ? (parentComponent as Enemy).lifePoints : (parentComponent as Character).lifePoints;
+    double lifePoints = (parent is Enemy) ? (parent as Enemy).lifePoints : (parent as Character).lifePoints;
     size = Vector2(
       (lifePoints * (segmentWidth + spacing)).toDouble(),
       barHeight.toDouble(),

@@ -66,7 +66,6 @@ class GoblinKing extends Enemy {
       LifeBar(
         segmentWidth: size.x / maxLifePoints,
         color: Colors.red,
-        parentComponent: this,
       ),
     );
 
