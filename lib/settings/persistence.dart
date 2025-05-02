@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/progression/default_levels.dart';
 import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/trophies/default_trophies.dart';
@@ -109,6 +110,24 @@ class Persistence {
     return recoveredTrophiesStats;
   }
 
+  /// Retrieve the characters position
+  Future<List<CharacterType?>> getCharactersPosition() async {
+    final prefs = await instanceFuture;
+    List<String>? encodedString = prefs.getStringList('charactersPosition');
+    List<CharacterType?> recoveredCharactersPosition = [];
+
+    if (encodedString != null) {
+      for (String characterString in encodedString) {
+        final CharacterType? character = characterString == 'NULL' ? null : getCharacterType(characterString);
+        recoveredCharactersPosition.add(character);
+      }
+    } else {
+      // If no characters are found, return an empty list
+      recoveredCharactersPosition = List<CharacterType?>.filled(3, null);
+    }
+    return recoveredCharactersPosition;
+  }
+
   /// Save the state of the audio
   Future<void> saveAudioOn(bool value) async {
     final prefs = await instanceFuture;
@@ -149,10 +168,12 @@ class Persistence {
   }
 
   /// Save the state of the trophies
-  Future<void> saveTrophies(List<String> value) async {
+  Future<void> saveTrophies(List<Trophy> trophies) async {
     final prefs = await instanceFuture;
 
-    await prefs.setStringList('trophies', value);
+    final List<String> encodedTrophies = trophies.map((Trophy trophy) => trophiesToString(trophy)).toList();
+
+    await prefs.setStringList('trophies', encodedTrophies);
   }
 
   /// Save the trophies stats
@@ -160,5 +181,14 @@ class Persistence {
     final prefs = await instanceFuture;
 
     await prefs.setString('trophiesStats', jsonEncode(value));
+  }
+
+  /// Save the characters position
+  Future<void> saveCharactersPosition(List<CharacterType?> value) async {
+    final prefs = await instanceFuture;
+
+    final List<String> encodedCharacters = value.map((CharacterType? character) => character == null ? 'NULL' : getCharacterTypeString(character)).toList();
+
+    await prefs.setStringList('charactersPosition', encodedCharacters);
   }
 }

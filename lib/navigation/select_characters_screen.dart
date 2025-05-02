@@ -1,4 +1,5 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
+import 'package:dungeon_run/settings/persistence.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
@@ -25,7 +26,17 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
   static const _gap = SizedBox(height: 60);
 
   /// The list of the characters and the relative postions that the player selected
-  final List<CharacterType?> _selectedCharacters = List<CharacterType?>.filled(3, null);
+  List<CharacterType?> _selectedCharacters = List<CharacterType?>.filled(3, null);
+
+  /// The container of the local saved data
+  final Persistence _persistence = Persistence();
+
+  @override
+  void initState() {
+    super.initState();
+    // Call getCharactersPosition when the screen is initialized
+    getCharactersPosition();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +184,9 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                   return;
                 }
 
+                // Save the selected characters in memory
+                _persistence.saveCharactersPosition(_selectedCharacters);
+
                 // If the first level is completed go to the level selection screen
                 Map<String, dynamic> extra = {
                   'selectedCharacters': _selectedCharacters,
@@ -193,5 +207,13 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
         ),
       ),
     );
+  }
+
+  /// Get the characters position from memory
+  Future<void> getCharactersPosition() async {
+    final List<CharacterType?> charactersPosition = await _persistence.getCharactersPosition();
+    setState(() {
+      _selectedCharacters = charactersPosition;
+    });
   }
 }

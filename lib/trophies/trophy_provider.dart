@@ -83,8 +83,7 @@ class TrophyProvider extends ChangeNotifier {
 
   /// Save the trophies to memory
   Future<void> saveToMemory() async {
-    final List<String> encodedTrophies = _trophies.map((Trophy trophy) => trophiesToString(trophy)).toList();
-    await _persistence.saveTrophies(encodedTrophies);
+    await _persistence.saveTrophies(_trophies);
 
     final Map<String, dynamic> encodedTrophiesStats = {
       "totalEnemiesKilled": _totalEnemiesKilled.toString(),
