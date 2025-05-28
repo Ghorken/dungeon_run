@@ -23,12 +23,20 @@ class Warrior extends Character {
   Future<void> onLoad() async {
     // This defines the different animation states that the character can be in.
     animations = {
+      // CharacterState.running: await game.loadSpriteAnimation(
+      //   'characters/warrior_walk.png',
+      //   SpriteAnimationData.sequenced(
+      //     amount: 3,
+      //     textureSize: Vector2(192, 192),
+      //     stepTime: 0.15,
+      //   ),
+      // ),
       CharacterState.running: await game.loadSpriteAnimation(
-        'characters/warrior_walk.png',
+        'characters/wm1.png',
         SpriteAnimationData.sequenced(
-          amount: 3,
-          textureSize: Vector2(192, 192),
-          stepTime: 0.15,
+          amount: 4,
+          textureSize: Vector2(506, 491),
+          stepTime: 0.2,
         ),
       ),
       CharacterState.attacking: await game.loadSpriteAnimation(
@@ -42,7 +50,7 @@ class Warrior extends Character {
       ),
     };
 
-    size = Vector2.all(200);
+    size = Vector2.all(100);
 
     /// The starting state will be that the character is running.
     current = CharacterState.running;

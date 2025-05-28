@@ -24,6 +24,8 @@ dependencies:
   logging: ^1.2.0
   fluttertoast: ^8.2.12
   toastification: ^3.0.2
+  rive: ^0.13.20
+  flame_rive: ^1.10.15
 
 dev_dependencies:
   flame_test: ^1.16.2
@@ -47,6 +49,7 @@ flutter:
     - assets/images/collectables/
     - assets/music/
     - assets/sfx/
+    - assets/animations/
 
   fonts:
     - family: Press Start 2P

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +17,6 @@ class HurtEffect extends Component with ParentIsA<Character> {
 
     parent.addAll(
       [
-        // Rotate the character by 360°
-        RotateEffect.by(
-          pi * 2,
-          EffectController(
-            duration: effectTime,
-            curve: Curves.easeInOut,
-          ),
-        ),
         // Make che character blinks in white
         ColorEffect(
           Colors.white,
