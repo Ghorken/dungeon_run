@@ -15,6 +15,7 @@ class Mage extends Character {
     required super.maxLifePoints,
     required super.damage,
     required super.cooldownTimer,
+    required super.artboard,
   }) : super(
           lifePoints: maxLifePoints,
         );
@@ -22,29 +23,29 @@ class Mage extends Character {
   @override
   Future<void> onLoad() async {
     // This defines the different animation states that the character can be in.
-    animations = {
-      CharacterState.running: await game.loadSpriteAnimation(
-        'characters/wizard.png',
-        SpriteAnimationData.sequenced(
-          amount: 1,
-          textureSize: Vector2(250, 394),
-          stepTime: 0.15,
-        ),
-      ),
-      CharacterState.attacking: await game.loadSpriteAnimation(
-        'characters/wizard.png',
-        SpriteAnimationData.sequenced(
-          amount: 1,
-          textureSize: Vector2(250, 394),
-          stepTime: 0.15,
-        ),
-      ),
-    };
+    // animations = {
+    //   CharacterState.running: await game.loadSpriteAnimation(
+    //     'characters/wizard.png',
+    //     SpriteAnimationData.sequenced(
+    //       amount: 1,
+    //       textureSize: Vector2(250, 394),
+    //       stepTime: 0.15,
+    //     ),
+    //   ),
+    //   CharacterState.attacking: await game.loadSpriteAnimation(
+    //     'characters/wizard.png',
+    //     SpriteAnimationData.sequenced(
+    //       amount: 1,
+    //       textureSize: Vector2(250, 394),
+    //       stepTime: 0.15,
+    //     ),
+    //   ),
+    // };
 
-    size = Vector2.all(200);
+    // size = Vector2.all(200);
 
-    /// The starting state will be that the character is running.
-    current = CharacterState.running;
+    // /// The starting state will be that the character is running.
+    // current = CharacterState.running;
 
     // Add the hitbox to the character
     add(
@@ -85,7 +86,7 @@ class Mage extends Character {
     // If there is one attack it
     if (closestEnemy != null) {
       // Change the state to attacking
-      current = CharacterState.attacking;
+      // current = CharacterState.attacking;
 
       // Apply damage to the closest enemy
       closestEnemy.hitted(damage);
@@ -106,9 +107,9 @@ class Mage extends Character {
       game.audioController.playSfx(SfxType.score);
 
       // Revert the state back to running after 0.5 seconds
-      Future.delayed(const Duration(milliseconds: 500), () {
-        current = CharacterState.running;
-      });
+      // Future.delayed(const Duration(milliseconds: 500), () {
+      //   current = CharacterState.running;
+      // });
     }
   }
 

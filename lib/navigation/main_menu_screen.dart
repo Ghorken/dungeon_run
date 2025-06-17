@@ -6,7 +6,6 @@ import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/trophies/trophy_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:dungeon_run/audio/audio_controller.dart';
@@ -18,6 +17,8 @@ import 'package:dungeon_run/utils/wobbly_button.dart';
 
 /// The class that defines the main page of the game
 class MainMenuScreen extends StatefulWidget {
+  static const String routeName = "/mainMenu";
+
   const MainMenuScreen({
     super.key,
   });
@@ -45,6 +46,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     final List<Level> levels = Provider.of<LevelProvider>(context).levels;
     final SettingsController settingsController = context.watch<SettingsController>();
     final AudioController audioController = context.watch<AudioController>();
+    final NavigatorState navigator = Navigator.of(context);
 
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
@@ -87,7 +89,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
                 // If there are more than one characters unlocked go to the selection screen
                 if (unlockedCharacters > 1) {
-                  GoRouter.of(context).go('/selectCharacters');
+                  navigator.pushNamed('/selectCharacters');
                 } else {
                   // If there are no characters unlocked prepare the party with only the [Warrior]
                   final List<CharacterType?> selectedCharacters = List<CharacterType?>.filled(3, null);
@@ -97,14 +99,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     Map<String, dynamic> extra = {
                       'selectedCharacters': selectedCharacters,
                     };
-                    GoRouter.of(context).go('/selectLevel', extra: extra);
+                    navigator.pushNamed('/selectLevel', arguments: extra);
                   } else {
                     // If the first level is not completed go to game screen
                     Map<String, dynamic> extra = {
                       'selectedCharacters': selectedCharacters,
                       'level': levels.first,
                     };
-                    GoRouter.of(context).go('/play', extra: extra);
+                    navigator.pushNamed('/play', arguments: extra);
                   }
                 }
               },
@@ -115,7 +117,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               WobblyButton(
                 onPressed: () {
                   audioController.playSfx(SfxType.buttonTap);
-                  GoRouter.of(context).go('/store');
+                  navigator.pushNamed('/store');
                 },
                 child: Text(Strings.store),
               ),
@@ -124,13 +126,16 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               WobblyButton(
                 onPressed: () {
                   audioController.playSfx(SfxType.buttonTap);
-                  GoRouter.of(context).go('/trophies');
+                  navigator.pushNamed('/trophies');
                 },
                 child: Text(Strings.trophiesRoom),
               ),
             _gap,
             WobblyButton(
-              onPressed: () => GoRouter.of(context).push('/settings'),
+              onPressed: () {
+                audioController.playSfx(SfxType.buttonTap);
+                navigator.pushNamed('/settings');
+              },
               child: Text(Strings.settings),
             ),
             _gap,

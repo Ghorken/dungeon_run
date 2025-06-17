@@ -5,7 +5,6 @@ import 'package:dungeon_run/trophies/trophy_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +20,8 @@ import 'package:dungeon_run/navigation/endless_runner.dart';
 /// the gets the [AudioController] from the context and passes it in to the
 /// [EndlessRunner] class so that it can play audio.
 class GameScreen extends StatelessWidget {
+  static const String routeName = "/play";
+
   const GameScreen({
     required this.selectedCharacters,
     required this.level,
@@ -51,6 +52,7 @@ class GameScreen extends StatelessWidget {
     final UpgradeProvider upgradeProvider = context.read<UpgradeProvider>();
     final LevelProvider levelProvider = context.read<LevelProvider>();
     final TrophyProvider trophyProvider = context.read<TrophyProvider>();
+    final NavigatorState navigator = Navigator.of(context);
 
     return Scaffold(
       body: GameWidget<EndlessRunner>(
@@ -73,7 +75,9 @@ class GameScreen extends StatelessWidget {
                 type: NesButtonType.normal,
                 onPressed: () {
                   // When pressed return to the home page
-                  GoRouter.of(context).go('/');
+                  navigator.popUntil((route) {
+                    return route.settings.name == null;
+                  });
                 },
                 child: NesIcon(iconData: NesIcons.leftArrowIndicator),
               ),
@@ -133,7 +137,9 @@ class GameScreen extends StatelessWidget {
                     ),
                     NesButton(
                       onPressed: () {
-                        GoRouter.of(context).go('/');
+                        navigator.popUntil((route) {
+                          return route.settings.name == null;
+                        });
                       },
                       type: NesButtonType.normal,
                       child: Text(Strings.ok),
@@ -159,7 +165,9 @@ class GameScreen extends StatelessWidget {
                     ),
                     NesButton(
                       onPressed: () {
-                        GoRouter.of(context).go('/');
+                        navigator.popUntil((route) {
+                          return route.settings.name == null;
+                        });
                       },
                       type: NesButtonType.normal,
                       child: Text(Strings.ok),

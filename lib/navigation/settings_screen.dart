@@ -2,13 +2,14 @@ import 'package:dungeon_run/utils/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/utils/wobbly_button.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:dungeon_run/settings/settings_controller.dart';
 
 /// The page that handles the settings of the game
 class SettingsScreen extends StatelessWidget {
+  static const String routeName = "/settings";
+
   const SettingsScreen({super.key});
 
   /// The gap between elements
@@ -17,6 +18,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
+    final NavigatorState navigator = Navigator.of(context);
 
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
@@ -66,7 +68,7 @@ class SettingsScreen extends StatelessWidget {
             _gap,
             WobblyButton(
               onPressed: () {
-                GoRouter.of(context).pop();
+                navigator.pop();
               },
               child: Text(Strings.back),
             ),

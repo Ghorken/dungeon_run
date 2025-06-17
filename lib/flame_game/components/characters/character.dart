@@ -4,8 +4,6 @@ import 'package:dungeon_run/flame_game/components/characters/berserk.dart';
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/components/characters/warrior.dart';
 import 'package:dungeon_run/flame_game/components/characters/mage.dart';
-import 'package:dungeon_run/flame_game/effects/hurt_effect.dart';
-import 'package:dungeon_run/flame_game/effects/invincible_effect.dart';
 import 'package:dungeon_run/navigation/endless_runner.dart';
 import 'package:dungeon_run/navigation/endless_world.dart';
 import 'package:dungeon_run/audio/sounds.dart';
@@ -14,15 +12,17 @@ import 'package:dungeon_run/store/upgrade.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame_rive/flame_rive.dart';
 
 /// The [Character] is the component that the player controls by tapping on it to make it attack
 /// It's abstract so that could not be instantiated and the single characters can extends it
-abstract class Character extends SpriteAnimationGroupComponent<CharacterState> with CollisionCallbacks, HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, TapCallbacks {
+abstract class Character extends RiveComponent with CollisionCallbacks, HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, TapCallbacks {
   Character({
     required this.damage,
     required this.maxLifePoints,
     required this.lifePoints,
     required this.cooldownTimer,
+    required super.artboard,
     super.position,
   }) : super(
           size: Vector2.all(150),
@@ -55,11 +55,9 @@ abstract class Character extends SpriteAnimationGroupComponent<CharacterState> w
   void hit(int damage) {
     if (invincible) {
       game.audioController.playSfx(SfxType.damage);
-      add(InvincibleEffect());
     } else {
       game.audioController.playSfx(SfxType.damage);
       lifePoints -= damage;
-      add(HurtEffect());
 
       // When the character lifePoints go to 0 kill the character
       if (lifePoints <= 0) {
@@ -113,7 +111,7 @@ enum CharacterState {
 /// [type] is the type of the character to create
 /// [position] is the position of the character in the screen
 /// [upgrades] is the map of the upgrades that the player has bought
-Character createCharacter(CharacterType type, Vector2 position, List<Upgrade> upgrades) {
+Future<Character> createCharacter(CharacterType type, Vector2 position, List<Upgrade> upgrades) async {
   switch (type) {
     case CharacterType.warrior:
       Upgrade warriorLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'warrior_life');
@@ -132,6 +130,7 @@ Character createCharacter(CharacterType type, Vector2 position, List<Upgrade> up
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
       );
     case CharacterType.archer:
       Upgrade archerLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'archer_life');
@@ -150,6 +149,7 @@ Character createCharacter(CharacterType type, Vector2 position, List<Upgrade> up
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
       );
     case CharacterType.mage:
       Upgrade mageLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'mage_life');
@@ -168,6 +168,7 @@ Character createCharacter(CharacterType type, Vector2 position, List<Upgrade> up
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
       );
     case CharacterType.assassin:
       Upgrade assassinLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'assassin_life');
@@ -186,6 +187,7 @@ Character createCharacter(CharacterType type, Vector2 position, List<Upgrade> up
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
       );
     case CharacterType.berserk:
       Upgrade berserkLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'berserk_life');
@@ -204,6 +206,7 @@ Character createCharacter(CharacterType type, Vector2 position, List<Upgrade> up
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
       );
   }
 }

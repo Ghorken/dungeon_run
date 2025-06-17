@@ -5,11 +5,12 @@ import 'package:dungeon_run/utils/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/utils/wobbly_button.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 /// The class that handle the selection of the level
 class SelectLevelScreen extends StatelessWidget {
+  static const String routeName = "/selectLevel";
+
   /// The list of unlocked characters recovered from upgrades
   final List<CharacterType?> selectedCharacters;
 
@@ -24,6 +25,7 @@ class SelectLevelScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Level> levels = Provider.of<LevelProvider>(context).levels;
+    final NavigatorState navigator = Navigator.of(context);
 
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
@@ -57,7 +59,7 @@ class SelectLevelScreen extends StatelessWidget {
                             ),
                           ),
                           // Buttons for levels
-                          for (int index = 0; index < levels.length; index++) _buildLevelButton(context, levels[index], index),
+                          for (int index = 0; index < levels.length; index++) _buildLevelButton(context, levels[index], index, navigator),
                         ],
                       ),
                     ),
@@ -68,7 +70,7 @@ class SelectLevelScreen extends StatelessWidget {
             _gap,
             WobblyButton(
               onPressed: () {
-                GoRouter.of(context).pop();
+                navigator.pop();
               },
               child: Text(Strings.back),
             ),
@@ -80,7 +82,7 @@ class SelectLevelScreen extends StatelessWidget {
   }
 
   /// Helper method to build a button for each level
-  Widget _buildLevelButton(BuildContext context, Level level, int index) {
+  Widget _buildLevelButton(BuildContext context, Level level, int index, NavigatorState navigator) {
     // Define specific positions for each button
     final List<Offset> buttonPositions = [
       Offset(MediaQuery.of(context).size.width / 2, 500),
@@ -121,7 +123,7 @@ class SelectLevelScreen extends StatelessWidget {
                         'selectedCharacters': selectedCharacters,
                         'level': level,
                       };
-                      GoRouter.of(context).go('/play', extra: extra);
+                      navigator.pushNamed('/play', arguments: extra);
                     }
                   : null,
               style: ElevatedButton.styleFrom(

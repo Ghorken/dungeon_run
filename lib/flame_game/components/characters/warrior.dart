@@ -5,7 +5,9 @@ import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:dungeon_run/flame_game/effects/special_attacks/warrior_special_attack_effect.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 
 /// The class that handles the attack and the damage of the Warrior
 /// The Warrior attacks the closest enemy in the bottom area of the screen
@@ -15,45 +17,30 @@ class Warrior extends Character {
     required super.maxLifePoints,
     required super.damage,
     required super.cooldownTimer,
+    required super.artboard,
   }) : super(
           lifePoints: maxLifePoints,
         );
 
+  /// The input for the attack animation
+  SMITrigger? _attackInput;
+
+  /// The input for the hitted animation
+  SMITrigger? _hittedInput;
+
   @override
   Future<void> onLoad() async {
-    // This defines the different animation states that the character can be in.
-    animations = {
-      // CharacterState.running: await game.loadSpriteAnimation(
-      //   'characters/warrior_walk.png',
-      //   SpriteAnimationData.sequenced(
-      //     amount: 3,
-      //     textureSize: Vector2(192, 192),
-      //     stepTime: 0.15,
-      //   ),
-      // ),
-      CharacterState.running: await game.loadSpriteAnimation(
-        'characters/wm1.png',
-        SpriteAnimationData.sequenced(
-          amount: 4,
-          textureSize: Vector2(506, 491),
-          stepTime: 0.2,
-        ),
-      ),
-      CharacterState.attacking: await game.loadSpriteAnimation(
-        'characters/warrior_attack.png',
-        SpriteAnimationData.sequenced(
-          amount: 6,
-          amountPerRow: 3,
-          textureSize: Vector2(192, 192),
-          stepTime: 0.15,
-        ),
-      ),
-    };
+    final controller = StateMachineController.fromArtboard(
+      artboard,
+      "Warrior",
+    );
+
+    _attackInput = controller?.getTriggerInput('Attack');
+    _hittedInput = controller?.getTriggerInput('Hitted');
+
+    artboard.addController(controller!);
 
     size = Vector2.all(100);
-
-    /// The starting state will be that the character is running.
-    current = CharacterState.running;
 
     // Add the hitbox to the character
     add(
@@ -97,18 +84,13 @@ class Warrior extends Character {
     // If there is one attack it
     if (closestEnemy != null) {
       // Change the state to attacking
-      current = CharacterState.attacking;
+      _attackInput?.fire();
 
       // Apply damage to the closest enemy
       closestEnemy.hitted(damage);
 
       // Play the attack sound effect
       game.audioController.playSfx(SfxType.score);
-
-      // Revert the state back to running after 0.5 seconds
-      Future.delayed(const Duration(milliseconds: 500), () {
-        current = CharacterState.running;
-      });
     }
   }
 
@@ -125,5 +107,12 @@ class Warrior extends Character {
 
       game.audioController.playSfx(SfxType.score);
     }
+  }
+
+  @override
+  void hit(int damage) {
+    super.hit(damage);
+
+    _hittedInput?.fire();
   }
 }

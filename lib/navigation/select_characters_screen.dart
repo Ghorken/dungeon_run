@@ -5,7 +5,6 @@ import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/utils/wobbly_button.dart';
@@ -13,6 +12,8 @@ import 'package:provider/provider.dart';
 
 /// The class that handle the compositions of the party
 class SelectCharactersScreen extends StatefulWidget {
+  static const String routeName = "/selectCharacters";
+
   const SelectCharactersScreen({
     super.key,
   });
@@ -41,7 +42,9 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Upgrade> upgrades = Provider.of<UpgradeProvider>(context).upgrades;
-    final List<CharacterType> unlockedCharacters = upgrades.where((Upgrade entry) => entry.characterType != null && entry.unlocked == true).map((Upgrade entry) => entry.characterType!).toList();
+    final List<CharacterType> unlockedCharacters =
+        upgrades.where((Upgrade entry) => entry.characterType != null && entry.unlocked == true).map((Upgrade entry) => entry.characterType!).toList();
+    final NavigatorState navigator = Navigator.of(context);
 
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
@@ -191,14 +194,14 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                 Map<String, dynamic> extra = {
                   'selectedCharacters': _selectedCharacters,
                 };
-                GoRouter.of(context).go('/selectLevel', extra: extra);
+                navigator.pushNamed('/selectLevel', arguments: extra);
               },
               child: Text(Strings.play),
             ),
             _gap,
             WobblyButton(
               onPressed: () {
-                GoRouter.of(context).pop();
+                navigator.pop();
               },
               child: Text(Strings.back),
             ),

@@ -5,10 +5,11 @@ import 'package:dungeon_run/utils/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/utils/wobbly_button.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class StoreScreen extends StatefulWidget {
+  static const String routeName = "/store";
+
   const StoreScreen({super.key});
 
   @override
@@ -23,6 +24,7 @@ class _StoreScreenState extends State<StoreScreen> {
   Widget build(BuildContext context) {
     final List<Upgrade> upgrades = Provider.of<UpgradeProvider>(context).upgrades;
     final int gold = Provider.of<UpgradeProvider>(context).gold;
+    final NavigatorState navigator = Navigator.of(context);
 
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
@@ -165,7 +167,7 @@ class _StoreScreenState extends State<StoreScreen> {
             _gap,
             WobblyButton(
               onPressed: () {
-                GoRouter.of(context).pop();
+                navigator.pop();
               },
               child: Text(Strings.back),
             ),

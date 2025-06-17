@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/fiore/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/fiore/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/fiore/progetti/dungeon_run/android/app/.cxx/Debug/3c5b206v/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/fiore/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/fiore/progetti/dungeon_run/android/app/.cxx/Debug/3c5b206v/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

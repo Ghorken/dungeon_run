@@ -1,14 +1,17 @@
+import 'package:dungeon_run/flame_game/components/characters/character.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy_type.dart';
 import 'package:dungeon_run/flame_game/components/lifebar.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
 
 class BridgeGuardian extends Enemy {
   BridgeGuardian({
     required super.goldUpgradeLevel,
+    required super.artboard,
   })  : maxLifePoints = 30,
         super(
           enemyGold: 1,
@@ -23,34 +26,27 @@ class BridgeGuardian extends Enemy {
   /// The max lifePoints of the enemy
   final int maxLifePoints;
 
+  /// The input for the attack animation
+  SMIBool? _attackInput;
+
+  /// The input for the hitted animation
+  SMITrigger? _hittedInput;
+
   @override
   Future<void> onLoad() async {
-    // Load the sprite of the enemy
-    animations = {
-      EnemyState.running: await game.loadSpriteAnimation(
-        'enemies/bridge_guardian.png',
-        SpriteAnimationData.sequenced(
-          amount: 1,
-          textureSize: Vector2(250, 373),
-          stepTime: 0.15,
-        ),
-      ),
-      EnemyState.attacking: await game.loadSpriteAnimation(
-        'enemies/bridge_guardian.png',
-        SpriteAnimationData.sequenced(
-          amount: 1,
-          textureSize: Vector2(250, 373),
-          stepTime: 0.15,
-        ),
-      ),
-    };
+    final controller = StateMachineController.fromArtboard(
+      artboard,
+      "Goblin",
+    );
 
+    _attackInput = controller?.getBoolInput('Attack');
+    _hittedInput = controller?.getTriggerInput('Hit');
+
+    artboard.addController(controller!);
     size = Vector2.all(250);
 
     // Position the enemy at the middlet of the top of the screen
     position = Vector2(0.0, -world.size.y / 2);
-
-    current = EnemyState.running;
 
     // Add the hitbox to the enemy
     add(
@@ -73,5 +69,30 @@ class BridgeGuardian extends Enemy {
 
     // Set the index of the character to attack
     targetCharacterIndex = world.characters.asMap().entries.where((entry) => entry.value != null).map((entry) => entry.key).toList().random();
+  }
+
+  @override
+  void hitted(double damage) {
+    super.hitted(damage);
+    _hittedInput?.fire();
+  }
+
+  @override
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent character,
+  ) {
+    super.onCollisionStart(intersectionPoints, character);
+    if (character is Character && world.characters.contains(character)) {
+      _attackInput?.value = true;
+    }
+  }
+
+  @override
+  void onCollisionEnd(
+    PositionComponent character,
+  ) {
+    super.onCollisionEnd(character);
+    _attackInput?.value = false;
   }
 }

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 class Palette {
   /// The main color, used for background
   PaletteEntry get backgroundMain => const PaletteEntry(Colors.blueGrey);
+  PaletteEntry get backgroundMainDark => PaletteEntry(Color.fromARGB(255, 49, 49, 49));
 
   /// The secondary color, used for various elements
   PaletteEntry get backgroundSecondary => PaletteEntry(Colors.orange[200]!);

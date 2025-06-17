@@ -4,10 +4,11 @@ import 'package:dungeon_run/utils/strings.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/utils/wobbly_button.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class TrophiesScreen extends StatefulWidget {
+  static const String routeName = "/trophies";
+
   const TrophiesScreen({super.key});
 
   @override
@@ -21,6 +22,7 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Trophy> trophies = Provider.of<TrophyProvider>(context).trophies;
+    final NavigatorState navigator = Navigator.of(context);
 
     return Scaffold(
       backgroundColor: Palette().backgroundMain.color,
@@ -100,7 +102,7 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
             _gap,
             WobblyButton(
               onPressed: () {
-                GoRouter.of(context).pop();
+                navigator.pop();
               },
               child: Text(Strings.back),
             ),

@@ -1,0 +1,2 @@
+/Users/fiore/progetti/dungeon_run/android/app/.cxx/RelWithDebInfo/0m3i604c/x86_64/CMakeFiles/edit_cache.dir
+/Users/fiore/progetti/dungeon_run/android/app/.cxx/RelWithDebInfo/0m3i604c/x86_64/CMakeFiles/rebuild_cache.dir

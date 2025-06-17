@@ -93,16 +93,24 @@ class EndlessWorld extends World with HasGameReference {
   /// The level of the game
   Level level;
 
-  /// Control if the enemy should be spawned or not
-  bool spawnEnemies = true;
+  /// Control if the boss is already spawned or not
+  bool bossSpawned = false;
+
+  /// A set of enemies that are loaded and ready to be spawned.
+  Set<Enemy> loadedEnemies = {};
+
+  /// The boss of the level
+  late Enemy boss;
 
   @override
   Future<void> onLoad() async {
     final List<Upgrade> upgrades = upgradeProvider.upgrades;
+    // Retrieve the level of the gold upgrade
+    final int goldUpgradeLevel = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
 
     // If the player selected a leftCharacter initialize id and add id to the screen
     if (selectedCharacters[0] != null) {
-      leftCharacter = createCharacter(
+      leftCharacter = await createCharacter(
         selectedCharacters[0]!,
         leftCharacterPosition,
         upgrades,
@@ -118,7 +126,7 @@ class EndlessWorld extends World with HasGameReference {
 
     // If the player selected a frontCharacter initialize id and add id to the screen
     if (selectedCharacters[1] != null) {
-      frontCharacter = createCharacter(
+      frontCharacter = await createCharacter(
         selectedCharacters[1]!,
         frontCharacterPosition,
         upgrades,
@@ -134,7 +142,7 @@ class EndlessWorld extends World with HasGameReference {
 
     // If the player selected a rightCharacter initialize id and add id to the screen
     if (selectedCharacters[2] != null) {
-      rightCharacter = createCharacter(
+      rightCharacter = await createCharacter(
         selectedCharacters[2]!,
         rightCharacterPosition,
         upgrades,
@@ -148,40 +156,42 @@ class EndlessWorld extends World with HasGameReference {
       }
     }
 
-    // Spawning random enemies in the world at a fixed interval
+    // Load the random enemies that will be spawned in the world
+    for (int i = 0; i < level.bossTimer / level.enemyFrequency; i++) {
+      final Enemy enemy = await randomEnemy(
+        enemies: level.enemies,
+        goldUpgradeLevel: goldUpgradeLevel,
+      );
+      loadedEnemies.add(enemy);
+    }
+    // Spawning enemies in the world at a fixed interval
     add(
-      SpawnComponent(
-        factory: (_) {
-          // If the player has reached the boss stop spawning random enemies
-          if (!spawnEnemies) {
-            return PositionComponent();
-          }
-          final int goldUpgradeLevel = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
-          final Enemy enemy = Enemy.random(
-            enemies: level.enemies,
-            goldUpgradeLevel: goldUpgradeLevel,
-          );
-          enemies.add(enemy);
-          return enemy;
-        },
+      TimerComponent(
         period: level.enemyFrequency,
+        repeat: true,
+        onTick: () {
+          if (!bossSpawned) {
+            enemies.add(loadedEnemies.first);
+            add(loadedEnemies.first);
+            loadedEnemies.remove(loadedEnemies.first);
+          }
+        },
       ),
     );
 
-    // Schedule the boss to spawn after 5 minutes
+    // Schedule the boss to spawn after the boss timer
+    // Load the boss enemy
+    boss = await spawnBoss(
+      goldUpgradeLevel: goldUpgradeLevel,
+      type: level.boss,
+    );
     add(
       TimerComponent(
         period: level.bossTimer,
         repeat: false, // Spawn only once
-        onTick: () {
+        onTick: () async {
           // Stop spawning enemies
-          spawnEnemies = false;
-
-          final int goldUpgradeLevel = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
-          final Enemy boss = Enemy.boss(
-            goldUpgradeLevel: goldUpgradeLevel,
-            type: level.boss,
-          );
+          bossSpawned = true;
           enemies.add(boss);
           add(boss);
         },
@@ -211,7 +221,8 @@ class EndlessWorld extends World with HasGameReference {
         factory: (_) {
           Collectable collectable = Collectable.random(
             upgrades: upgrades,
-            collectables: upgrades.where((Upgrade upgrade) => upgrade.collectableType != null && upgrade.unlocked == true).map((Upgrade upgrade) => upgrade.collectableType!).toList(),
+            collectables:
+                upgrades.where((Upgrade upgrade) => upgrade.collectableType != null && upgrade.unlocked == true).map((Upgrade upgrade) => upgrade.collectableType!).toList(),
           );
           collectables.add(collectable);
           return collectable;

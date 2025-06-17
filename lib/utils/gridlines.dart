@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Shows a grid on the screen
 /// Used to measure spaces
-class GridLines extends Component with HasGameRef {
+class GridLines extends Component with HasGameReference {
   final double lineSpacing; // Spacing between lines
   final Color lineColor; // Color of the lines
   final double lineWidth; // Width of the lines
@@ -23,19 +23,19 @@ class GridLines extends Component with HasGameRef {
       ..strokeWidth = lineWidth;
 
     // Draw horizontal lines across the screen
-    for (double y = -gameRef.size.y; y <= gameRef.size.y; y += lineSpacing) {
+    for (double y = -game.size.y; y <= game.size.y; y += lineSpacing) {
       canvas.drawLine(
-        Offset(-gameRef.size.x, y), // Start point (top of the screen)
-        Offset(gameRef.size.x, y), // End point (bottom of the screen)
+        Offset(-game.size.x, y), // Start point (top of the screen)
+        Offset(game.size.x, y), // End point (bottom of the screen)
         paint,
       );
     }
 
     // Draw vertical lines across the screen
-    for (double x = -gameRef.size.x; x <= gameRef.size.x; x += lineSpacing) {
+    for (double x = -game.size.x; x <= game.size.x; x += lineSpacing) {
       canvas.drawLine(
-        Offset(x, -gameRef.size.y), // Start point (top of the screen)
-        Offset(x, gameRef.size.y), // End point (bottom of the screen)
+        Offset(x, -game.size.y), // Start point (top of the screen)
+        Offset(x, game.size.y), // End point (bottom of the screen)
         paint,
       );
     }

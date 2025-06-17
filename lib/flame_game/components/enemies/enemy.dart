@@ -19,14 +19,14 @@ import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 
 import 'package:dungeon_run/flame_game/effects/death_effect.dart';
-import 'package:dungeon_run/flame_game/effects/enemy_hurt_effect.dart';
 import 'package:dungeon_run/navigation/endless_runner.dart';
 import 'package:dungeon_run/navigation/endless_world.dart';
+import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
 
 /// The [Enemy] component can represent the different types of enemies
 /// that the character can run into.
-abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, CollisionCallbacks {
+abstract class Enemy extends RiveComponent with HasWorldReference<EndlessWorld>, HasGameReference<EndlessRunner>, CollisionCallbacks {
   // Constructors for every tipe of enemy
   Enemy({
     required this.enemyGold,
@@ -36,6 +36,7 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     required this.speed,
     required this.lifePoints,
     required this.goldUpgradeLevel,
+    required super.artboard,
     this.enemyType,
     this.bossType,
     this.targetCharacterIndex,
@@ -43,51 +44,6 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
           size: Vector2.all(150),
           anchor: Anchor.bottomCenter,
         );
-
-  /// Factory method to create a random enemy.
-  factory Enemy.random({
-    required int goldUpgradeLevel,
-    required List<EnemyType> enemies,
-  }) {
-    final EnemyType enemyType = enemies.random();
-    switch (enemyType) {
-      case EnemyType.goblin:
-        return Goblin(goldUpgradeLevel: goldUpgradeLevel);
-      case EnemyType.troll:
-        return Troll(goldUpgradeLevel: goldUpgradeLevel);
-      case EnemyType.elemental:
-        return Elemental(goldUpgradeLevel: goldUpgradeLevel);
-      case EnemyType.animatedArmour:
-        return AnimatedArmour(goldUpgradeLevel: goldUpgradeLevel);
-      case EnemyType.imp:
-        return Imp(goldUpgradeLevel: goldUpgradeLevel);
-      case EnemyType.zombie:
-        return Zombie(goldUpgradeLevel: goldUpgradeLevel);
-      case EnemyType.zombieDog:
-        return ZombieDog(goldUpgradeLevel: goldUpgradeLevel);
-      case EnemyType.skeleton:
-        return Skeleton(goldUpgradeLevel: goldUpgradeLevel);
-    }
-  }
-
-  // Factory method to create an enemy boss based on its type
-  factory Enemy.boss({
-    required int goldUpgradeLevel,
-    required BossType type,
-  }) {
-    switch (type) {
-      case BossType.goblinKing:
-        return GoblinKing(goldUpgradeLevel: goldUpgradeLevel);
-      case BossType.bridgeGuardian:
-        return BridgeGuardian(goldUpgradeLevel: goldUpgradeLevel);
-      case BossType.balor:
-        return Balor(goldUpgradeLevel: goldUpgradeLevel);
-      case BossType.zombieChef:
-        return ZombieChef(goldUpgradeLevel: goldUpgradeLevel);
-      case BossType.skeletonExecutioner:
-        return SkeletonExecutioner(goldUpgradeLevel: goldUpgradeLevel);
-    }
-  }
 
   /// The current lifePoints of the enemy
   double lifePoints;
@@ -123,7 +79,9 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
   int? targetCharacterIndex;
 
   @override
-  Future<void> onLoad();
+  void onLoad() {
+    super.onLoad();
+  }
 
   @override
   void update(double dt) {
@@ -172,7 +130,6 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
       // Set the speed of the enemy to 0 to stop it
       actualSpeed = 0;
 
-      current = EnemyState.attacking;
       // Start a timer to attack the character every second
       attackTimer = TimerComponent(
         period: 1.0, // Attack every second
@@ -194,8 +151,6 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     PositionComponent character,
   ) {
     super.onCollisionEnd(character);
-
-    current = EnemyState.running;
 
     // When the [Enemy] is not colliding with the [Character] because the [Character] died
     // The enemy should start move again
@@ -236,9 +191,7 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     // Add the damageText to the Enemy
     add(damageText);
 
-    if (lifePoints > 0) {
-      add(EnemyHurtEffect());
-    } else {
+    if (lifePoints <= 0) {
       die();
       // When the boss is defeated the player wins
       if (isBoss) {
@@ -259,7 +212,6 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
     // We remove the enemy from the list so that it is no longer hittable even if still present on the screen.
     world.enemies.remove(this);
     DeathEffect deathEffect = DeathEffect();
-    add(deathEffect);
 
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(
@@ -274,8 +226,87 @@ abstract class Enemy extends SpriteAnimationGroupComponent with HasWorldReferenc
   }
 }
 
-/// The possible states of the character
-enum EnemyState {
-  running,
-  attacking,
+/// Factory method to create a random enemy.
+Future<Enemy> randomEnemy({
+  required int goldUpgradeLevel,
+  required List<EnemyType> enemies,
+}) async {
+  final EnemyType enemyType = enemies.random();
+
+  switch (enemyType) {
+    case EnemyType.goblin:
+      return Goblin(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case EnemyType.troll:
+      return Troll(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case EnemyType.elemental:
+      return Elemental(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case EnemyType.animatedArmour:
+      return AnimatedArmour(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case EnemyType.imp:
+      return Imp(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case EnemyType.zombie:
+      return Zombie(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case EnemyType.zombieDog:
+      return ZombieDog(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case EnemyType.skeleton:
+      return Skeleton(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+  }
+}
+
+// Factory method to create an enemy boss based on its type
+Future<Enemy> spawnBoss({
+  required int goldUpgradeLevel,
+  required BossType type,
+}) async {
+  switch (type) {
+    case BossType.goblinKing:
+      return GoblinKing(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case BossType.bridgeGuardian:
+      return BridgeGuardian(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case BossType.balor:
+      return Balor(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case BossType.zombieChef:
+      return ZombieChef(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+    case BossType.skeletonExecutioner:
+      return SkeletonExecutioner(
+        goldUpgradeLevel: goldUpgradeLevel,
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
+      );
+  }
 }
