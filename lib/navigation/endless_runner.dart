@@ -2,6 +2,7 @@ import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/trophies/trophy_provider.dart';
+import 'package:dungeon_run/utils/enemies_provider.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
@@ -29,6 +30,7 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
     required this.selectedCharacters,
     required this.level,
     required this.upgradeProvider,
+    required this.enemiesProvider,
     required this.levelProvider,
     required this.trophyProvider,
   }) : super(
@@ -36,6 +38,7 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
             selectedCharacters: selectedCharacters,
             level: level,
             upgradeProvider: upgradeProvider,
+            enemiesProvider: enemiesProvider,
             levelProvider: levelProvider,
             trophyProvider: trophyProvider,
           ),
@@ -50,6 +53,9 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection {
 
   /// The state of the upgrades
   final UpgradeProvider upgradeProvider;
+
+  /// The state of the enemies
+  final EnemiesProvider enemiesProvider;
 
   /// The state of the levels
   final LevelProvider levelProvider;

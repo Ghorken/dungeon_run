@@ -1,5 +1,6 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/navigation/game_screen.dart';
+import 'package:dungeon_run/navigation/loading_screen.dart';
 import 'package:dungeon_run/navigation/main_menu_screen.dart';
 import 'package:dungeon_run/navigation/select_characters_screen.dart';
 import 'package:dungeon_run/navigation/select_level_screen.dart';
@@ -11,6 +12,7 @@ import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/style/palette.dart';
 import 'package:dungeon_run/trophies/trophy_provider.dart';
+import 'package:dungeon_run/utils/enemies_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +60,7 @@ class DungeonRun extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => UpgradeProvider()),
           ChangeNotifierProvider(create: (_) => LevelProvider()),
           ChangeNotifierProvider(create: (_) => TrophyProvider()),
+          ChangeNotifierProvider(create: (_) => EnemiesProvider()),
         ],
         child: Builder(
           builder: (context) {
@@ -89,6 +92,10 @@ class DungeonRun extends StatelessWidget {
                   SettingsScreen.routeName: (BuildContext context) => const SettingsScreen(),
                   StoreScreen.routeName: (BuildContext context) => const StoreScreen(),
                   TrophiesScreen.routeName: (BuildContext context) => const TrophiesScreen(),
+                  LoadingScreen.routeName: (BuildContext context) => LoadingScreen(
+                        selectedCharacters: (ModalRoute.of(context)?.settings.arguments as Map)['selectedCharacters'] as List<CharacterType?>,
+                        level: (ModalRoute.of(context)?.settings.arguments as Map)['level'] as Level,
+                      ),
                 },
               ),
             );

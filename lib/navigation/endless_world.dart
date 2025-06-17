@@ -3,6 +3,7 @@ import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/trophies/trophy_provider.dart';
+import 'package:dungeon_run/utils/enemies_provider.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
@@ -28,6 +29,7 @@ class EndlessWorld extends World with HasGameReference {
     required this.selectedCharacters,
     required this.level,
     required this.upgradeProvider,
+    required this.enemiesProvider,
     required this.levelProvider,
     required this.trophyProvider,
   });
@@ -37,6 +39,9 @@ class EndlessWorld extends World with HasGameReference {
 
   /// The state of the upgrades
   final UpgradeProvider upgradeProvider;
+
+  /// The state of the enemies
+  final EnemiesProvider enemiesProvider;
 
   /// The state of the levels
   final LevelProvider levelProvider;
@@ -105,6 +110,9 @@ class EndlessWorld extends World with HasGameReference {
   @override
   Future<void> onLoad() async {
     final List<Upgrade> upgrades = upgradeProvider.upgrades;
+
+    loadedEnemies = enemiesProvider.getEnemies();
+
     // Retrieve the level of the gold upgrade
     final int goldUpgradeLevel = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
 
@@ -156,14 +164,6 @@ class EndlessWorld extends World with HasGameReference {
       }
     }
 
-    // Load the random enemies that will be spawned in the world
-    for (int i = 0; i < level.bossTimer / level.enemyFrequency; i++) {
-      final Enemy enemy = await randomEnemy(
-        enemies: level.enemies,
-        goldUpgradeLevel: goldUpgradeLevel,
-      );
-      loadedEnemies.add(enemy);
-    }
     // Spawning enemies in the world at a fixed interval
     add(
       TimerComponent(

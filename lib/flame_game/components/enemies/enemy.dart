@@ -13,6 +13,7 @@ import 'package:dungeon_run/flame_game/components/enemies/minions/troll.dart';
 import 'package:dungeon_run/flame_game/components/enemies/minions/zombie.dart';
 import 'package:dungeon_run/flame_game/components/enemies/bosses/zombie_chef.dart';
 import 'package:dungeon_run/flame_game/components/enemies/minions/zombie_dog.dart';
+import 'package:dungeon_run/utils/enemies_provider.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -227,53 +228,54 @@ abstract class Enemy extends RiveComponent with HasWorldReference<EndlessWorld>,
 }
 
 /// Factory method to create a random enemy.
-Future<Enemy> randomEnemy({
+// Future<Enemy>
+void randomEnemy({
   required int goldUpgradeLevel,
   required List<EnemyType> enemies,
+  required EnemiesProvider enemiesProvider,
 }) async {
   final EnemyType enemyType = enemies.random();
-
   switch (enemyType) {
     case EnemyType.goblin:
-      return Goblin(
+      enemiesProvider.addEnemy(Goblin(
         goldUpgradeLevel: goldUpgradeLevel,
         artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
-      );
+      ));
     case EnemyType.troll:
-      return Troll(
+      enemiesProvider.addEnemy(Troll(
         goldUpgradeLevel: goldUpgradeLevel,
         artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
-      );
+      ));
     case EnemyType.elemental:
-      return Elemental(
+      enemiesProvider.addEnemy(Elemental(
         goldUpgradeLevel: goldUpgradeLevel,
         artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
-      );
+      ));
     case EnemyType.animatedArmour:
-      return AnimatedArmour(
+      enemiesProvider.addEnemy(AnimatedArmour(
         goldUpgradeLevel: goldUpgradeLevel,
         artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
-      );
+      ));
     case EnemyType.imp:
-      return Imp(
+      enemiesProvider.addEnemy(Imp(
         goldUpgradeLevel: goldUpgradeLevel,
         artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
-      );
+      ));
     case EnemyType.zombie:
-      return Zombie(
+      enemiesProvider.addEnemy(Zombie(
         goldUpgradeLevel: goldUpgradeLevel,
         artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
-      );
+      ));
     case EnemyType.zombieDog:
-      return ZombieDog(
+      enemiesProvider.addEnemy(ZombieDog(
         goldUpgradeLevel: goldUpgradeLevel,
         artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
-      );
+      ));
     case EnemyType.skeleton:
-      return Skeleton(
+      enemiesProvider.addEnemy(Skeleton(
         goldUpgradeLevel: goldUpgradeLevel,
         artboard: await loadArtboard(RiveFile.asset('assets/animations/goblin.riv')),
-      );
+      ));
   }
 }
 

@@ -106,7 +106,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       'selectedCharacters': selectedCharacters,
                       'level': levels.first,
                     };
-                    navigator.pushNamed('/play', arguments: extra);
+                    navigator.pushNamed('/loading', arguments: extra);
                   }
                 }
               },

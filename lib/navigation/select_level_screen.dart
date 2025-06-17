@@ -123,7 +123,7 @@ class SelectLevelScreen extends StatelessWidget {
                         'selectedCharacters': selectedCharacters,
                         'level': level,
                       };
-                      navigator.pushNamed('/play', arguments: extra);
+                      navigator.pushNamed('/loading', arguments: extra);
                     }
                   : null,
               style: ElevatedButton.styleFrom(

@@ -2,6 +2,7 @@ import 'package:dungeon_run/progression/level.dart';
 import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/trophies/trophy_provider.dart';
+import 'package:dungeon_run/utils/enemies_provider.dart';
 import 'package:dungeon_run/utils/strings.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,7 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AudioController audioController = context.read<AudioController>();
     final UpgradeProvider upgradeProvider = context.read<UpgradeProvider>();
+    final EnemiesProvider enemiesProvider = context.read<EnemiesProvider>();
     final LevelProvider levelProvider = context.read<LevelProvider>();
     final TrophyProvider trophyProvider = context.read<TrophyProvider>();
     final NavigatorState navigator = Navigator.of(context);
@@ -62,6 +64,7 @@ class GameScreen extends StatelessWidget {
           selectedCharacters: selectedCharacters,
           level: level,
           upgradeProvider: upgradeProvider,
+          enemiesProvider: enemiesProvider,
           levelProvider: levelProvider,
           trophyProvider: trophyProvider,
         ),
