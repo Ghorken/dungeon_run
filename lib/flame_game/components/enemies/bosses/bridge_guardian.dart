@@ -66,9 +66,6 @@ class BridgeGuardian extends Enemy {
         color: Colors.red,
       ),
     );
-
-    // Set the index of the character to attack
-    targetCharacterIndex = world.characters.asMap().entries.where((entry) => entry.value != null).map((entry) => entry.key).toList().random();
   }
 
   @override

@@ -75,6 +75,9 @@ abstract class Character extends RiveComponent with CollisionCallbacks, HasWorld
     }
     world.deadCharacters[index] = this;
 
+    if (world.characters.nonNulls.isEmpty) {
+      world.loose();
+    }
     // We remove the enemy from the screen after the effect has been played.
     Future.delayed(
       Duration(
@@ -82,10 +85,6 @@ abstract class Character extends RiveComponent with CollisionCallbacks, HasWorld
       ),
       () => removeFromParent(),
     );
-
-    if (world.characters.nonNulls.isEmpty) {
-      world.loose();
-    }
   }
 
   /// The abstract attack function that every character should implement

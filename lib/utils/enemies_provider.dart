@@ -15,6 +15,10 @@ class EnemiesProvider with ChangeNotifier {
     _enemies.remove(enemy);
   }
 
+  void clearEnemies() {
+    _enemies.clear();
+  }
+
   Set<Enemy> getEnemies() {
     return _enemies;
   }

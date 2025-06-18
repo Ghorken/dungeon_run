@@ -12,7 +12,7 @@ const List<Level> defaultLevels = [
     enemies: [
       EnemyType.goblin,
     ],
-    enemyFrequency: 0.5,
+    enemyFrequency: 1,
     boss: BossType.goblinKing,
     bossTimer: 20.0,
     traps: [],
@@ -27,7 +27,8 @@ const List<Level> defaultLevels = [
         "collectable_damage",
       ],
     },
-    message: "I dintorni del castello erano pieni di goblin, ma sei riuscito a farti strada tra i nemici e raggiungere l'entrata.\nUn profondo fossato circonda il castello e l'unico passaggio sembra essere il ponte levatotoio abbassato.",
+    message:
+        "I dintorni del castello erano pieni di goblin, ma sei riuscito a farti strada tra i nemici e raggiungere l'entrata.\nUn profondo fossato circonda il castello e l'unico passaggio sembra essere il ponte levatotoio abbassato.",
   ),
   (
     id: "external-2",
@@ -39,7 +40,7 @@ const List<Level> defaultLevels = [
     enemies: [
       EnemyType.animatedArmour,
     ],
-    enemyFrequency: 0.5,
+    enemyFrequency: 1,
     boss: BossType.bridgeGuardian,
     bossTimer: 20.0,
     traps: [
@@ -56,7 +57,8 @@ const List<Level> defaultLevels = [
         "archer",
       ],
     },
-    message: "Superato il fossato hai trovato una sorpresa, un arciere, ultimo rimasto di un gruppo che ha tentato l'ingresso prima di te. Ha deciso di darti una mano e insieme siete entrati nel castello.\nAlla vostra sinistra vedete l'accesso alle cucine, alla vostra destra riuscite a vedere il corpo di guardia che appare deserto mentre dritto davanti a voi la torre del mago, sulla cui cima brilla un turbinio di energia magica."
+    message:
+        "Superato il fossato hai trovato una sorpresa, un arciere, ultimo rimasto di un gruppo che ha tentato l'ingresso prima di te. Ha deciso di darti una mano e insieme siete entrati nel castello.\nAlla vostra sinistra vedete l'accesso alle cucine, alla vostra destra riuscite a vedere il corpo di guardia che appare deserto mentre dritto davanti a voi la torre del mago, sulla cui cima brilla un turbinio di energia magica."
   ),
   (
     id: "servants-1",
@@ -116,7 +118,8 @@ const List<Level> defaultLevels = [
         "wizard",
       ],
     },
-    message: "Qualcosa deve essere andato storto con l'ultimo incantesimo del mago di corte e si è aperto un portale da cui è fuoriuscita un'orda di demoni.\nIl mago ha cercato di fermarli ma senza il tuo aiuto non ce l'avrebbe fatta e per questo ti è riconoscente.",
+    message:
+        "Qualcosa deve essere andato storto con l'ultimo incantesimo del mago di corte e si è aperto un portale da cui è fuoriuscita un'orda di demoni.\nIl mago ha cercato di fermarli ma senza il tuo aiuto non ce l'avrebbe fatta e per questo ti è riconoscente.",
   ),
   (
     id: "guards-1",
@@ -145,6 +148,7 @@ const List<Level> defaultLevels = [
         "berserk",
       ],
     },
-    message: "Il corpo di guardia è stato facile da superare, gli scheletri cadevano come una torre del jenga, ma hai trovato un tesoro inaspettato: in una delle celle era rinchiuso un nano che ha deciso di affiancarti nella tua avventura.",
+    message:
+        "Il corpo di guardia è stato facile da superare, gli scheletri cadevano come una torre del jenga, ma hai trovato un tesoro inaspettato: in una delle celle era rinchiuso un nano che ha deciso di affiancarti nella tua avventura.",
   ),
 ];

@@ -88,6 +88,8 @@ abstract class Enemy extends RiveComponent with HasWorldReference<EndlessWorld>,
   void update(double dt) {
     super.update(dt);
 
+    targetCharacterIndex ??= world.characters.asMap().entries.where((entry) => entry.value != null).map((entry) => entry.key).toList().random();
+
     // If the enemy is a boss, we need to move towards the target character
     // If the enemy is not a boss, we need to move down
 
@@ -96,19 +98,19 @@ abstract class Enemy extends RiveComponent with HasWorldReference<EndlessWorld>,
     // last update ran. We need to multiply the speed by `dt` to make sure that
     // the speed of the obstacles are the same no matter the refresh rate/speed
     // of your device.
-    if (isBoss) {
-      if (world.characters[targetCharacterIndex!] != null) {
-        // If the enemy is a boss and has a target character, move towards it
-        final Vector2 targetPosition = world.characters[targetCharacterIndex!]!.position;
-        final Vector2 direction = (targetPosition - position).normalized();
-        position += direction * (world.speed * actualSpeed) * dt;
-      } else {
-        // If the target character is null, we need to find a new target
-        targetCharacterIndex = world.characters.asMap().entries.where((entry) => entry.value != null).map((entry) => entry.key).toList().random();
-      }
+    if (world.characters[targetCharacterIndex!] != null) {
+      // If the enemy is a boss and has a target character, move towards it
+      final Vector2 targetPosition = world.characters[targetCharacterIndex!]!.position;
+      final Vector2 direction = (targetPosition - position).normalized();
+      position += direction * (world.speed * actualSpeed) * dt;
     } else {
-      // We need to move the enemy to the bottom
-      position.y += (world.speed * actualSpeed) * dt;
+      // If the target character is null and there are other available targets, we need to find a new target
+      if (world.characters.nonNulls.isNotEmpty) {
+        targetCharacterIndex = world.characters.asMap().entries.where((entry) => entry.value != null).map((entry) => entry.key).toList().random();
+      } else {
+        // If there are no characters, we can just move down
+        position.y += (world.speed * actualSpeed) * dt;
+      }
     }
 
     // When the component is no longer visible on the screen anymore, remove it.

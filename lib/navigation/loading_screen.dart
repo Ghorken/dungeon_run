@@ -1,7 +1,6 @@
 import 'package:dungeon_run/flame_game/components/characters/character_type.dart';
 import 'package:dungeon_run/flame_game/components/enemies/enemy.dart';
 import 'package:dungeon_run/progression/level.dart';
-import 'package:dungeon_run/progression/level_provider.dart';
 import 'package:dungeon_run/store/upgrade.dart';
 import 'package:dungeon_run/store/upgrade_provider.dart';
 import 'package:dungeon_run/utils/enemies_provider.dart';
@@ -74,12 +73,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   Future<void> _loadLevel() async {
-    final LevelProvider levelProvider = context.read<LevelProvider>();
-    final List<Level> levels = levelProvider.levels;
-
     final UpgradeProvider upgradeProvider = context.read<UpgradeProvider>();
     final List<Upgrade> upgrades = upgradeProvider.upgrades;
     final EnemiesProvider enemiesProvider = context.read<EnemiesProvider>();
+    enemiesProvider.clearEnemies();
+
     // Retrieve the level of the gold upgrade
     final int goldUpgradeLevel = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
 
@@ -96,7 +94,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // Navigate to the next screen after loading
     Map<String, dynamic> extra = {
       'selectedCharacters': widget.selectedCharacters,
-      'level': levels.first,
+      'level': widget.level,
     };
     Navigator.of(context).pushReplacementNamed('/play', arguments: extra);
   }
