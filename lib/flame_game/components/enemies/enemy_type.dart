@@ -1,12 +1,9 @@
 /// Enums of the type of enemies
 enum EnemyType {
   goblin,
-  troll,
-  elemental,
   animatedArmour,
   imp,
   zombie,
-  zombieDog,
   skeleton,
 }
 

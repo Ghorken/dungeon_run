@@ -22,6 +22,8 @@ import 'package:provider/provider.dart';
 import 'package:dungeon_run/navigation/app_lifecycle.dart';
 import 'package:dungeon_run/audio/audio_controller.dart';
 import 'package:dungeon_run/settings/settings_controller.dart';
+import 'package:rive/rive.dart';
+import 'package:rive_native/rive_native.dart';
 import 'package:rive_splash_screen/rive_splash_screen.dart';
 import 'package:toastification/toastification.dart';
 
@@ -33,6 +35,9 @@ void main() async {
   /// Set the device in portrait mode and in full screen
   await Flame.device.setPortraitUpOnly();
   await Flame.device.fullScreen();
+
+  await RiveNative.init();
+  await RiveFile.initialize();
 
   runApp(const DungeonRun());
 }
@@ -74,7 +79,7 @@ class DungeonRun extends StatelessWidget {
                 home: SplashScreen.navigate(
                   name: 'assets/animations/anvil.riv',
                   next: (context) => MainMenuScreen(),
-                  until: () => Future.delayed(const Duration(milliseconds: 1000)),
+                  until: () => Future.delayed(const Duration(milliseconds: 500)),
                   loopAnimation: 'Martellata',
                   backgroundColor: Palette().backgroundMainDark.color,
                   fit: BoxFit.contain,

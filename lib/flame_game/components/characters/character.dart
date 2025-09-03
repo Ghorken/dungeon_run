@@ -129,7 +129,7 @@ Future<Character> createCharacter(CharacterType type, Vector2 position, List<Upg
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
-        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/characters/warrior.riv')),
       );
     case CharacterType.archer:
       Upgrade archerLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'archer_life');
@@ -148,7 +148,7 @@ Future<Character> createCharacter(CharacterType type, Vector2 position, List<Upg
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
-        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/characters/archer.riv')),
       );
     case CharacterType.mage:
       Upgrade mageLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'mage_life');
@@ -167,7 +167,7 @@ Future<Character> createCharacter(CharacterType type, Vector2 position, List<Upg
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
-        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/characters/mage.riv')),
       );
     case CharacterType.assassin:
       Upgrade assassinLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'assassin_life');
@@ -186,7 +186,7 @@ Future<Character> createCharacter(CharacterType type, Vector2 position, List<Upg
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
-        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/characters/assassin.riv')),
       );
     case CharacterType.berserk:
       Upgrade berserkLife = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'berserk_life');
@@ -205,7 +205,7 @@ Future<Character> createCharacter(CharacterType type, Vector2 position, List<Upg
         maxLifePoints: (life + 1) * lifeStep,
         damage: (damage + 1) * damageStep,
         cooldownTimer: baseCooldown - (special * specialStep).toInt(),
-        artboard: await loadArtboard(RiveFile.asset('assets/animations/warrior.riv')),
+        artboard: await loadArtboard(RiveFile.asset('assets/animations/characters/berserk.riv')),
       );
   }
 }

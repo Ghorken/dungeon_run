@@ -69,7 +69,6 @@ const List<Level> defaultLevels = [
     ],
     enemies: [
       EnemyType.zombie,
-      EnemyType.zombieDog,
     ],
     enemyFrequency: 0.5,
     boss: BossType.zombieChef,
@@ -99,7 +98,6 @@ const List<Level> defaultLevels = [
     ],
     enemies: [
       EnemyType.imp,
-      EnemyType.elemental,
     ],
     enemyFrequency: 0.5,
     boss: BossType.balor,

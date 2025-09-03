@@ -25,6 +25,7 @@ dependencies:
   rive: ^0.13.20
   flame_rive: ^1.10.15
   rive_splash_screen: ^0.1.1
+  rive_native: ^0.0.8
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,8 @@ flutter:
     - assets/music/
     - assets/sfx/
     - assets/animations/
+    - assets/animations/characters/
+    - assets/animations/monsters/
 
   fonts:
     - family: Press Start 2P

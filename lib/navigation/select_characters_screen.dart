@@ -147,15 +147,18 @@ class _SelectCharactersScreenState extends State<SelectCharactersScreen> {
                               for (int colIndex = 0; colIndex < 3; colIndex++)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Checkbox(
-                                    value: _selectedCharacters[colIndex] == characterType,
+                                  child: Radio(
+                                    value: characterType,
+                                    groupValue: _selectedCharacters[colIndex],
                                     onChanged: (value) {
                                       setState(() {
                                         // Update the selected row for the current column
-                                        if (value == true) {
-                                          _selectedCharacters[colIndex] = characterType;
-                                        } else {
-                                          _selectedCharacters[colIndex] = null;
+                                        _selectedCharacters[colIndex] = value;
+                                        // If the character is selected, unselect it from the other columns
+                                        for (int i = 0; i < _selectedCharacters.length; i++) {
+                                          if (i != colIndex && _selectedCharacters[i] == value) {
+                                            _selectedCharacters[i] = null;
+                                          }
                                         }
                                       });
                                     },
