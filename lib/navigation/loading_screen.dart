@@ -8,19 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoadingScreen extends StatefulWidget {
-  static const String routeName = "/loading";
+  const LoadingScreen({
+    required this.selectedCharacters,
+    required this.level,
+    super.key,
+  });
+  static const String routeName = '/loading';
 
   /// The selected characters to show
   final List<CharacterType?> selectedCharacters;
 
   /// The level of the game
   final Level level;
-
-  const LoadingScreen({
-    required this.selectedCharacters,
-    required this.level,
-    super.key,
-  });
 
   @override
   State<LoadingScreen> createState() => _LoadingScreenState();
@@ -37,31 +36,31 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircularProgressIndicator(),
-              const SizedBox(height: 20),
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
               Text(
                 'Loading...',
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
-                'Tap on one of your character to make it attacks enemies in range.',
+                'Tap on one of your character to make it attack enemies in range.',
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 'Tap on one of the special ability button when available to use it.',
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 'Tap on traps to disarm them.',
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Text(
                 'Tap on collectables elements to collect them.',
               ),
@@ -75,8 +74,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Future<void> _loadLevel() async {
     final UpgradeProvider upgradeProvider = context.read<UpgradeProvider>();
     final List<Upgrade> upgrades = upgradeProvider.upgrades;
-    final EnemiesProvider enemiesProvider = context.read<EnemiesProvider>();
-    enemiesProvider.clearEnemies();
+    final EnemiesProvider enemiesProvider = context.read<EnemiesProvider>()..clearEnemies();
 
     // Retrieve the level of the gold upgrade
     final int goldUpgradeLevel = upgrades.firstWhere((Upgrade upgrade) => upgrade.name == 'enemy_gold').currentLevel;
@@ -88,7 +86,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         goldUpgradeLevel: goldUpgradeLevel,
         enemiesProvider: enemiesProvider,
       );
-      await Future.delayed(const Duration(milliseconds: 10));
+      await Future<dynamic>.delayed(const Duration(milliseconds: 10));
     }
 
     // Navigate to the next screen after loading

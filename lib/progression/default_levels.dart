@@ -20,7 +20,7 @@ const List<Level> defaultLevels = [
     trapMaxPeriod: 10.0,
     collectableMinPeriod: 1.0,
     collectableMaxPeriod: 10.0,
-    map: "map",
+    map: "esterno",
     rewards: {
       "gold": 100,
       "upgrades": [
@@ -28,7 +28,7 @@ const List<Level> defaultLevels = [
       ],
     },
     message:
-        "I dintorni del castello erano pieni di goblin, ma sei riuscito a farti strada tra i nemici e raggiungere l'entrata.\nUn profondo fossato circonda il castello e l'unico passaggio sembra essere il ponte levatotoio abbassato.",
+        "Ho varcato le terre oltre le mura e mi sono fatto strada tra orde di goblin.\nEppure, il castello non mostra segni di rovina: torri dritte, finestre illuminate, arazzi al vento.\nNon sembra un luogo conquistato, ma custodito.",
   ),
   (
     id: "external-2",
@@ -58,11 +58,11 @@ const List<Level> defaultLevels = [
       ],
     },
     message:
-        "Superato il fossato hai trovato una sorpresa, un arciere, ultimo rimasto di un gruppo che ha tentato l'ingresso prima di te. Ha deciso di darti una mano e insieme siete entrati nel castello.\nAlla vostra sinistra vedete l'accesso alle cucine, alla vostra destra riuscite a vedere il corpo di guardia che appare deserto mentre dritto davanti a voi la torre del mago, sulla cui cima brilla un turbinio di energia magica."
+        "Nel fossato ho incontrato un arciere imprigionato dalla paura e dall’acqua nera.\nMi ha confidato che non tutto ciò che vive qui resiste controvoglia.\nMolti, a suo dire, hanno scelto questa condizione."
   ),
   (
     id: "servants-1",
-    name: "Cucine",
+    name: "Stalle",
     completed: false,
     dependency: [
       "Fossato",
@@ -87,11 +87,11 @@ const List<Level> defaultLevels = [
         "collectable_resurrection",
       ],
     },
-    message: "Le cucine erano piene di zombie, la servitù rimasta fedele al castello.\nNonostante la pizza di marcio sei riuscito ad attraversarle e a raggiungere la posteria",
+    message: "Le stalle odorano ancora di fieno fresco, nonostante siano abitate da carcasse e bestie distorte.\nCom’è possibile che qui la putrefazione non attecchisca?",
   ),
   (
     id: "firstFloor-1",
-    name: "Torre del mago",
+    name: "Corpo di guardia",
     completed: false,
     dependency: [
       "Fossato",
@@ -116,12 +116,11 @@ const List<Level> defaultLevels = [
         "wizard",
       ],
     },
-    message:
-        "Qualcosa deve essere andato storto con l'ultimo incantesimo del mago di corte e si è aperto un portale da cui è fuoriuscita un'orda di demoni.\nIl mago ha cercato di fermarli ma senza il tuo aiuto non ce l'avrebbe fatta e per questo ti è riconoscente.",
+    message: "Qui avrei dovuto trovare soldati pronti a difendere.\nHo trovato resti di guardie e prigionieri, indistinguibili ormai.\nUn carcere senza innocenti.",
   ),
   (
     id: "guards-1",
-    name: "Corpo di guardia",
+    name: "Corte",
     completed: false,
     dependency: [
       "Fossato",
@@ -146,7 +145,6 @@ const List<Level> defaultLevels = [
         "berserk",
       ],
     },
-    message:
-        "Il corpo di guardia è stato facile da superare, gli scheletri cadevano come una torre del jenga, ma hai trovato un tesoro inaspettato: in una delle celle era rinchiuso un nano che ha deciso di affiancarti nella tua avventura.",
+    message: "La corte, cuore del castello, è viva di una vita che non è più umana.\nEppure tutto appare perfetto.\nLa perfezione qui è la vera menzogna.",
   ),
 ];
